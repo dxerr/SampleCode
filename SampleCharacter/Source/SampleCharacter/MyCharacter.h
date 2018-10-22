@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Public/SkeletalMeshMerge.h"
+#include "PartsMergeDefine.h"
 #include "MyCharacter.generated.h"	
+
 
 UCLASS()
 class SAMPLECHARACTER_API AMyCharacter : public ACharacter
@@ -19,6 +22,10 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	struct FSkeletalMeshMergeParams Params;
+
+public:
 	// Sets default values for this character's properties
 	AMyCharacter();
 
@@ -26,8 +33,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//카메라 설정
-	void SetCamera();
+protected:
+	void OnPartsMerge();
+
+public:
+	void ToMergeParams(const TArray<FSkelMeshMergeSectionMapping_BP>& InSectionMappings, TArray<FSkelMeshMergeSectionMapping>& OutSectionMappings);
+	void ToMergeParams(const TArray<FSkelMeshMergeUVTransformMapping>& InUVTransformsPerMesh, TArray<FSkelMeshMergeUVTransforms>& OutUVTransformsPerMesh);
+
+	USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
 
 public:	
 	// Called every frame
@@ -35,7 +48,4 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	
-	
 };
