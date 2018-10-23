@@ -12,27 +12,24 @@
  * 
  */
 UCLASS(editinlinenew, meta = (BlueprintSpawnableComponent), ClassGroup = Rendering)
-class SAMPLECHARACTER_API USkeletalMeshMergeComponent : public USkeletalMeshComponent
+class SAMPLECHARACTER_API USkeletalMeshMergeComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY(EditAnywhere, Category = "Piece")
-	TArray < USkeletalMesh*> PieceMeshes;
-
-	UPROPERTY(EditAnywhere, Category = "Params")
-	struct FSkeletalMeshMergeParams Params;
-
-	void OnRegister() override;
-	void OnUnregister() override;
-
 public:
-	void MergeToPieceMesh();
-	USkeletalMesh* MergeToParams();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Piece")
+	TArray<USkeletalMesh*> PieceMeshes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Params")
+	struct FSkeletalMeshMergeParams Params;
 
 private:
 	void ToMergeParams(const TArray<FSkelMeshMergeSectionMapping_BP>& InSectionMappings, TArray<FSkelMeshMergeSectionMapping>& OutSectionMappings);
 	void ToMergeParams(const TArray<FSkelMeshMergeUVTransformMapping>& InUVTransformsPerMesh, TArray<FSkelMeshMergeUVTransforms>& OutUVTransformsPerMesh);
 
 	USkeletalMesh* MergeToParams(const FSkeletalMeshMergeParams& Params);
+
+public:
+	USkeletalMesh* MergeToPieceMesh();
+	USkeletalMesh* MergeToParams();
 };

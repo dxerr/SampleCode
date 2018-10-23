@@ -5,11 +5,8 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Engine/SkeletalMesh.h"
 
-void USkeletalMeshMergeComponent::MergeToPieceMesh()
+USkeletalMesh* USkeletalMeshMergeComponent::MergeToPieceMesh()
 {
-	if (GetOwner() == nullptr)
-		return;
-
 	if (PieceMeshes.Num() > 0)
 	{
 		TArray<USkeletalMesh*> mergeMeshes;
@@ -28,12 +25,17 @@ void USkeletalMeshMergeComponent::MergeToPieceMesh()
 			USkeletalMesh* targetMesh = NewObject<USkeletalMesh>(this, FName("MergedMesh"), RF_Transient);
 			TArray<FSkelMeshMergeSectionMapping> sectionMappings;
 			FSkeletalMeshMerge merger(targetMesh, mergeMeshes, sectionMappings, 0);
-			const bool mergeStatus = merger.DoMerge();
-			check(mergeStatus == true);
+			if (!merger.DoMerge())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Merge failed!"));
+				return nullptr;
+			}
 
-			this->SetSkeletalMesh(targetMesh);
+			return targetMesh;
 		}
 	}
+
+	return nullptr;
 }
 void USkeletalMeshMergeComponent::ToMergeParams(const TArray<FSkelMeshMergeSectionMapping_BP>& InSectionMappings, TArray<FSkelMeshMergeSectionMapping>& OutSectionMappings)
 {
@@ -156,14 +158,4 @@ USkeletalMesh* USkeletalMeshMergeComponent::MergeToParams(const FSkeletalMeshMer
 		UE_LOG(LogTemp, Warning, TEXT("Found Duplicates: %s"), *((Total != UniqueTotal) ? FString("True") : FString("False")));
 	}
 	return BaseMesh;
-}
-
-void USkeletalMeshMergeComponent::OnRegister()
-{
-	Super::OnRegister();
-}
-
-void USkeletalMeshMergeComponent::OnUnregister()
-{
-	Super::OnUnregister();
 }

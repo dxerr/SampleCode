@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MyCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
 
 
@@ -28,6 +29,12 @@ void AMyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	MergeComponent = FindComponentByClass<USkeletalMeshMergeComponent>();
+
+	auto controller = UGameplayStatics::GetPlayerController(this, 0);
+	if (controller)
+	{
+		controller->SetViewTarget(this);
+	}
 }
 
 // Called every frame
@@ -48,6 +55,11 @@ void AMyCharacter::OnPartsMerge()
 {
 	if (nullptr != MergeComponent)
 	{
-		MergeComponent->MergeToPieceMesh();
+		auto skeletal = MergeComponent->MergeToPieceMesh();
+		if (skeletal)
+		{
+			auto mesh = GetMesh();
+			mesh->SetSkeletalMesh(skeletal);
+		}
 	}
 }
