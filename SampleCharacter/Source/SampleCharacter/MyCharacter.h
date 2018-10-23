@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Public/SkeletalMeshMerge.h"
-#include "PartsMergeDefine.h"
+#include "SkeletalMeshMergeComponent.h"
 #include "MyCharacter.generated.h"	
 
 
@@ -21,9 +20,11 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	//ÆÄÃ÷ ¸ÓÁö ÄÄÆÛ³ÍÆ®
+	USkeletalMeshMergeComponent* MergeComponent;
+
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	struct FSkeletalMeshMergeParams Params;
+	
 
 public:
 	// Sets default values for this character's properties
@@ -35,12 +36,6 @@ protected:
 
 protected:
 	void OnPartsMerge();
-
-public:
-	void ToMergeParams(const TArray<FSkelMeshMergeSectionMapping_BP>& InSectionMappings, TArray<FSkelMeshMergeSectionMapping>& OutSectionMappings);
-	void ToMergeParams(const TArray<FSkelMeshMergeUVTransformMapping>& InUVTransformsPerMesh, TArray<FSkelMeshMergeUVTransforms>& OutUVTransformsPerMesh);
-
-	USkeletalMesh* MergeMeshes(const FSkeletalMeshMergeParams& Params);
 
 public:	
 	// Called every frame
