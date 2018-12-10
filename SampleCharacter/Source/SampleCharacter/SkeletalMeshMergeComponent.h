@@ -13,7 +13,7 @@
  */
 UCLASS(editinlinenew, meta = (BlueprintSpawnableComponent), ClassGroup = Rendering)
 class SAMPLECHARACTER_API USkeletalMeshMergeComponent : public UActorComponent
-{
+{  
 	GENERATED_BODY()
 
 public:

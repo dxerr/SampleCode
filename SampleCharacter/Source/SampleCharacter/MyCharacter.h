@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "SkeletalMeshMergeComponent.h"
+#include "Global/GlobalDefine.h"
 #include "MyCharacter.generated.h"	
 
 
@@ -23,8 +24,8 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 	//ÆÄÃ÷ ¸ÓÁö ÄÄÆÛ³ÍÆ®
 	USkeletalMeshMergeComponent* MergeComponent;
 
-public:
-	
+	//ÃÖÁ¾ ½ºÄÌ·¹Å» ¸Þ½Ã Á¤º¸
+	USkeletalMesh* CurrSkeletalMesh;
 
 public:
 	// Sets default values for this character's properties
@@ -35,7 +36,17 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
+	void OnPartsSimpleMerge();
 	void OnPartsMerge();
+
+protected:
+	UFUNCTION()
+		void MoveForward(float Value);
+	UFUNCTION()
+		void MoveRight(float Value);
+
+
+
 
 public:	
 	// Called every frame

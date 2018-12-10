@@ -4,6 +4,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
 
+#if GAME_LOG_DEFINED
+DEFINE_LOG_CATEGORY(GameLog);
+#endif
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -48,18 +51,59 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	//TestMerge
 	PlayerInputComponent->BindAction("PartsMerge", IE_Released, this, &AMyCharacter::OnPartsMerge);
+	PlayerInputComponent->BindAction("PartsSimpleMerge", IE_Released, this, &AMyCharacter::OnPartsSimpleMerge);
+	//Movement
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::MoveRight);
+
+	PlayerInputComponent->BindAxis("Turn", this, &AMyCharacter::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &AMyCharacter::AddControllerPitchInput);
+}
+
+void AMyCharacter::OnPartsSimpleMerge()
+{
+	if (nullptr != MergeComponent)
+	{
+		CurrSkeletalMesh = MergeComponent->MergeToPieceMesh();
+		if (CurrSkeletalMesh)
+		{
+			auto mesh = GetMesh();
+			CurrSkeletalMesh->Skeleton = mesh->SkeletalMesh->Skeleton;
+			mesh->SetSkeletalMesh(CurrSkeletalMesh);
+		}
+	}
 }
 
 void AMyCharacter::OnPartsMerge()
 {
 	if (nullptr != MergeComponent)
 	{
-		auto skeletal = MergeComponent->MergeToPieceMesh();
-		if (skeletal)
+		CurrSkeletalMesh = MergeComponent->MergeToParams();
+		if (CurrSkeletalMesh)
 		{
 			auto mesh = GetMesh();
-			mesh->SetSkeletalMesh(skeletal);
+			mesh->SetSkeletalMesh(CurrSkeletalMesh);
 		}
 	}
+}
+
+void AMyCharacter::MoveForward(float Value)
+{
+	FVector dir = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+	AddMovementInput(dir, Value);
+
+	//Test 애니메이션 재생
+	UAnimInstance* ani = GetMesh()->GetAnimInstance();
+	UAnimMontage* montage = ani->GetCurrentActiveMontage();
+	ani->PlaySlotAnimationAsDynamicMontage(montage, TEXT("Move"));
+
+	GAME_LOG("Move Test Log");
+}
+
+void AMyCharacter::MoveRight(float Value)
+{
+	FVector dir = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+	AddMovementInput(dir, Value);
 }
