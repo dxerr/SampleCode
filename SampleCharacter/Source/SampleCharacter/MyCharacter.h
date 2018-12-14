@@ -21,6 +21,17 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	//Animation
+	UPROPERTY(EditDefaultsOnly, Category = Animation)
+	UAnimMontage* IdleMontage;
+	UPROPERTY(EditDefaultsOnly, Category = Animation)
+	UAnimMontage* AttackMontage;
+	UPROPERTY(EditDefaultsOnly, Category = Animation)
+	UAnimMontage* RunMontage;
+
+	//애니메이션 길이 체크
+	TMap<int32, float> MapAnimationTime;
+
 	//파츠 머지 컴퍼넌트
 	USkeletalMeshMergeComponent* MergeComponent;
 
@@ -31,6 +42,7 @@ public:
 	// Sets default values for this character's properties
 	AMyCharacter();
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,15 +50,15 @@ protected:
 protected:
 	void OnPartsSimpleMerge();
 	void OnPartsMerge();
+	void OnMoveForward(float Value);
+	void OnMoveRight(float Value);
+	void OnAttack1();
+
+	void TestMove();
+	void TestStop();
 
 protected:
-	UFUNCTION()
-		void MoveForward(float Value);
-	UFUNCTION()
-		void MoveRight(float Value);
-
-
-
+	void SetAniTimer(int32 ClassID, float Timer);
 
 public:	
 	// Called every frame

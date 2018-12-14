@@ -59,3 +59,12 @@ DECLARE_LOG_CATEGORY_EXTERN(GameLog, Log, All);
 #define GAME_ERROR(Message, ...)
 #define GAME_HALT(Message, ...)
 #endif
+
+namespace CharEnum
+{
+	enum State
+	{
+		Move,
+		Idle,
+	};
+}

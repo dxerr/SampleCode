@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "MyCharacter.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -31,6 +33,8 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+
 	MergeComponent = FindComponentByClass<USkeletalMeshMergeComponent>();
 
 	auto controller = UGameplayStatics::GetPlayerController(this, 0);
@@ -44,6 +48,11 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (GetCharacterMovement()->IsMovingOnGround() && GetVelocity().Equals(FVector::ZeroVector))
+	{
+		TestStop();
+	}
 }
 
 // Called to bind functionality to input
@@ -54,9 +63,13 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	//TestMerge
 	PlayerInputComponent->BindAction("PartsMerge", IE_Released, this, &AMyCharacter::OnPartsMerge);
 	PlayerInputComponent->BindAction("PartsSimpleMerge", IE_Released, this, &AMyCharacter::OnPartsSimpleMerge);
+
+	//key
+	PlayerInputComponent->BindAction("Attack1", IE_Released, this, &AMyCharacter::OnAttack1);
+
 	//Movement
-	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::OnMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::OnMoveRight);
 
 	PlayerInputComponent->BindAxis("Turn", this, &AMyCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyCharacter::AddControllerPitchInput);
@@ -89,21 +102,54 @@ void AMyCharacter::OnPartsMerge()
 	}
 }
 
-void AMyCharacter::MoveForward(float Value)
+void AMyCharacter::OnAttack1()
+{
+	UAnimInstance* ani = GetMesh()->GetAnimInstance();
+	float len = ani->Montage_Play(AttackMontage);
+	SetAniTimer(AttackMontage->StaticClass.GetUniqueID(), len);
+}
+
+void AMyCharacter::OnMoveForward(float Value)
 {
 	FVector dir = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	AddMovementInput(dir, Value);
-
-	//Test 애니메이션 재생
-	UAnimInstance* ani = GetMesh()->GetAnimInstance();
-	UAnimMontage* montage = ani->GetCurrentActiveMontage();
-	ani->PlaySlotAnimationAsDynamicMontage(montage, TEXT("Move"));
-
-	GAME_LOG("Move Test Log");
+	if (!FMath::IsNearlyZero(Value) && GetCharacterMovement()->MovementMode == MOVE_None)
+	{
+		TestMove();
+	}
 }
 
-void AMyCharacter::MoveRight(float Value)
+void AMyCharacter::OnMoveRight(float Value)
 {
 	FVector dir = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(dir, Value);
 }
+
+void AMyCharacter::TestMove()
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+
+	UAnimInstance* ani = GetMesh()->GetAnimInstance();
+	float len = ani->Montage_Play(RunMontage);
+	SetAniTimer(RunMontage->StaticClass.GetUniqueID(), len);
+
+	GAME_LOG("Move Playing");
+}
+
+void AMyCharacter::TestStop()
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+
+	UAnimInstance* ani = GetMesh()->GetAnimInstance();
+	float len = ani->Montage_Play(IdleMontage);
+	SetAniTimer(IdleMontage->StaticClass.GetUniqueID(), len);
+
+	GAME_LOG("Stop Playing");
+}
+
+void AMyCharacter::SetAniTimer(int32 ClassID, float Timer)
+{
+	float& time = MapAnimationTime.FindOrAdd(AttackMontage->StaticClass()->GetUniqueID());
+	time = Timer;
+}
+
