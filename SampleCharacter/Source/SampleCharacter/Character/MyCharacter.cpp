@@ -105,8 +105,13 @@ void AMyCharacter::OnPartsMerge()
 void AMyCharacter::OnAttack1()
 {
 	UAnimInstance* ani = GetMesh()->GetAnimInstance();
-	float len = ani->Montage_Play(AttackMontage);
-	SetAniTimer(AttackMontage->StaticClass.GetUniqueID(), len);
+	auto newmontage = ani->PlaySlotAnimationAsDynamicMontage(AttackMontage, TEXT("UpperBody"), 0.1f, 0.1f, 1.0f, 30.0f);
+	float len = ani->Montage_Play(newmontage);
+	SetAniTimer(AttackMontage->GetUniqueID(), len);
+
+	FOnMontageEnded EndDelegate;
+	EndDelegate.BindUObject(this, &AMyCharacter::OnAttackEnd);
+	ani->Montage_SetEndDelegate(EndDelegate);
 }
 
 void AMyCharacter::OnMoveForward(float Value)
@@ -131,7 +136,7 @@ void AMyCharacter::TestMove()
 
 	UAnimInstance* ani = GetMesh()->GetAnimInstance();
 	float len = ani->Montage_Play(RunMontage);
-	SetAniTimer(RunMontage->StaticClass.GetUniqueID(), len);
+	SetAniTimer(RunMontage->GetUniqueID(), len);
 
 	GAME_LOG("Move Playing");
 }
@@ -142,14 +147,25 @@ void AMyCharacter::TestStop()
 
 	UAnimInstance* ani = GetMesh()->GetAnimInstance();
 	float len = ani->Montage_Play(IdleMontage);
-	SetAniTimer(IdleMontage->StaticClass.GetUniqueID(), len);
+	SetAniTimer(IdleMontage->GetUniqueID(), len);
 
 	GAME_LOG("Stop Playing");
 }
 
 void AMyCharacter::SetAniTimer(int32 ClassID, float Timer)
 {
-	float& time = MapAnimationTime.FindOrAdd(AttackMontage->StaticClass()->GetUniqueID());
+	float& time = MapAnimationTime.FindOrAdd(ClassID);
 	time = Timer;
+}
+
+void AMyCharacter::SetAniEndEvent(int32 ClassID, FOnMontageEnded EndEvent)
+{
+	FOnMontageEnded& event = MapAnimationEnd.FindOrAdd(ClassID);
+	event = EndEvent;
+}
+
+void AMyCharacter::OnAttackEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	TestStop();
 }
 

@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PartsMergeDefine.h"
 #include "Public/SkeletalMeshMerge.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "SampleCharacter/Character/Define/PartsMergeDefine.h"
 #include "SkeletalMeshMergeComponent.generated.h"
 
 /**

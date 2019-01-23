@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "SkeletalMeshMergeComponent.h"
 #include "Global/GlobalDefine.h"
+#include "Component/SkeletalMeshMergeComponent.h"
 #include "MyCharacter.generated.h"	
 
 
@@ -29,8 +29,11 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category = Animation)
 	UAnimMontage* RunMontage;
 
-	//애니메이션 길이 체크
+	//애니메이션 타이머 설정
 	TMap<int32, float> MapAnimationTime;
+
+	//애니메이션 End이벤트 처리
+	TMap<int32, FOnMontageEnded> MapAnimationEnd;
 
 	//파츠 머지 컴퍼넌트
 	USkeletalMeshMergeComponent* MergeComponent;
@@ -58,7 +61,11 @@ protected:
 	void TestStop();
 
 protected:
+	void OnAttackEnd(UAnimMontage* Montage, bool bInterrupted);
+
+protected:
 	void SetAniTimer(int32 ClassID, float Timer);
+	void SetAniEndEvent(int32 ClassID, FOnMontageEnded EndEvent);
 
 public:	
 	// Called every frame
