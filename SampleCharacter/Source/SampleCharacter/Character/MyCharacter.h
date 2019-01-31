@@ -29,6 +29,7 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category = Animation)
 	UAnimMontage* RunMontage;
 
+
 	//애니메이션 타이머 설정
 	TMap<int32, float> MapAnimationTime;
 
@@ -41,12 +42,15 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 	//최종 스켈레탈 메시 정보
 	USkeletalMesh* CurrSkeletalMesh;
 
+	class UMyAnimInstance* Animation;
+
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
 
 
 protected:
+	virtual void PostInitializeComponents() override;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

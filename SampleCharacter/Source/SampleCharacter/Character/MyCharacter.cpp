@@ -5,6 +5,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Character/Component/MyAnimInstance.h"
+#include "State/StateIdle.h"
 
 #if GAME_LOG_DEFINED
 DEFINE_LOG_CATEGORY(GameLog);
@@ -26,6 +28,15 @@ AMyCharacter::AMyCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	
+}
+
+void AMyCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	Animation = Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
 // Called when the game starts or when spawned
@@ -33,9 +44,9 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCharacterMovement()->SetMovementMode(MOVE_None);
-
 	MergeComponent = FindComponentByClass<USkeletalMeshMergeComponent>();
+
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
 
 	auto controller = UGameplayStatics::GetPlayerController(this, 0);
 	if (controller)
@@ -104,6 +115,8 @@ void AMyCharacter::OnPartsMerge()
 
 void AMyCharacter::OnAttack1()
 {
+	Animation->ChangeUpperState(ECharacterStateUpperBase::Attack, 1);
+	/*
 	UAnimInstance* ani = GetMesh()->GetAnimInstance();
 	auto newmontage = ani->PlaySlotAnimationAsDynamicMontage(AttackMontage, TEXT("UpperBody"), 0.1f, 0.1f, 1.0f, 30.0f);
 	float len = ani->Montage_Play(newmontage);
@@ -111,7 +124,9 @@ void AMyCharacter::OnAttack1()
 
 	FOnMontageEnded EndDelegate;
 	EndDelegate.BindUObject(this, &AMyCharacter::OnAttackEnd);
-	ani->Montage_SetEndDelegate(EndDelegate);
+	ani->Montage_SetEndDelegate(EndDelegate);*/
+
+
 }
 
 void AMyCharacter::OnMoveForward(float Value)
@@ -132,22 +147,27 @@ void AMyCharacter::OnMoveRight(float Value)
 
 void AMyCharacter::TestMove()
 {
+	Animation->ChangeState(ECharacterStateBase::Walk);
+	
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 
+	/*
 	UAnimInstance* ani = GetMesh()->GetAnimInstance();
 	float len = ani->Montage_Play(RunMontage);
-	SetAniTimer(RunMontage->GetUniqueID(), len);
+	SetAniTimer(RunMontage->GetUniqueID(), len);*/
 
 	GAME_LOG("Move Playing");
 }
 
 void AMyCharacter::TestStop()
 {
+	Animation->ChangeState(ECharacterStateBase::Idle);
+
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 
-	UAnimInstance* ani = GetMesh()->GetAnimInstance();
+	/*UAnimInstance* ani = GetMesh()->GetAnimInstance();
 	float len = ani->Montage_Play(IdleMontage);
-	SetAniTimer(IdleMontage->GetUniqueID(), len);
+	SetAniTimer(IdleMontage->GetUniqueID(), len);*/
 
 	GAME_LOG("Stop Playing");
 }
