@@ -12,9 +12,6 @@ UMyAnimInstance::UMyAnimInstance()
 
 	CurrStateType = ECharacterStateBase::Idle;
 	CurrUpperStateType = ECharacterStateUpperBase::None;
-
-	OnMontageStarted.AddDynamic(&CurrUpperAni, &FCurrentUpperAniData::OnMontageStart);
-	OnMontageEnded.AddDynamic(&CurrUpperAni, &FCurrentUpperAniData::OnMontageEnded);
 }
 
 void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -68,6 +65,11 @@ void UMyAnimInstance::ChangeState_Implementation(ECharacterStateBase ChangeState
 	}
 }
 
+bool UMyAnimInstance::IsUpperBlend()
+{
+	return CurrStateType == ECharacterStateBase::Walk;
+}
+
 void UMyAnimInstance::ChangeUpperState_Implementation(ECharacterStateUpperBase ChangeState, int Id)
 {
 	CurrUpperStateType = ChangeState;
@@ -86,6 +88,8 @@ void UMyAnimInstance::ChangeUpperState_Implementation(ECharacterStateUpperBase C
 		if (nullptr != findele)
 		{
 			CurrUpperAni.ReturnState = ECharacterStateUpperBase::None;
+
+			PlayUpperAnimation(findele->ResAni);
 		}
 	}
 
@@ -94,6 +98,15 @@ void UMyAnimInstance::ChangeUpperState_Implementation(ECharacterStateUpperBase C
 	{
 		GAME_WARN("ChangeUpperState : %s", *enumPtr->GetEnumName((int32)ChangeState));
 	}
+}
+
+void UMyAnimInstance::PlayUpperAnimation(UAnimMontage* Animation)
+{
+	CurrUpperAni.Ani		= Animation;
+	CurrUpperAni.Timer		= FApp::GetCurrentTime();
+	CurrUpperAni.Duration	= Animation->GetPlayLength();
+
+	Montage_Play(CurrUpperAni.Ani, 1.f, EMontagePlayReturnType::MontageLength, 0.f, !IsUpperBlend());
 }
 
 UAnimMontage* UMyAnimInstance::GetCurrentSocialAction() const

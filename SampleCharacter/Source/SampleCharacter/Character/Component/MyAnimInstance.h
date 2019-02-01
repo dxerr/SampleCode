@@ -98,6 +98,8 @@ public:
 	bool IsState(ECharacterStateBase State);
 	UFUNCTION(BlueprintPure, Category = "MyAnimation", meta = (BlueprintThreadSafe))
 	bool IsUpperState(ECharacterStateUpperBase State);
+	UFUNCTION(BlueprintCallable, Category = "MyAnimation")
+	bool IsUpperBlend();
 	
 	UFUNCTION(BlueprintNativeEvent, Category = "MyAnimation")
 	void OnSocialPlay(int Index);
