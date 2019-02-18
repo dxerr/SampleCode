@@ -106,7 +106,7 @@ void UMyAnimInstance::PlayUpperAnimation(UAnimMontage* Animation)
 	CurrUpperAni.Timer		= FApp::GetCurrentTime();
 	CurrUpperAni.Duration	= Animation->GetPlayLength();
 
-	Montage_Play(CurrUpperAni.Ani, 1.f, EMontagePlayReturnType::MontageLength, 0.f, !IsUpperBlend());
+	Montage_Play(CurrUpperAni.Ani);
 }
 
 UAnimMontage* UMyAnimInstance::GetCurrentSocialAction() const
