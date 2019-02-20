@@ -1,17 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MyAnimInstance.h"
+#include "SampleCharacter/Character/MyCharacter.h"
+#include "SampleCharacter/Character/State/FSMManager.h"
+#include "SampleCharacter/Character/State/StateBase.h"
 
 UMyAnimInstance::UMyAnimInstance()
 {
-	//기본 소셜 모션 설정
-	if (SocialActions.IsValidIndex(0))
-	{
-		currentSocialAction = SocialActions[0].Ani;
-	}
-
-	CurrStateType = ECharacterStateBase::Idle;
-	CurrUpperStateType = ECharacterStateUpperBase::None;
 }
 
 void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -21,61 +16,43 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (CurrUpperAni.IsEnd())
 	{
 		CurrUpperAni.Clear();
-		ChangeUpperState(CurrUpperAni.ReturnState, 0);
+		//ChangeUpperState(CurrUpperAni.ReturnState, 0);
 	}
 }
 
-ECharacterStateBase UMyAnimInstance::GetCurrentStateType()
+void UMyAnimInstance::ChangeState(int State)
 {
-	return CurrStateType;
-}
-
-UAnimMontage* UMyAnimInstance::CurrBlendAnimation() const
-{
-	return CurrUpperAni.Ani;
+	if (State >= (int)ECharacterStateUpperBase::None)
+	{
+		UpperStateType = static_cast<ECharacterStateUpperBase>(State);
+	}
+	else
+	{
+		BaseStateType = static_cast<ECharacterStateBase>(State);
+	}
+	
 }
 
 bool UMyAnimInstance::IsState(ECharacterStateBase State)
 {
-	return CurrStateType == State;
+	return BaseStateType == State;
 }
 
 bool UMyAnimInstance::IsUpperState(ECharacterStateUpperBase State)
 {
-	return CurrUpperStateType == State;
-}
-
-void UMyAnimInstance::OnSocialPlay_Implementation(int Index)
-{
-	//해당 인덱스로 소셜 액션 애니 설정
-	if (SocialActions.IsValidIndex(Index))
-	{
-		currentSocialAction = SocialActions[Index].Ani;
-	}
-}
-
-void UMyAnimInstance::ChangeState_Implementation(ECharacterStateBase ChangeState)
-{
-	CurrStateType = ChangeState;
-
-	const UEnum* enumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ECharacterStateBase"), true);
-	if (enumPtr)
-	{
-		GAME_WARN("ChangeState : %s", *enumPtr->GetEnumName((int32)ChangeState));
-	}
+	return UpperStateType == State;
 }
 
 bool UMyAnimInstance::IsUpperBlend()
 {
-	return CurrStateType == ECharacterStateBase::Walk;
+	return BaseStateType != ECharacterStateBase::Idle;
 }
 
-void UMyAnimInstance::ChangeUpperState_Implementation(ECharacterStateUpperBase ChangeState, int Id)
+void UMyAnimInstance::PlayUpperAni(ECharacterStateUpperBase ChangeState, int Id)
 {
-	CurrUpperStateType = ChangeState;
 	auto find = UpperParams.Params.FindByPredicate([=](const FStateUpperParam& el)
 	{
-		return el.EStateType == CurrUpperStateType;
+		return el.EStateType == ChangeState;
 	});
 
 	if (nullptr != find)
@@ -93,11 +70,11 @@ void UMyAnimInstance::ChangeUpperState_Implementation(ECharacterStateUpperBase C
 		}
 	}
 
-	const UEnum* enumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("ECharacterStateUpperBase"), true);
-	if (enumPtr)
+	/*
+	if (UpperFsmMgr)
 	{
-		GAME_WARN("ChangeUpperState : %s", *enumPtr->GetEnumName((int32)ChangeState));
-	}
+		GAME_WARN("ChangeUpperState : %s", *UpperFsmMgr->CurrentState()->Name());
+	}*/
 }
 
 void UMyAnimInstance::PlayUpperAnimation(UAnimMontage* Animation)
@@ -107,9 +84,4 @@ void UMyAnimInstance::PlayUpperAnimation(UAnimMontage* Animation)
 	CurrUpperAni.Duration	= Animation->GetPlayLength();
 
 	Montage_Play(CurrUpperAni.Ani);
-}
-
-UAnimMontage* UMyAnimInstance::GetCurrentSocialAction() const
-{
-	return currentSocialAction;
 }

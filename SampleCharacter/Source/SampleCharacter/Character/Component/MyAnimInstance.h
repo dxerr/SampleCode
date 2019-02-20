@@ -53,20 +53,27 @@ struct SAMPLECHARACTER_API FCurrentUpperAniData
 };
 
 /**
- * 
+ * 내부 로직에서 구현한 FSM의 상태정보를 애님블루프린트에 전달
+ * Upper애니메이션에 해당하는 애니메이션 시퀀스 정보를 애님블루프린트에 전달
  */
 UCLASS()
 class SAMPLECHARACTER_API UMyAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 
-private:
-	ECharacterStateBase			CurrStateType;
-	ECharacterStateUpperBase	CurrUpperStateType;
-	FCurrentUpperAniData		CurrUpperAni;
-
 protected:
-	UAnimMontage* currentSocialAction;
+	//상태 정보
+	//FSMManager에서 직접 참조 하고 싶은데 나이스한 방법을 아직 잘모르겠음 ㅠ
+	ECharacterStateBase			BaseStateType;
+	ECharacterStateUpperBase	UpperStateType;
+	//UpperResource
+	ECharacterStateUpperBase	UpperAnis;
+
+	UAnimMontage* SocialAnis;
+	
+
+	//ECharacterStateBase			CurrStateType;
+	FCurrentUpperAniData		CurrUpperAni;
 
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -85,44 +92,24 @@ public:
 	UPROPERTY(EditAnywhere, Category = "MyAnimation")
 	TArray<FSocialActionAniData> SocialActions;
 
-	UFUNCTION(BlueprintCallable, Category = "MyAnimation")
-	UAnimMontage* GetCurrentSocialAction() const;
+public:
+	//FSMManager 애님 블루프린트 FSM 파라미터 동기화
+	//FSMManager에서 직접 참조하고 싶지만.. 아직 잘모르겠음..
+	//문제점1. AMyCharacter 객체 참조를 하려해도 에디터상 문제가 생김(CDO)
+	//문제점2. 애님 블루프린트 상태 파라미터 검사시 쓰레드 세이프 하지 않음(AMyCharacter 형변환 노드 사용시)
+	void ChangeState(int state);
 
-	UFUNCTION(BlueprintPure, Category = "MyAnimation", meta = (BlueprintThreadSafe))
-	ECharacterStateBase GetCurrentStateType();
-
-	UFUNCTION(BlueprintPure, Category = "MyAnimation", meta = (BlueprintThreadSafe))
-	UAnimMontage* CurrBlendAnimation() const;
-
+	//애님 플루프린트 FSM동기화 참조 함수
 	UFUNCTION(BlueprintPure,Category = "MyAnimation", meta = (BlueprintThreadSafe))
 	bool IsState(ECharacterStateBase State);
 	UFUNCTION(BlueprintPure, Category = "MyAnimation", meta = (BlueprintThreadSafe))
 	bool IsUpperState(ECharacterStateUpperBase State);
 	UFUNCTION(BlueprintPure, Category = "MyAnimation", meta = (BlueprintThreadSafe))
 	bool IsUpperBlend();
-	
-	UFUNCTION(BlueprintNativeEvent, Category = "MyAnimation")
-	void OnSocialPlay(int Index);
-	void OnSocialPlay_Implementation(int Index);
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyAnimation")
-	void ChangeState(ECharacterStateBase ChangeState);
-	void ChangeState_Implementation(ECharacterStateBase ChangeState);
-
-	//추후 데이터 형에 맞게 구현
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MyAnimation")
-	void ChangeUpperState(ECharacterStateUpperBase ChangeState, int Id);
-	void ChangeUpperState_Implementation(ECharacterStateUpperBase ChangeState, int Id);
+	//임의 
+	void PlayUpperAni(ECharacterStateUpperBase ChangeState, int Id);
 
 public:
 	UMyAnimInstance();
-};
-
-//Proxy
-USTRUCT()
-struct SAMPLECHARACTER_API FAnimMyInstanceProxy : public FAnimInstanceProxy
-{
-	GENERATED_BODY()
-
-
 };

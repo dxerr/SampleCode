@@ -6,7 +6,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Character/Component/MyAnimInstance.h"
-#include "State/StateIdle.h"
+#include "State/StateBase.h"
+#include "State/FSMManager.h"
+
 
 #if GAME_LOG_DEFINED
 DEFINE_LOG_CATEGORY(GameLog);
@@ -27,9 +29,7 @@ AMyCharacter::AMyCharacter()
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	
+	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm	
 }
 
 void AMyCharacter::PostInitializeComponents()
@@ -37,6 +37,16 @@ void AMyCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	Animation = Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance());
+	if (!LowwerFsm)
+	{
+		LowwerFsm = new FFSMManager();
+		LowwerFsm->Initialize(this);
+	}
+	if (!UpperFsm)
+	{
+		UpperFsm = new FFSMManager();
+		UpperFsm->Initialize(this);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -86,6 +96,11 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyCharacter::AddControllerPitchInput);
 }
 
+UMyAnimInstance* AMyCharacter::GetAnimInstance() 
+{ 
+	return Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance()); 
+}
+
 void AMyCharacter::OnPartsSimpleMerge()
 {
 	if (nullptr != MergeComponent)
@@ -115,7 +130,8 @@ void AMyCharacter::OnPartsMerge()
 
 void AMyCharacter::OnAttack1()
 {
-	Animation->ChangeUpperState(ECharacterStateUpperBase::Attack, 1);
+	UpperFsm->ChangeState<FStateAttack>();
+	//Animation->ChangeUpperState(ECharacterStateUpperBase::Attack, 1);
 	/*
 	UAnimInstance* ani = GetMesh()->GetAnimInstance();
 	auto newmontage = ani->PlaySlotAnimationAsDynamicMontage(AttackMontage, TEXT("UpperBody"), 0.1f, 0.1f, 1.0f, 30.0f);
@@ -147,7 +163,7 @@ void AMyCharacter::OnMoveRight(float Value)
 
 void AMyCharacter::TestMove()
 {
-	Animation->ChangeState(ECharacterStateBase::Walk);
+	LowwerFsm->ChangeState<FStateWalk>();
 	
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 
@@ -161,7 +177,7 @@ void AMyCharacter::TestMove()
 
 void AMyCharacter::TestStop()
 {
-	Animation->ChangeState(ECharacterStateBase::Idle);
+	LowwerFsm->ChangeState<FStateIdle>();
 
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 

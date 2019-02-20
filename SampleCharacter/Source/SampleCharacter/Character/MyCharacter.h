@@ -6,8 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Global/GlobalDefine.h"
 #include "Component/SkeletalMeshMergeComponent.h"
-#include "MyCharacter.generated.h"	
-
+#include "MyCharacter.generated.h"
 
 UCLASS()
 class SAMPLECHARACTER_API AMyCharacter : public ACharacter
@@ -44,10 +43,12 @@ class SAMPLECHARACTER_API AMyCharacter : public ACharacter
 
 	class UMyAnimInstance* Animation;
 
-public:
-	// Sets default values for this character's properties
-	AMyCharacter();
+	//FSM
+	class FFSMManager* LowwerFsm;
+	class FFSMManager* UpperFsm;
 
+public:
+	class UMyAnimInstance* GetAnimInstance();
 
 protected:
 	virtual void PostInitializeComponents() override;
@@ -72,6 +73,9 @@ protected:
 	void SetAniEndEvent(int32 ClassID, FOnMontageEnded EndEvent);
 
 public:	
+	// Sets default values for this character's properties
+	AMyCharacter();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
