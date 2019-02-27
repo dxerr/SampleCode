@@ -48,6 +48,11 @@ bool UMyAnimInstance::IsUpperBlend()
 	return BaseStateType != ECharacterStateBase::Idle;
 }
 
+void UMyAnimInstance::PlayUpperAni(UAnimMontage* res)
+{
+	PlayUpperAnimation(res);
+}
+
 void UMyAnimInstance::PlayUpperAni(ECharacterStateUpperBase ChangeState, int Id)
 {
 	auto find = UpperParams.Params.FindByPredicate([=](const FStateUpperParam& el)

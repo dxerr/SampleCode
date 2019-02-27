@@ -6,6 +6,7 @@
 #include "Public/SkeletalMeshMerge.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "SampleCharacter/Character/Define/PartsMergeDefine.h"
+#include "Character/Parts/Data/PartsData.h"
 #include "SkeletalMeshMergeComponent.generated.h"
 
 /**

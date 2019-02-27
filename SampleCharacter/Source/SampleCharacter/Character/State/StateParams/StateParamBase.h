@@ -21,7 +21,7 @@ enum class ECharacterStateBase : uint8
 UENUM()
 enum class  ECharacterStateUpperBase : uint8
 {
-	None = 99,
+	None = (uint8)ECharacterStateBase::BaseMax,
 	Attack,
 
 	BaseMax,

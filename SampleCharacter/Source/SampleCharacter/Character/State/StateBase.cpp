@@ -4,6 +4,7 @@
 #include "StateParams/StateParamBase.h"
 #include "Character/MyCharacter.h"
 #include "Character/Component/MyAnimInstance.h"
+#include "Character/Skill/SkillManager.h"
 
 FStateBase::FStateBase()
 {
@@ -43,7 +44,7 @@ void FStateIdle::Exit(AMyCharacter* Owner)
 }
 
 /*
-* IdleState
+* MoveState
 */
 int FStateWalk::GetStateID()
 {
@@ -86,8 +87,12 @@ FString FStateAttack::Name()
 
 void FStateAttack::Enter(AMyCharacter* Owner)
 {
-	UMyAnimInstance* anim = Cast<UMyAnimInstance>(Owner->GetMesh()->GetAnimInstance());
-	anim->PlayUpperAni(ECharacterStateUpperBase::Attack, 1);
+	FSkillManager* skillMgr = Owner->GetSKillManager();
+	if (skillMgr->CurrentSkillData)
+	{
+		UMyAnimInstance* anim = Owner->GetAnimInstance();
+		anim->PlayUpperAni(skillMgr->CurrentSkillData->ResAni);
+	}
 }
 
 void FStateAttack::Update(AMyCharacter* Owner)

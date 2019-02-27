@@ -6,8 +6,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Character/Component/MyAnimInstance.h"
+#include "Character/Skill/SkillDataContainer.h"
 #include "State/StateBase.h"
 #include "State/FSMManager.h"
+#include "Skill/SkillManager.h"
+#include "Parts/PartsManager.h"
+#include "Parts/Data/PartsData.h"
 
 
 #if GAME_LOG_DEFINED
@@ -47,6 +51,20 @@ void AMyCharacter::PostInitializeComponents()
 		UpperFsm = new FFSMManager();
 		UpperFsm->Initialize(this);
 	}
+
+	if (!SkillMgr)
+	{
+		SkillMgr = new FSkillManager();
+		SkillMgr->Initialize(this);
+		SkillMgr->LoadData(TEXT("SkillDataContainer'/Game/Resource/DataAsset/LocalSkill.LocalSkill'"));
+	}
+
+	if (!PartsMgr)
+	{
+		PartsMgr = new FPartsManager();
+		PartsMgr->Initialize(this);
+		PartsMgr->LoadData(TEXT("PartsContainer'/Game/Resource/DataAsset/LocalParts.LocalParts'"));
+	}
 }
 
 // Called when the game starts or when spawned
@@ -84,9 +102,15 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	//TestMerge
 	PlayerInputComponent->BindAction("PartsMerge", IE_Released, this, &AMyCharacter::OnPartsMerge);
 	PlayerInputComponent->BindAction("PartsSimpleMerge", IE_Released, this, &AMyCharacter::OnPartsSimpleMerge);
+	PlayerInputComponent->BindAction<FOnAttachParts>("AttachPartsH", IE_Released, this, &AMyCharacter::OnAttachParts, true, EPartsType::HEAD);
+	PlayerInputComponent->BindAction<FOnAttachParts>("AttachPartsB", IE_Released, this, &AMyCharacter::OnAttachParts, true, EPartsType::BODY);
+	PlayerInputComponent->BindAction<FOnAttachParts>("AttachPartsG", IE_Released, this, &AMyCharacter::OnAttachParts, true, EPartsType::GLOVE);
+	PlayerInputComponent->BindAction<FOnAttachParts>("AttachPartsL", IE_Released, this, &AMyCharacter::OnAttachParts, true, EPartsType::LEG);
 
 	//key
-	PlayerInputComponent->BindAction("Attack1", IE_Released, this, &AMyCharacter::OnAttack1);
+	PlayerInputComponent->BindAction<FOnAttack1>("Attack1", IE_Released, this, &AMyCharacter::OnAttack1, 1);
+	PlayerInputComponent->BindAction<FOnAttack1>("Attack2", IE_Released, this, &AMyCharacter::OnAttack1, 2);
+	PlayerInputComponent->BindAction<FOnAttack1>("Attack3", IE_Released, this, &AMyCharacter::OnAttack1, 3);
 
 	//Movement
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::OnMoveForward);
@@ -96,10 +120,11 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyCharacter::AddControllerPitchInput);
 }
 
+/*
 UMyAnimInstance* AMyCharacter::GetAnimInstance() 
 { 
 	return Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance()); 
-}
+}*/
 
 void AMyCharacter::OnPartsSimpleMerge()
 {
@@ -128,9 +153,23 @@ void AMyCharacter::OnPartsMerge()
 	}
 }
 
-void AMyCharacter::OnAttack1()
+void AMyCharacter::OnAttachParts(bool Attach, EPartsType Type)
 {
-	UpperFsm->ChangeState<FStateAttack>();
+	if (PartsMgr)
+	{
+		(Attach) ? PartsMgr->Attach(Type) : PartsMgr->Detach(Type);
+	}
+}
+
+void AMyCharacter::OnAttack1(int32 slot)
+{
+	if (SkillMgr)
+	{
+		SkillMgr->UseSKill(slot);
+		UpperFsm->ChangeState<FStateAttack>();
+	}
+
+	//UpperFsm->ChangeState<FStateAttack>();
 	//Animation->ChangeUpperState(ECharacterStateUpperBase::Attack, 1);
 	/*
 	UAnimInstance* ani = GetMesh()->GetAnimInstance();
@@ -187,21 +226,3 @@ void AMyCharacter::TestStop()
 
 	GAME_LOG("Stop Playing");
 }
-
-void AMyCharacter::SetAniTimer(int32 ClassID, float Timer)
-{
-	float& time = MapAnimationTime.FindOrAdd(ClassID);
-	time = Timer;
-}
-
-void AMyCharacter::SetAniEndEvent(int32 ClassID, FOnMontageEnded EndEvent)
-{
-	FOnMontageEnded& event = MapAnimationEnd.FindOrAdd(ClassID);
-	event = EndEvent;
-}
-
-void AMyCharacter::OnAttackEnd(UAnimMontage* Montage, bool bInterrupted)
-{
-	TestStop();
-}
-

@@ -27,11 +27,8 @@ public:
 	}
 };
 
-template <typename T>
-std::unique_ptr<T> StateSingleton<T>::_instance;
-
-template <typename T>
-std::once_flag StateSingleton<T>::_flag1;
+template <typename T> std::unique_ptr<T> StateSingleton<T>::_instance;
+template <typename T> std::once_flag StateSingleton<T>::_flag1;
 
 /**
  * 

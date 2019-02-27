@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Animation/AnimInstanceProxy.h"
 #include "Animation/AnimInstance.h"
 #include "Character/State/StateParams/StateParamBase.h"
 #include "Global/GlobalDefine.h"
@@ -109,6 +108,7 @@ public:
 
 	//юсюг 
 	void PlayUpperAni(ECharacterStateUpperBase ChangeState, int Id);
+	void PlayUpperAni(UAnimMontage* res);
 
 public:
 	UMyAnimInstance();
