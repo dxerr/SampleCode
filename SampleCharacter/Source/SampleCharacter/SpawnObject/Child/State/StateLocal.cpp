@@ -4,10 +4,11 @@
 
 #include "Define/StateParams.h"
 
+#include "FSMManager.h"
 #include "SpawnObject/Child/LocalPlayerObject.h"
 #include "SpawnObject/Child/Skill/SKillLocal.h"
 #include "SpawnObject/Child/Component/Movement/CharacterMovementComponentLocal.h"
-#include "SpawnObject/Child/Component/Animation/AnimInstanceLocal.h"
+#include "SpawnObject/Child/Component/Animation/AnimInstanceState.h"
 
 /*
 * IdleState
@@ -155,7 +156,7 @@ void FStateAttack::OnEnter(ALocalPlayerObject* Owner)
 	FSKillLocal* skillMgr = Owner->GetSKill();
 	if (skillMgr->CurrentSkillData)
 	{
-		UAnimInstanceLocal* anim = Owner->GetAnim();
+		UAnimInstanceState* anim = Owner->GetAnim();
 		anim->PlayUpperAni(skillMgr->CurrentSkillData->ResAni);
 	}
 }

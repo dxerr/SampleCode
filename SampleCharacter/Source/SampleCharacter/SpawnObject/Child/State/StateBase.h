@@ -45,7 +45,7 @@ public:
 	virtual int GetStateID() = 0;
 	virtual FString Name() = 0;
 
-	//체인지 가능 or 불가능 상태 정의
+	//체인지 가능 or 불가능(Black List | White List) 상태 정의
 	virtual bool IsChange(int StateID);
 
 	virtual void Enter(FBaseObject* Owner)	= 0;
@@ -53,6 +53,11 @@ public:
 	virtual void Update(FBaseObject* Owner, float Delta) = 0;
 	virtual void Exit(FBaseObject* Owner) = 0;
 };
+
+/**
+* FSM의 상태 클래스들은 자주 호출되고, 싱글톤 객체이므로 다중상속에 의한 캐스팅보다(Owner->cast())
+* 추후 템플릿 구현으로 수정
+*/
 
 template <typename T>
 class SAMPLECHARACTER_API FStateTargetBase : public FStateBase
@@ -101,7 +106,7 @@ protected:
 	//애님 블루프린트에 가장 최우선으로 상태를 전송해줘야한다.
 	virtual void OnEnter(ALocalPlayerObject* Owner) override
 	{
-		UAnimInstanceLocal* anim = Owner->GetAnim();
+		UAnimInstanceState* anim = Owner->GetAnim();
 		anim->ChangeState(GetStateID());
 	}
 

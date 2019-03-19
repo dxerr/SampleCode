@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "SpawnObject/CharacterObject.h"
-#include "Character/State/FSMManager.h"
-#include "SpawnObject/Child/Parts/Data/PartsDataBase.h" //EPartsType
+#include "Parts/Data/PartsDataBase.h" //EPartsType
 #include "LocalPlayerObject.generated.h"
 
 //전방 선언
-class UAnimInstanceLocal;
+class UAnimInstanceState;
 class FSKillLocal;
 class FPartsLocal;
+class FFSMManager;
 
 UCLASS()
 class SAMPLECHARACTER_API ALocalPlayerObject : public ACharacterObject
@@ -58,7 +58,7 @@ public:
 
 private:
 	//Anim
-	UAnimInstanceLocal* Animation;
+	UAnimInstanceState* Animation;
 	//FSM
 	FFSMManager* LowwerFsm;
 	FFSMManager* UpperFsm;
@@ -69,7 +69,7 @@ private:
 
 public:
 	//FORCEINLINE : Virtual 처리가 불가능 한것으로 알고있는데 추후 수정될수 있음..
-	FORCEINLINE UAnimInstanceLocal* GetAnim() { return Animation; }
+	FORCEINLINE UAnimInstanceState* GetAnim() { return Animation; }
 	FORCEINLINE FSKillLocal* GetSKill() { return SkillMgr; }
 	FORCEINLINE FPartsLocal* GetParts() { return PartsMgr; }
 	FORCEINLINE FFSMManager* GetLowwerState() { return LowwerFsm; }

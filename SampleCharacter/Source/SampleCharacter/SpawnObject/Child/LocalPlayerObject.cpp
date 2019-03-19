@@ -6,11 +6,11 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "SpawnObject/Child/Component/Animation/AnimInstanceLocal.h"
-#include "SampleCharacter/Character/State/FSMManager.h"
-#include "SpawnObject/Child/State/StateLocal.h"
-#include "SpawnObject/Child/Skill/SKillLocal.h"
-#include "SpawnObject/Child/Parts/PartsLocal.h"
+#include "Component/Animation/AnimInstanceState.h"
+#include "State/FSMManager.h"
+#include "State/StateLocal.h"
+#include "Skill/SKillLocal.h"
+#include "Parts/PartsLocal.h"
 
 // Sets default values
 ALocalPlayerObject::ALocalPlayerObject()
@@ -34,7 +34,7 @@ void ALocalPlayerObject::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	Animation = Cast<UAnimInstanceLocal>(GetMesh()->GetAnimInstance());
+	Animation = Cast<UAnimInstanceState>(GetMesh()->GetAnimInstance());
 	if (!LowwerFsm)
 	{
 		LowwerFsm = new FFSMManager();

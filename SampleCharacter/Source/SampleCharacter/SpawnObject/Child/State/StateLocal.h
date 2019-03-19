@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/State/StateBase.h"
+#include "StateBase.h"
 
 /**
  * 
