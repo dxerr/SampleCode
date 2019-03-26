@@ -18,6 +18,7 @@ public:
 
 	virtual void Attach(EPartsType Type, ...) override;
 	virtual void Detach(EPartsType Type, ...) override;
+	virtual void AttachAll() override;
 
 private:
 	USkeletalMesh* MergeParts() const;

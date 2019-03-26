@@ -4,6 +4,36 @@
 
 #include "CoreMinimal.h"
 #include "StateBase.h"
+#include "SpawnObject/Child/Component/Animation/AnimInstanceState.h"
+#include "SpawnObject/Child/LocalPlayerObject.h"
+
+template <typename T>
+class SAMPLECHARACTER_API FStateSingleLocal : public StateSingleton<T>, public FStateTargetBase<ALocalPlayerObject>
+{
+protected:
+	
+
+protected:
+	//애님 블루프린트에 가장 최우선으로 상태를 전송해줘야한다.
+	virtual void OnEnter(ALocalPlayerObject* Owner) override
+	{
+		UAnimInstanceState* anim = Owner->GetAnim();
+		anim->ChangeState(GetStateID());
+	}
+
+	virtual void OnReEnter(ALocalPlayerObject* Owner) override
+	{
+
+	}
+	virtual void OnUpdate(ALocalPlayerObject* Owner, float Delta) override
+	{
+
+	}
+	virtual void OnExit(ALocalPlayerObject* Owner) override
+	{
+
+	}
+};
 
 /**
  * 
@@ -32,6 +62,16 @@ public:
 };
 
 class SAMPLECHARACTER_API FStateBackwardWalk : public FStateSingleLocal<FStateBackwardWalk>
+{
+public:
+	virtual int GetStateID() override;
+	virtual FString Name() override;
+
+	virtual void OnEnter(ALocalPlayerObject* Owner) override;
+	virtual void OnUpdate(ALocalPlayerObject* Owner, float Delta) override;
+};
+
+class SAMPLECHARACTER_API FStateSideWalk : public FStateSingleLocal<FStateSideWalk>
 {
 public:
 	virtual int GetStateID() override;

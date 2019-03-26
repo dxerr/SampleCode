@@ -16,6 +16,7 @@ enum class EStateBase : uint8
 	Idle = 1,
 	ForwardWalk,
 	BackwardWalk,
+	SideWalk,
 	Run,
 
 	BaseMax,

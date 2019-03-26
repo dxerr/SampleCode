@@ -10,9 +10,7 @@
 #include "SpawnObject/Child/Component/Movement/CharacterMovementComponentLocal.h"
 #include "SpawnObject/Child/Component/Animation/AnimInstanceState.h"
 
-/*
-* IdleState
-*/
+/// FStateIdle ///
 int FStateIdle::GetStateID()
 {
 	return (int)EStateBase::Idle;
@@ -30,10 +28,8 @@ void FStateIdle::OnEnter(ALocalPlayerObject* Owner)
 	Owner->GetCharacterMovement()->SetMovementMode(MOVE_None);
 }
 
-/*
-* MoveState
-*/
 
+/// FStateForwardWalk ///
 int FStateForwardWalk::GetStateID()
 {
 	return (int)EStateBase::ForwardWalk;
@@ -74,6 +70,8 @@ void FStateForwardWalk::UpdateSpeed(ALocalPlayerObject* Owner, float Speed)
 	}
 }
 
+
+/// FStateBackwardWalk ///
 int FStateBackwardWalk::GetStateID()
 {
 	return (int)EStateBase::BackwardWalk;
@@ -100,6 +98,36 @@ void FStateBackwardWalk::OnUpdate(ALocalPlayerObject* Owner, float Delta)
 	Owner->AddMovementInput(dir, Owner->MovementForce);
 }
 
+
+/// FStateSideWalk ///
+int FStateSideWalk::GetStateID()
+{
+	return (int)EStateBase::SideWalk;
+}
+
+FString FStateSideWalk::Name()
+{
+	return TEXT("StateSideWalk");
+}
+
+void FStateSideWalk::OnEnter(ALocalPlayerObject* Owner)
+{
+	FStateSingleLocal::OnEnter(Owner);
+
+	auto movement = Owner->GetCharacterMovement();
+	movement->SetMovementMode(MOVE_Walking);
+	movement->MaxWalkSpeed = 500.f;
+	//Owner->MovementForce = -0.5f;
+}
+
+void FStateSideWalk::OnUpdate(ALocalPlayerObject* Owner, float Delta)
+{
+	FVector dir = FRotationMatrix(Owner->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+	Owner->AddMovementInput(dir, Owner->MovementForce);
+}
+
+
+/// FStateRun ///
 int FStateRun::GetStateID()
 {
 	return (int)EStateBase::Run;
@@ -136,9 +164,8 @@ void FStateRun::OnUpdate(ALocalPlayerObject* Owner, float Delta)
 	Owner->AddMovementInput(dir, Owner->MovementForce);
 }
 
-/*
-*AttackState
-*/
+
+/// FStateAttack ///
 int FStateAttack::GetStateID()
 {
 	return (int)EStateUpperBase::Attack;

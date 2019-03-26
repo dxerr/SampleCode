@@ -34,8 +34,6 @@ template <typename T> std::once_flag StateSingleton<T>::_flag1;
 /**
  * 
  */
-class ALocalPlayerObject;
-
 class SAMPLECHARACTER_API FStateBase
 {
 public:
@@ -47,6 +45,7 @@ public:
 
 	//체인지 가능 or 불가능(Black List | White List) 상태 정의
 	virtual bool IsChange(int StateID);
+	virtual bool IsSameState(int StateID);
 
 	virtual void Enter(FBaseObject* Owner)	= 0;
 	virtual void ReEnter(FBaseObject* Owner) = 0;
@@ -91,35 +90,4 @@ protected:
 	virtual void OnExit(T* Owner) = 0;
 };
 
-template <typename T>
-class SAMPLECHARACTER_API FStateSingleBase : public FStateBase, public StateSingleton<T>
-{
-public:
-	FStateSingleBase() = default;
-};
 
-
-template <typename T>
-class SAMPLECHARACTER_API FStateSingleLocal : public StateSingleton<T>, public FStateTargetBase<ALocalPlayerObject>
-{
-protected:
-	//애님 블루프린트에 가장 최우선으로 상태를 전송해줘야한다.
-	virtual void OnEnter(ALocalPlayerObject* Owner) override
-	{
-		UAnimInstanceState* anim = Owner->GetAnim();
-		anim->ChangeState(GetStateID());
-	}
-
-	virtual void OnReEnter(ALocalPlayerObject* Owner) override
-	{
-
-	}
-	virtual void OnUpdate(ALocalPlayerObject* Owner, float Delta) override
-	{
-
-	}
-	virtual void OnExit(ALocalPlayerObject* Owner) override
-	{
-
-	}
-};

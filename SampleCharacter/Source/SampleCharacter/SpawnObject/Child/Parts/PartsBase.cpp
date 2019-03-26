@@ -52,4 +52,8 @@ void FPartsBase::Detach(EPartsType Type, ...)
 {
 }
 
+void FPartsBase::AttachAll()
+{
+}
+
 

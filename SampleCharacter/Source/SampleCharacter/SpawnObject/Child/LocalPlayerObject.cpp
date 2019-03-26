@@ -67,6 +67,8 @@ void ALocalPlayerObject::BeginPlay()
 	Super::BeginPlay();
 
 	LowwerFsm->ChangeState<FStateIdle>();
+	//파츠 장착
+	PartsMgr->AttachAll();
 
 	auto controller = UGameplayStatics::GetPlayerController(this, 0);
 	if (controller)
@@ -111,6 +113,8 @@ void ALocalPlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	//Movement
 	PlayerInputComponent->BindAction("MoveForward", IE_Pressed, this, &ALocalPlayerObject::OnMoveForward);
 	PlayerInputComponent->BindAction("MoveBackward", IE_Pressed, this, &ALocalPlayerObject::OnMoveBackward);
+	PlayerInputComponent->BindAction("MoveLeft", IE_Pressed, this, &ALocalPlayerObject::OnMoveLeft);
+	PlayerInputComponent->BindAction("MoveRight", IE_Pressed, this, &ALocalPlayerObject::OnMoveRight);
 	PlayerInputComponent->BindAction("MoveStop", IE_Released, this, &ALocalPlayerObject::OnMoveStop);
 
 	PlayerInputComponent->BindAxis("MoveRotate", this, &ALocalPlayerObject::AddControllerYawInput);
@@ -158,18 +162,26 @@ void ALocalPlayerObject::OnMoveStop()
 
 void ALocalPlayerObject::OnMoveForward()
 {
-	if (GetCharacterMovement()->MovementMode == MOVE_None)
-	{
-		LowwerFsm->ChangeState<FStateForwardWalk>();
-	}
+	LowwerFsm->ChangeState<FStateForwardWalk>();
 }
 
 void ALocalPlayerObject::OnMoveBackward()
 {
-	if (GetCharacterMovement()->MovementMode == MOVE_None)
-	{
-		LowwerFsm->ChangeState<FStateBackwardWalk>();
-	}
+	LowwerFsm->ChangeState<FStateBackwardWalk>();
+}
+
+void ALocalPlayerObject::OnMoveLeft()
+{
+	MovementForce = -0.5f; //Movement 구현으로 추후 대체되야함
+
+	LowwerFsm->ChangeState<FStateSideWalk>();
+}
+
+void ALocalPlayerObject::OnMoveRight()
+{
+	MovementForce = 0.5f; //Movement 구현으로 추후 대체되야함
+
+	LowwerFsm->ChangeState<FStateSideWalk>();
 }
 
 void ALocalPlayerObject::OnMoveRotate(float Value)

@@ -35,6 +35,8 @@ protected:
 
 	void OnMoveForward();
 	void OnMoveBackward();
+	void OnMoveLeft();
+	void OnMoveRight();
 	void OnMoveStop();
 	void OnMoveRotate(float Value);
 	void OnAttachParts(EPartsType Type);

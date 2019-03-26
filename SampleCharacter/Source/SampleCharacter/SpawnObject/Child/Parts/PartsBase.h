@@ -24,6 +24,7 @@ public:
 
 	virtual void Attach(EPartsType Type, ...);
 	virtual void Detach(EPartsType Type, ...);
+	virtual void AttachAll();
 
 	const FPartsDataBase* GetParts(EPartsType Type);		//추후 리소스 Load로 수정
 	bool IsEquip(EPartsType Type);

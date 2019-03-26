@@ -3,6 +3,7 @@
 #include "PartsLocal.h"
 #include "Engine/SkeletalMesh.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Container/PartsDataContainerBase.h"
 #include "SpawnObject/Child/LocalPlayerObject.h"
 
 void FPartsLocal::Initialize(FBaseObject* owner)
@@ -57,7 +58,21 @@ void FPartsLocal::Detach(EPartsType Type, ...)
 			}
 		}
 	}
+}
 
+void FPartsLocal::AttachAll()
+{
+	Parts.Empty();
+	for (auto el:PartsFctory->GetPartsData())
+	{
+		Parts.Add(&el);
+	}
+	
+	if (USkeletalMesh* mesh = MergeParts())
+	{
+		USkeletalMeshComponent* MeshComponent = Local->GetMesh();
+		MeshComponent->SetSkeletalMesh(mesh);
+	}
 }
 
 USkeletalMesh* FPartsLocal::MergeParts() const
