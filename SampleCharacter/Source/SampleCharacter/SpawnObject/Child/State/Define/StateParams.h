@@ -27,7 +27,7 @@ UENUM()
 enum class  EStateUpperBase : uint8
 {
 	None = (uint8)EStateBase::BaseMax,
+	Idle,
 	Attack,
-
 	BaseMax,
 };

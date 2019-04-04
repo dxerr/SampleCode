@@ -63,7 +63,7 @@ void FPartsLocal::Detach(EPartsType Type, ...)
 void FPartsLocal::AttachAll()
 {
 	Parts.Empty();
-	for (auto el:PartsFctory->GetPartsData())
+	for (auto &el : PartsFctory->GetPartsData())
 	{
 		Parts.Add(&el);
 	}

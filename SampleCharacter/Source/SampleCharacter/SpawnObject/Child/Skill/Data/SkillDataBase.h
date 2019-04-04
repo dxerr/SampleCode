@@ -9,18 +9,18 @@ class UAnimMontage;
  *
  */
 USTRUCT(BlueprintType)
-struct SAMPLECHARACTER_API FSkillActiontDataBase
+struct SAMPLECHARACTER_API FSkillActionDataBase
 {
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	int Type;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	float Time;	//실행 시간정보
+	float Rate;	//실행 타이밍 정보
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	int Count;	//수집 대상 갯수
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	int Effect;	//효과 정보
+	int RefID;	//효과 참조 정보
 };
 
 USTRUCT(BlueprintType)
@@ -28,7 +28,7 @@ struct SAMPLECHARACTER_API FSkillDataBase
 {
 	GENERATED_USTRUCT_BODY()
 
-	public:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SKill")
 	int ID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SKill")
@@ -39,7 +39,5 @@ struct SAMPLECHARACTER_API FSkillDataBase
 	//FString ResAni;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SKill")
-	TArray<FSkillActiontDataBase> SkillAction;
-
-	double Timer; //내부용 End체크 타이머
+	TArray<FSkillActionDataBase> SkillAction;
 };

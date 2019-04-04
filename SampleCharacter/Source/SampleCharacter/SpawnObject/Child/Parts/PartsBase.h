@@ -20,6 +20,7 @@ public:
 	virtual ~FPartsBase();
 
 	virtual void Initialize(FBaseObject* owner);
+	virtual void DeInitialize();
 	virtual void LoadData(const TCHAR * Path);
 
 	virtual void Attach(EPartsType Type, ...);

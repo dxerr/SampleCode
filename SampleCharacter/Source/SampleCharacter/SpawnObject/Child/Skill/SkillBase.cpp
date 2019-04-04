@@ -1,11 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SkillBase.h"
+#include "Data/SkillDataBase.h"
 #include "Container/SkillDataContainerBase.h"
 
 void FSkillBase::Initialize(FBaseObject* owner)
 {
 	Owner = owner;
+}
+
+void FSkillBase::DeInitialize()
+{
+	if (nullptr != CurrentSkillData)
+	{
+		delete CurrentSkillData;
+	}
 }
 
 void FSkillBase::LoadData(const TCHAR * Path)
@@ -27,5 +36,26 @@ const FSkillDataBase* FSkillBase::GetSkillData(int ID)
 
 void FSkillBase::UseSKill(int ID)
 {
-	CurrentSkillData = GetSkillData(ID);
+	//기존 정보 제거
+	if (nullptr != CurrentSkillData)
+	{
+		delete CurrentSkillData;
+	}
+
+	CurrentSkillData = new RunSKillInfo(GetSkillData(ID));
+}
+
+void FSkillBase::OnSKillNode()
+{
+	//타이머 설정
+}
+
+void FSkillBase::RunSkillNode(float DeltaTime)
+{
+	CurrentSkillData->Timer += DeltaTime;
+}
+
+void FSkillBase::EndSKillNode()
+{
+	CurrentSkillData = nullptr;
 }

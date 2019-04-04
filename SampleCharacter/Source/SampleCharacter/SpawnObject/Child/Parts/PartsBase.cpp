@@ -19,6 +19,11 @@ void FPartsBase::Initialize(FBaseObject* Character)
 	Owner = Character;
 }
 
+void FPartsBase::DeInitialize()
+{
+
+}
+
 void FPartsBase::LoadData(const TCHAR * Path)
 {
 	PartsFctory = LoadObject<UPartsDataContainerBase>(NULL, Path, NULL, LOAD_None, NULL);

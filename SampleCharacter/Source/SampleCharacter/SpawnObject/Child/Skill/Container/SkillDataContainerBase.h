@@ -19,7 +19,7 @@ class SAMPLECHARACTER_API USkillDataContainerBase : public UDataAsset
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	FORCEINLINE const TArray<FSkillDataBase>& GetSkillData() { return Skills; }
 
 	const FSkillDataBase* FindData(int ID);

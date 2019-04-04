@@ -28,7 +28,6 @@ void FStateIdle::OnEnter(ALocalPlayerObject* Owner)
 	Owner->GetCharacterMovement()->SetMovementMode(MOVE_None);
 }
 
-
 /// FStateForwardWalk ///
 int FStateForwardWalk::GetStateID()
 {
@@ -164,6 +163,28 @@ void FStateRun::OnUpdate(ALocalPlayerObject* Owner, float Delta)
 	Owner->AddMovementInput(dir, Owner->MovementForce);
 }
 
+///FStateUpperIdle///
+int FStateUpperIdle::GetStateID()
+{
+	return (int)EStateUpperBase::Idle;
+}
+
+FString FStateUpperIdle::Name()
+{
+	return TEXT("StateUpperIdle");
+}
+
+void FStateUpperIdle::OnEnter(ALocalPlayerObject* Owner)
+{
+	//상체 애니 재생 정지
+	FSKillLocal* skillMgr = Owner->GetSKill();
+	if (skillMgr->CurrentSkillData)
+	{
+		UAnimInstanceState* anim = Owner->GetAnim();
+		anim->StopUpperAni(skillMgr->CurrentSkillData->GetAni());
+
+	}
+}
 
 /// FStateAttack ///
 int FStateAttack::GetStateID()
@@ -184,11 +205,15 @@ void FStateAttack::OnEnter(ALocalPlayerObject* Owner)
 	if (skillMgr->CurrentSkillData)
 	{
 		UAnimInstanceState* anim = Owner->GetAnim();
-		anim->PlayUpperAni(skillMgr->CurrentSkillData->ResAni);
+		anim->PlayUpperAni(skillMgr->CurrentSkillData->GetAni());
+		skillMgr->OnSKillNode();
 	}
 }
 
 void FStateAttack::OnUpdate(ALocalPlayerObject* Owner, float Delta)
 {
-
+	if (FSKillLocal* skillMgr = Owner->GetSKill())
+	{
+		skillMgr->RunSkillNode(Delta);
+	}
 }

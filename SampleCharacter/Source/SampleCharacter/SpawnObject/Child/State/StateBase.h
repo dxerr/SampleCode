@@ -57,7 +57,6 @@ public:
 * FSM의 상태 클래스들은 자주 호출되고, 싱글톤 객체이므로 다중상속에 의한 캐스팅보다(Owner->cast())
 * 추후 템플릿 구현으로 수정
 */
-
 template <typename T>
 class SAMPLECHARACTER_API FStateTargetBase : public FStateBase
 {

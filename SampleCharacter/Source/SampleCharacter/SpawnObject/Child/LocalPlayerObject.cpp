@@ -77,6 +77,30 @@ void ALocalPlayerObject::BeginPlay()
 	}
 }
 
+void ALocalPlayerObject::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	if (!LowwerFsm)
+	{
+		LowwerFsm->DeInitialize();
+	}
+	if (!UpperFsm)
+	{
+		UpperFsm->DeInitialize();
+	}
+
+	if (!SkillMgr)
+	{
+		SkillMgr->DeInitialize();
+	}
+
+	if (!PartsMgr)
+	{
+		PartsMgr->DeInitialize();
+	}
+}
+
 // Called every frame
 void ALocalPlayerObject::Tick(float DeltaTime)
 {
@@ -137,7 +161,6 @@ void ALocalPlayerObject::OnAttack1(int32 slot)
 	if (SkillMgr)
 	{
 		SkillMgr->UseSKill(slot);
-		UpperFsm->ChangeState<FStateAttack>();
 	}
 
 	//UpperFsm->ChangeState<FStateAttack>();

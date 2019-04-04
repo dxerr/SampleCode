@@ -20,6 +20,8 @@ public:
 	}
 
 	void Initialize(FBaseObject* owner);
+	void DeInitialize();
+
 	void Update(float Delta);
 
 	template <typename T>

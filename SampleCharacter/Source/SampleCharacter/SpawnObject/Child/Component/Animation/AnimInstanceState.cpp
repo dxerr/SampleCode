@@ -55,8 +55,13 @@ void UAnimInstanceState::ChangeState(int State)
 	UE_LOG(LogTemp, Warning, TEXT("UAnimInstanceLocal ChangeState Lowwer : %d  Upper : %d"), (int)BaseStateType, (int)UpperStateType);
 }
 
-void UAnimInstanceState::PlayUpperAni(UAnimMontage* Animation)
+void UAnimInstanceState::PlayUpperAni(UAnimMontage* res)
 {
-	Montage_Play(Animation);
+	Montage_Play(res);
+}
+
+void UAnimInstanceState::StopUpperAni(UAnimMontage* res)
+{
+	Montage_Stop(0.2f, res);
 }
 

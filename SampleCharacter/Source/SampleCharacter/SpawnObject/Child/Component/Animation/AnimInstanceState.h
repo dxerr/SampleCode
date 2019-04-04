@@ -29,6 +29,7 @@ public:
 	void ChangeState(int state);
 
 	void PlayUpperAni(UAnimMontage* res);
+	void StopUpperAni(UAnimMontage* res);
 
 	//애님 플루프린트 FSM동기화 참조 함수
 	UFUNCTION(BlueprintPure, Category = "MyAnimation", meta = (BlueprintThreadSafe))

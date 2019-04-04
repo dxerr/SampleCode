@@ -104,6 +104,17 @@ public:
 	virtual void OnUpdate(ALocalPlayerObject* Owner, float Delta) override;
 };
 
+
+//Uppper
+class SAMPLECHARACTER_API FStateUpperIdle : public FStateSingleLocal<FStateUpperIdle>
+{
+public:
+	virtual int GetStateID() override;
+	virtual FString Name() override;
+
+	virtual void OnEnter(ALocalPlayerObject* Owner) override;
+};
+
 class SAMPLECHARACTER_API FStateAttack : public FStateSingleLocal<FStateAttack>
 {
 public:
