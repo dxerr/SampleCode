@@ -7,7 +7,7 @@
 
 ANonePcObject::ANonePcObject()
 {
-	Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("NpckeletalMesh"));
+	Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("NpcSkeletalMesh"));
 	if (Mesh)
 	{
 		Mesh->AlwaysLoadOnClient = true;
@@ -22,16 +22,20 @@ ANonePcObject::ANonePcObject()
 		Mesh->SetCollisionProfileName(MeshCollisionProfileName);
 		Mesh->SetGenerateOverlapEvents(false);
 		Mesh->SetCanEverAffectNavigation(false);
-	}
 
-	RootComponent = Mesh;
+		RootComponent = Mesh;
+	}
 }
 
 void ANonePcObject::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	
+	if (Mesh)
+	{
+		Animation = Cast<UAnimInstanceState>(Mesh->GetAnimInstance());
+	}
 
-	Animation = Cast<UAnimInstanceState>(Mesh->GetAnimInstance());
 	if (!Fsm)
 	{
 		Fsm = new FFSMManager();

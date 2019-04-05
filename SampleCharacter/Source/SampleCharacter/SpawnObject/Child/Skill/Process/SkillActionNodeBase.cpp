@@ -3,9 +3,9 @@
 #include "SkillActionNodeBase.h"
 #include "SpawnObject/Child/Skill/Data/SkillDataBase.h"
 
-FSkillActionNodeBase::FSkillActionNodeBase(const FSkillActionDataBase* Data)
+FSkillActionNodeBase::FSkillActionNodeBase(const FSkillActionDataBase& Data)
 {
-	SkillData = Data;
+	Rate = Data.Rate;
 }
 
 FSkillActionNodeBase::~FSkillActionNodeBase()
@@ -14,5 +14,5 @@ FSkillActionNodeBase::~FSkillActionNodeBase()
 
 float FSkillActionNodeBase::GetRate()
 {
-	return SkillData->Rate;
+	return Rate;
 }

@@ -30,6 +30,7 @@ protected:
 
 public:
 	FORCEINLINE UAnimInstanceState* GetAnim() { return Animation; }
+	FORCEINLINE FFSMManager* GetState() { return Fsm; }
 
 private:
 	//Anim

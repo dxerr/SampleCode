@@ -45,6 +45,7 @@ protected:
 public:
 	// Sets default values for this character's properties
 	ALocalPlayerObject();
+	~ALocalPlayerObject();
 
 protected:
 	virtual void PostInitializeComponents() override;

@@ -13,7 +13,7 @@ class FBaseObject;
 class SAMPLECHARACTER_API FSkillActionNodeBase
 {
 public:
-	FSkillActionNodeBase(const FSkillActionDataBase* Data);
+	FSkillActionNodeBase(const FSkillActionDataBase& Data);
 	virtual ~FSkillActionNodeBase();
 
 public:
@@ -26,5 +26,5 @@ public:
 	virtual bool Update(FBaseObject* Owner) { return false;  }
 
 protected:
-	const FSkillActionDataBase* SkillData;
+	float Rate;
 };

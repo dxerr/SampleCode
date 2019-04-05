@@ -11,7 +11,7 @@ void FSkillBase::Initialize(FBaseObject* owner)
 
 void FSkillBase::DeInitialize()
 {
-	if (nullptr != CurrentSkillData)
+	if (CurrentSkillData)
 	{
 		delete CurrentSkillData;
 	}
@@ -37,7 +37,7 @@ const FSkillDataBase* FSkillBase::GetSkillData(int ID)
 void FSkillBase::UseSKill(int ID)
 {
 	//기존 정보 제거
-	if (nullptr != CurrentSkillData)
+	if (CurrentSkillData)
 	{
 		delete CurrentSkillData;
 	}

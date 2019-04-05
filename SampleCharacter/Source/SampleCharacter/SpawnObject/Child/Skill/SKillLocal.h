@@ -27,7 +27,7 @@ public:
 
 private:
 	void LoadSKillNode();
-	FSkillActionNodeBase* CreateSkillNode(const FSkillActionDataBase* Data);
+	FSkillActionNodeBase* CreateSkillNode(const FSkillActionDataBase& Data) const;
 
 private:
 	//스킬 액션 정보들

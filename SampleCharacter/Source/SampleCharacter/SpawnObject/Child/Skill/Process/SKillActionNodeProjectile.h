@@ -12,12 +12,9 @@ class FBaseObject;
 class SAMPLECHARACTER_API FSKillActionNodeProjectile : public FSkillActionNodeBase
 {
 public:
-	FSKillActionNodeProjectile(const FSkillActionDataBase* Data);
+	FSKillActionNodeProjectile(const FSkillActionDataBase& Data);
 
 public:
 	virtual void Process(FBaseObject* Owner) override;
 	virtual void Action(FBaseObject* Owner) override;
-
-protected:
-	
 };

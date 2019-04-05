@@ -43,3 +43,12 @@ public:
 
 	virtual void OnEnter(ANonePcObject* Owner) override;
 };
+
+class SAMPLECHARACTER_API FStateNpcBeaten : public FStateSingleNpc<FStateNpcBeaten>
+{
+public:
+	virtual int GetStateID() override;
+	virtual FString Name() override;
+
+	virtual void OnUpdate(ANonePcObject* Owner, float Delta) override;
+};

@@ -30,6 +30,29 @@ ALocalPlayerObject::ALocalPlayerObject()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm	
 }
 
+ALocalPlayerObject::~ALocalPlayerObject()
+{
+	if (!LowwerFsm)
+	{
+		LowwerFsm->DeInitialize();
+	}
+	if (!UpperFsm)
+	{
+		UpperFsm->DeInitialize();
+	}
+
+	//에디터 실행중 컴파일 되면 여기서 크래쉬 발생 ㅠㅠ
+	if (!SkillMgr)
+	{
+		//SkillMgr->DeInitialize();
+	}
+
+	if (!PartsMgr)
+	{
+		//PartsMgr->DeInitialize();
+	}
+}
+
 void ALocalPlayerObject::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -44,7 +67,13 @@ void ALocalPlayerObject::PostInitializeComponents()
 	{
 		UpperFsm = new FFSMManager();
 		UpperFsm->Initialize(this);
-	}
+	}	
+}
+
+// Called when the game starts or when spawned
+void ALocalPlayerObject::BeginPlay()
+{
+	Super::BeginPlay();
 
 	if (!SkillMgr)
 	{
@@ -59,12 +88,6 @@ void ALocalPlayerObject::PostInitializeComponents()
 		PartsMgr->Initialize(this);
 		PartsMgr->LoadData(TEXT("PartsDataContainerBase'/Game/Resource/DataAsset/LocalParts.LocalParts'"));
 	}
-}
-
-// Called when the game starts or when spawned
-void ALocalPlayerObject::BeginPlay()
-{
-	Super::BeginPlay();
 
 	LowwerFsm->ChangeState<FStateIdle>();
 	//파츠 장착
@@ -80,25 +103,6 @@ void ALocalPlayerObject::BeginPlay()
 void ALocalPlayerObject::BeginDestroy()
 {
 	Super::BeginDestroy();
-
-	if (!LowwerFsm)
-	{
-		LowwerFsm->DeInitialize();
-	}
-	if (!UpperFsm)
-	{
-		UpperFsm->DeInitialize();
-	}
-
-	if (!SkillMgr)
-	{
-		SkillMgr->DeInitialize();
-	}
-
-	if (!PartsMgr)
-	{
-		PartsMgr->DeInitialize();
-	}
 }
 
 // Called every frame

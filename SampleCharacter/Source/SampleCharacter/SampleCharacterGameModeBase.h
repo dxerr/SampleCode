@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "SampleCharacter/SpawnObject/Handler/ObjectSpawner.h"
 #include "SampleCharacterGameModeBase.generated.h"
 
+
+class FObjectSpawner;
 /**
  * 
  */
@@ -15,6 +18,11 @@ class SAMPLECHARACTER_API ASampleCharacterGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 	
-	
-	
+public:
+	ASampleCharacterGameModeBase();
+
+	TWeakPtr<FObjectSpawner> GetSpawner() { return Spawner; }
+
+private:
+	TSharedPtr<FObjectSpawner> Spawner;
 };

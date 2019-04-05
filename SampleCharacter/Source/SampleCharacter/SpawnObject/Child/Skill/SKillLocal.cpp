@@ -43,8 +43,8 @@ void FSKillLocal::LoadSKillNode()
 	{
 		for (auto el2 : el.SkillAction)
 		{
-			FSkillActionNodeBase* NodeData = CreateSkillNode(&el2);
-			if (nullptr != NodeData)
+			FSkillActionNodeBase* NodeData = CreateSkillNode(el2);
+			if (NodeData)
 			{
 				NodeData->Process(Owner);
 				TArray<FSkillActionNodeBase*>* findList = MapSkillNodes.Find(el.ID);
@@ -63,9 +63,9 @@ void FSKillLocal::LoadSKillNode()
 	}
 }
 
-FSkillActionNodeBase* FSKillLocal::CreateSkillNode(const FSkillActionDataBase* Data)
+FSkillActionNodeBase* FSKillLocal::CreateSkillNode(const FSkillActionDataBase& Data) const
 {
-	switch (Data->Type)
+	switch (Data.Type)
 	{
 	case 1:
 		return new FSKillActionNodeProjectile(Data);
@@ -95,6 +95,8 @@ void FSKillLocal::RunSkillNode(float DeltaTime)
 	{
 		if (el->GetRate() < CurrentSkillData->GetRate())
 		{
+			UE_LOG(LogTemp, Warning, TEXT("SkillAction node rate %f Skill Rate %f"), el->GetRate(), CurrentSkillData->GetRate());
+
 			el->Action(Owner);
 			//사용 스킬로 이전
 			UseSkillNodes.Add(el);

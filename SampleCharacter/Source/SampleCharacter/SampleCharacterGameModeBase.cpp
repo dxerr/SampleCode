@@ -2,6 +2,10 @@
 
 #include "SampleCharacterGameModeBase.h"
 
+ASampleCharacterGameModeBase::ASampleCharacterGameModeBase()
+{
+	Spawner = MakeShareable(new FObjectSpawner());
+}
 
 
 

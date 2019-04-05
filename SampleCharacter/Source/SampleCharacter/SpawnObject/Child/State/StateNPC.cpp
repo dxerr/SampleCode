@@ -17,3 +17,19 @@ void FStateNpcIdle::OnEnter(ANonePcObject* Owner)
 {
 	FStateSingleNpc::OnEnter(Owner);
 }
+
+
+int FStateNpcBeaten::GetStateID()
+{
+	return (int)EStateBase::Beaten;
+}
+
+FString FStateNpcBeaten::Name()
+{
+	return TEXT("StateNpcBeaten");
+}
+
+void FStateNpcBeaten::OnUpdate(ANonePcObject* Owner, float Delta)
+{
+
+}

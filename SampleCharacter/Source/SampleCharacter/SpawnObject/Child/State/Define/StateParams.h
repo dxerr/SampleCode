@@ -19,6 +19,8 @@ enum class EStateBase : uint8
 	SideWalk,
 	Run,
 
+	Beaten,
+
 	BaseMax,
 };
 
