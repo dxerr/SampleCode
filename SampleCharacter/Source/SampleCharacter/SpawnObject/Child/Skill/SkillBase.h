@@ -59,6 +59,6 @@ struct RunSKillInfo
 
 	float GetRate()
 	{
-		return Data->Duration / Timer;
+		return Timer / Data->Duration;
 	}
 };
