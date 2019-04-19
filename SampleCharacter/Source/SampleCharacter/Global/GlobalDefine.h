@@ -1,10 +1,19 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 
-// Ä¿½ºÅÍ¸¶ÀÌÂ¡µÈ ·Î±× (³ªÁß ¸±¸®Áî ºôµå¿¡¼± ²ô´Â ¿ëµµÀÌ´Ù)
+//ì„ì‹œ í—¤ë” ë§Œë“¤ê¸°
+#include "GameObject/Component/Animation/AnimInstanceState.h"
+#include "GameObject/State/FSMManager.h"
+#include "GameObject/State/StateLocal.h"
+#include "GameObject/State/StateNPC.h"
+#include "GameObject/Skill/SKillLocal.h"
+#include "GameObject/Parts/PartsLocal.h"
+
+
+// ì»¤ìŠ¤í„°ë§ˆì´ì§•ëœ ë¡œê·¸ (ë‚˜ì¤‘ ë¦´ë¦¬ì¦ˆ ë¹Œë“œì—ì„  ë„ëŠ” ìš©ë„ì´ë‹¤)
 #define LOG_CALLINFO (FString(__FUNCTION__) + TEXT(" ----Line(") + FString::FromInt(__LINE__) + TEXT(")"))
 #define LOG_S(Verbosity)	UE_LOG(LogTemp, Verbosity, TEXT("----%s"), *LOG_CALLINFO)
 #define LOG(Verbosity, Format, ...)	UE_LOG(LogTemp, Verbosity, TEXT("----%s ----%s"), *LOG_CALLINFO, *FString::Printf(Format, ##__VA_ARGS__))
