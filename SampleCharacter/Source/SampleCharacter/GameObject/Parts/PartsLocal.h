@@ -6,8 +6,8 @@
 #include "PartsBase.h"
 #include "Data/PartsDataBase.h"
 
-class FGameObjectBase;
-class FGameObjectLocal;
+class UGameObjectBase;
+class UGameObjectLocal;
 
 /**
  * 파츠 담당 클래스
@@ -17,7 +17,7 @@ class FGameObjectLocal;
 class SAMPLECHARACTER_API FPartsLocal : public FPartsBase
 {
 public:
-	virtual void Initialize(FGameObjectBase* owner) override;
+	virtual void Initialize(UGameObjectBase* owner) override;
 
 	virtual void Attach(EPartsType Type, ...) override;
 	virtual void Detach(EPartsType Type, ...) override;
@@ -32,6 +32,6 @@ private:
 	USkeletalMesh* MergeToParams(const FSkeletalMeshMergeParams& Params);
 
 private:
-	FGameObjectLocal* Local;
+	UGameObjectLocal* Local;
 	UActorComponent* ActorComponent;
 };

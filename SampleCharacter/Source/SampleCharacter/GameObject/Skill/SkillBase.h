@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Data/SkillDataBase.h"
 
-class FGameObjectBase;
+class UGameObjectBase;
 class USkillDataContainerBase;
 
 /**
@@ -14,9 +14,8 @@ class USkillDataContainerBase;
 class SAMPLECHARACTER_API FSkillBase
 {
 public:
-	virtual ~FSkillBase() = default;
 
-	virtual void Initialize(FGameObjectBase* owner);
+	virtual void Initialize(UGameObjectBase* owner);
 	virtual void DeInitialize();
 	virtual void LoadData(const TCHAR * Path);
 
@@ -34,7 +33,7 @@ public:
 	struct RunSKillInfo* CurrentSkillData = nullptr;
 
 protected:
-	FGameObjectBase* Owner;
+	UGameObjectBase* Owner;
 	USkillDataContainerBase* SkillFactory;
 };
 

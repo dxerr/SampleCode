@@ -8,28 +8,27 @@
 #include "GameObject/ObjectClass/GameObjectLocal.h"
 
 template <typename T>
-class SAMPLECHARACTER_API FStateSingleLocal : public StateSingleton<T>, public FStateTargetBase<FGameObjectLocal>
+class SAMPLECHARACTER_API FStateSingleLocal : public StateSingleton<T>, public FStateTargetBase<UGameObjectLocal>
 {
 protected:
-	
-
-protected:
 	//애님 블루프린트에 가장 최우선으로 상태를 전송해줘야한다.
-	virtual void OnEnter(FGameObjectLocal* Owner) override
+	virtual void OnEnter(UGameObjectLocal* Owner) override
 	{
-		UAnimInstanceState* anim = Owner->GetLocal()->GetAnim();
-		anim->ChangeState(GetStateID());
+		if (UAnimInstanceState* anim = Owner->GetLocal()->GetAnim())
+		{
+			anim->ChangeState(GetStateID());
+		}
 	}
 
-	virtual void OnReEnter(FGameObjectLocal* Owner) override
-	{
-
-	}
-	virtual void OnUpdate(FGameObjectLocal* Owner, float Delta) override
+	virtual void OnReEnter(UGameObjectLocal* Owner) override
 	{
 
 	}
-	virtual void OnExit(FGameObjectLocal* Owner) override
+	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override
+	{
+
+	}
+	virtual void OnExit(UGameObjectLocal* Owner) override
 	{
 
 	}
@@ -44,7 +43,7 @@ public:
 	virtual int GetStateID() override;
 	virtual FString Name() override;
 
-	virtual void OnEnter(FGameObjectLocal* Owner) override;
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
 };
 
 //캐릭터는 전방 이동과 후방이동으로 분류
@@ -54,11 +53,11 @@ public:
 	virtual int GetStateID() override;
 	virtual FString Name() override;
 
-	virtual void OnEnter(FGameObjectLocal* Owner) override;
-	virtual void OnUpdate(FGameObjectLocal* Owner, float Delta) override;
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
+	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override;
 
 	//Movement 쪽으로 이동
-	void UpdateSpeed(FGameObjectLocal* Owner, float Speed);
+	void UpdateSpeed(UGameObjectLocal* Owner, float Speed);
 };
 
 class SAMPLECHARACTER_API FStateBackwardWalk : public FStateSingleLocal<FStateBackwardWalk>
@@ -67,8 +66,8 @@ public:
 	virtual int GetStateID() override;
 	virtual FString Name() override;
 
-	virtual void OnEnter(FGameObjectLocal* Owner) override;
-	virtual void OnUpdate(FGameObjectLocal* Owner, float Delta) override;
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
+	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override;
 };
 
 class SAMPLECHARACTER_API FStateSideWalk : public FStateSingleLocal<FStateSideWalk>
@@ -77,8 +76,8 @@ public:
 	virtual int GetStateID() override;
 	virtual FString Name() override;
 
-	virtual void OnEnter(FGameObjectLocal* Owner) override;
-	virtual void OnUpdate(FGameObjectLocal* Owner, float Delta) override;
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
+	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override;
 };
 
 /*
@@ -100,8 +99,8 @@ public:
 	virtual FString Name() override;
 
 	virtual bool IsChange(int StateID) override;
-	virtual void OnEnter(FGameObjectLocal* Owner) override;
-	virtual void OnUpdate(FGameObjectLocal* Owner, float Delta) override;
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
+	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override;
 };
 
 
@@ -112,7 +111,7 @@ public:
 	virtual int GetStateID() override;
 	virtual FString Name() override;
 
-	virtual void OnEnter(FGameObjectLocal* Owner) override;
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
 };
 
 class SAMPLECHARACTER_API FStateAttack : public FStateSingleLocal<FStateAttack>
@@ -121,6 +120,6 @@ public:
 	virtual int GetStateID() override;
 	virtual FString Name() override;
 
-	virtual void OnEnter(FGameObjectLocal* Owner) override;
-	virtual void OnUpdate(FGameObjectLocal* Owner, float Delta) override;
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
+	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override;
 };

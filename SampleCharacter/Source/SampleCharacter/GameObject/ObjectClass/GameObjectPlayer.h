@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameObjectDynamic.h"
+#include "GameObjectPlayer.generated.h"
 
 class ACharacter;
 class FFSMManager;
@@ -13,15 +14,18 @@ class FSkillBase;
  * Player류에 해당 하는 base클래스
  * SKill, FSM의 상태는 두단계이상으로 분류
  */
-class SAMPLECHARACTER_API FGameObjectPlayer : public FGameObjectDynamic
+UCLASS()
+class SAMPLECHARACTER_API UGameObjectPlayer : public UGameObjectDynamic
 {
+	GENERATED_BODY()
+	
 public:
 	virtual void Initialize() override;
 	virtual void DeInitialize() override;
 
 public:
-	virtual AActor* GetActor() override = 0;
-	virtual ACharacter* GetCharacter() = 0;
+	virtual AActor* GetActor() override;
+	virtual ACharacter* GetCharacter();
 
 	//virtual TWeakPtr<FFSMManager> GetBaseFSM() = 0;
 	virtual FFSMManager* GetUpperFSM();

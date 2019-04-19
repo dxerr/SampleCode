@@ -13,7 +13,7 @@ void UInputBindingLocalPlayer::Initialize()
 	//error
 }
 
-void UInputBindingLocalPlayer::Initialize(FGameObjectLocal* target)
+void UInputBindingLocalPlayer::Initialize(UGameObjectLocal* target)
 {
 	Target = target;
 }

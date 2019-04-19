@@ -3,7 +3,7 @@
 #include "FSMManager.h"
 #include "Runtime/Engine/Public/TimerManager.h"
 
-void FFSMManager::Initialize(FGameObjectBase* owner)
+void FFSMManager::Initialize(UGameObjectBase* owner)
 {
 	Owner = owner;
 	Current = nullptr;
@@ -13,14 +13,6 @@ void FFSMManager::Initialize(FGameObjectBase* owner)
 void FFSMManager::DeInitialize()
 {
 
-}
-
-void FFSMManager::Update(float Delta)
-{
-	if (nullptr != Current)
-	{
-		Current->Update(Owner, Delta);
-	}
 }
 
 bool FFSMManager::ChangeState(FStateBase* State, FStateChangeFailed const& FailDelegate)
@@ -80,8 +72,9 @@ void FFSMManager::ChangePrevState(float Time)
 	{
 		FTimerHandle handle;
 		FStateBase* PrevState = Prev;
+
 		world->GetTimerManager().SetTimer(handle, 
-			FTimerDelegate::CreateRaw(this, &FFSMManager::CallbakChangePrevState, Prev), Time, false);
+			FTimerDelegate::CreateRaw(this, &FFSMManager::CallbakChangePrevState, Prev), Time, false);	
 	}
 }
 

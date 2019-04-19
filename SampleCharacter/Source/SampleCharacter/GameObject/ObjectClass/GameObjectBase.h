@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameObjectBase.generated.h"
 
 class AActor;
 
@@ -10,18 +11,18 @@ class AActor;
  * 모든 스폰 관련 오브젝트들의 base클래스
  * 언리얼엔진에서 제공하는 로직을 제외한 오브젝트에 대한 클라이언트 로직 처리 담당 
  */
-class SAMPLECHARACTER_API FGameObjectBase
+UCLASS()
+class SAMPLECHARACTER_API UGameObjectBase : public UObject
 {
+	GENERATED_BODY()
+	
 public:
-	FGameObjectBase();
-	virtual ~FGameObjectBase();
-
-	virtual void Initialize() = 0;
-	virtual void DeInitialize() = 0;
+	virtual void Initialize();
+	virtual void DeInitialize();
 
 public:
 	//기본적인 Actor클래스 얻기
-	virtual AActor* GetActor() = 0;
+	virtual AActor* GetActor();
 
 public:
 	virtual AActor* Spawn(UClass* instance, UWorld* world, const FVector& position, const FRotator& dir);

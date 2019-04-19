@@ -4,13 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameObjectBase.h"
+#include "GameObjectProjectile.generated.h"
 
 class AProjectileActor;
 /**
  * 
  */
-class SAMPLECHARACTER_API FGameObjectProjectile : public FGameObjectBase
+UCLASS()
+class SAMPLECHARACTER_API UGameObjectProjectile : public UGameObjectBase
 {
+	GENERATED_BODY()
+	
 public:
 	virtual void Initialize() override;
 	virtual void DeInitialize() override;

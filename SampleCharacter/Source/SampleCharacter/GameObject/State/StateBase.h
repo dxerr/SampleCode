@@ -49,10 +49,10 @@ public:
 	virtual bool IsChange(int StateID);
 	virtual bool IsSameState(int StateID);
 
-	virtual void Enter(FGameObjectBase* Owner)	= 0;
-	virtual void ReEnter(FGameObjectBase* Owner) = 0;
-	virtual void Update(FGameObjectBase* Owner, float Delta) = 0;
-	virtual void Exit(FGameObjectBase* Owner) = 0;
+	virtual void Enter(UGameObjectBase* Owner)	= 0;
+	virtual void ReEnter(UGameObjectBase* Owner) = 0;
+	virtual void Update(UGameObjectBase* Owner, float Delta) = 0;
+	virtual void Exit(UGameObjectBase* Owner) = 0;
 };
 
 /**
@@ -64,25 +64,25 @@ template <typename T>
 class SAMPLECHARACTER_API FStateTargetBase : public FStateBase
 {
 public:
-	virtual void Enter(FGameObjectBase* Owner) override
+	virtual void Enter(UGameObjectBase* Owner) override
 	{
 		//T* castOwner = static_cast<T*>(Owner->cast());
-		OnEnter(static_cast<T*>(Owner));
+		OnEnter(Cast<T>(Owner));
 	}
-	virtual void ReEnter(FGameObjectBase* Owner) override
+	virtual void ReEnter(UGameObjectBase* Owner) override
 	{
 		//T* castOwner = static_cast<T*>(Owner->cast());
-		OnReEnter(static_cast<T*>(Owner));
+		OnReEnter(Cast<T>(Owner));
 	}
-	virtual void Update(FGameObjectBase* Owner, float Delta) override
+	virtual void Update(UGameObjectBase* Owner, float Delta) override
 	{
 		//T* castOwner = static_cast<T*>(Owner->cast());
-		OnUpdate(static_cast<T*>(Owner), Delta);
+		OnUpdate(Cast<T>(Owner), Delta);
 	}
-	virtual void Exit(FGameObjectBase* Owner) override
+	virtual void Exit(UGameObjectBase* Owner) override
 	{
 		//T* castOwner = static_cast<T*>(Owner->cast());
-		OnExit(static_cast<T*>(Owner));
+		OnExit(Cast<T>(Owner));
 	}
 
 protected:

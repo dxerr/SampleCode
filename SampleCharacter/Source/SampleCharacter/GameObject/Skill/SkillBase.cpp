@@ -4,7 +4,7 @@
 #include "Data/SkillDataBase.h"
 #include "Container/SkillDataContainerBase.h"
 
-void FSkillBase::Initialize(FGameObjectBase* owner)
+void FSkillBase::Initialize(UGameObjectBase* owner)
 {
 	Owner = owner;
 }

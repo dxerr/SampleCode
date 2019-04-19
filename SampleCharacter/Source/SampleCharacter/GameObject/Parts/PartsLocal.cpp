@@ -7,11 +7,11 @@
 #include "GameObject/ObjectClass/GameObjectLocal.h"
 #include "GameObject/ActorExtend/LocalCharacter.h"
 
-void FPartsLocal::Initialize(FGameObjectBase* owner)
+void FPartsLocal::Initialize(UGameObjectBase* owner)
 {
 	FPartsBase::Initialize(owner);
 
-	Local = static_cast<FGameObjectLocal*>(owner);
+	Local = Cast<UGameObjectLocal>(owner);
 	ActorComponent = Local->GetLocal()->FindComponentByClass<UActorComponent>();
 }
 

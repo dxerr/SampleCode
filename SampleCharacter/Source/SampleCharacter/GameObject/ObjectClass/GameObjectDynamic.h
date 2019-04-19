@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameObjectBase.h"
 //#include "GameObject/State/FSMManager.h" //헤더 선언으로 error 02143발생  추후 확인해볼것
+#include "GameObjectDynamic.generated.h"
 
 class FPartsBase;
 class FFSMManager;
@@ -13,8 +14,11 @@ class FFSMManager;
  * 운동 능력이 있는 오브젝트 Base클래스
  * FSM, Parts, Movment 등의 기본 기능 처리
  */
-class SAMPLECHARACTER_API FGameObjectDynamic : public FGameObjectBase
+UCLASS()
+class SAMPLECHARACTER_API UGameObjectDynamic : public UGameObjectBase
 {
+	GENERATED_BODY()
+	
 public:
 	virtual void Initialize() override;
 	virtual void DeInitialize() override;

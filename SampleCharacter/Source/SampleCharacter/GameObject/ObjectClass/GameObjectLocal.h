@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameObjectPlayer.h"
+#include "GameObjectLocal.generated.h"
 
 class ALocalCharacter;
 class UInputBindingLocalPlayer;
@@ -11,8 +12,11 @@ class UInputBindingLocalPlayer;
 /**
  * 
  */
-class SAMPLECHARACTER_API FGameObjectLocal : public FGameObjectPlayer
+UCLASS()
+class SAMPLECHARACTER_API UGameObjectLocal : public UGameObjectPlayer
 {
+	GENERATED_BODY()
+	
 public:
 	virtual void Initialize() override;
 	virtual void DeInitialize() override;

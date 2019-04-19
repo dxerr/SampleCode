@@ -7,7 +7,7 @@
 #include "GameObject/Parts/Data/PartsDataBase.h"
 #include "InputBindingLocalPlayer.generated.h"
 
-class FGameObjectLocal;
+class UGameObjectLocal;
 /**
  * 
  */
@@ -21,7 +21,7 @@ class SAMPLECHARACTER_API UInputBindingLocalPlayer : public UInputBindingBase
 
 public:
 	virtual void Initialize() override;
-	virtual void Initialize(FGameObjectLocal* target);
+	virtual void Initialize(UGameObjectLocal* target);
 	virtual void SetBinding(UInputComponent* input) override;
 
 protected:
@@ -39,5 +39,5 @@ protected:
 	//
 
 protected:
-	FGameObjectLocal* Target;
+	UGameObjectLocal* Target;
 };

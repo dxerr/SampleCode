@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameObjectDynamic.h"
+#include "GameObjectNonPlayer.generated.h"
 
 class APawn;
 class ANpcPawn;
@@ -11,8 +12,11 @@ class FSkillBase;
 /**
  * 
  */
-class SAMPLECHARACTER_API FGameObjectNonPlayer : public FGameObjectDynamic
+UCLASS()
+class SAMPLECHARACTER_API UGameObjectNonPlayer : public UGameObjectDynamic
 {
+	GENERATED_BODY()
+	
 public:
 	virtual void Initialize() override;
 	virtual void DeInitialize() override;

@@ -7,7 +7,7 @@
 #include "GameInstanceExtend.generated.h"
 
 class FGameObjectLocal;
-class FObjectSpawner;
+class UObjectSpawner;
 class APlayerControllerExpend;
 
 /**
@@ -22,7 +22,7 @@ class SAMPLECHARACTER_API UGameInstanceExtend : public UGameInstance
 public:
 	UGameInstanceExtend();
 
-	FORCEINLINE TWeakPtr<FObjectSpawner> GetSpawner()				{ return Spawner; }
+	FORCEINLINE UObjectSpawner* GetSpawner()				{ return Spawner; }
 	
 public:
 	virtual void Init() override;
@@ -45,5 +45,5 @@ private:
 	FDelegateHandle TickDelegate;
 
 	//스폰 관련 매니져 클래스
-	TSharedPtr<FObjectSpawner> Spawner;
+	UObjectSpawner* Spawner;
 };

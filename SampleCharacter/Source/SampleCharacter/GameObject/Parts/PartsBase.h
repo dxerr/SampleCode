@@ -6,7 +6,7 @@
 #include "Public/SkeletalMeshMerge.h"
 #include "Data/PartsDataBase.h"
 
-class FGameObjectBase;
+class UGameObjectBase;
 class UActorComponent;
 class UPartsDataContainerBase;
 
@@ -19,7 +19,7 @@ public:
 	FPartsBase();
 	virtual ~FPartsBase();
 
-	virtual void Initialize(FGameObjectBase* owner);
+	virtual void Initialize(UGameObjectBase* owner);
 	virtual void DeInitialize();
 	virtual void LoadData(const TCHAR * Path);
 
@@ -31,7 +31,7 @@ public:
 	bool IsEquip(EPartsType Type);
 
 protected:
-	FGameObjectBase* Owner;
+	UGameObjectBase* Owner;
 	
 	UPartsDataContainerBase* PartsFctory;
 	TArray<const FPartsDataBase*> Parts;

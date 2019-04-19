@@ -5,24 +5,24 @@
 #include "Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h"
 
 
-void FGameObjectProjectile::Initialize()
+void UGameObjectProjectile::Initialize()
 {
 
 }
 
-void FGameObjectProjectile::DeInitialize()
+void UGameObjectProjectile::DeInitialize()
 {
 
 }
 
-AActor* FGameObjectProjectile::GetActor()
+AActor* UGameObjectProjectile::GetActor()
 {
 	return Actor;
 }
 
-void FGameObjectProjectile::ActorSpawned(AActor* spawn)
+void UGameObjectProjectile::ActorSpawned(AActor* spawn)
 {
-	FGameObjectBase::ActorSpawned(spawn);
+	UGameObjectBase::ActorSpawned(spawn);
 	if (spawn)
 	{
 		Actor = Cast<AProjectileActor>(spawn);

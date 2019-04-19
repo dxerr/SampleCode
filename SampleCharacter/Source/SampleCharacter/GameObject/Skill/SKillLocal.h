@@ -7,7 +7,6 @@
 #include "Process/SkillActionNodeBase.h"
 
 class ALocalPlayerObject;
-
 /**
  * 
  */
@@ -17,7 +16,7 @@ public:
 	FSKillLocal();
 	virtual ~FSKillLocal();
 
-	virtual void Initialize(FGameObjectBase* owner) override;
+	virtual void Initialize(UGameObjectBase* owner) override;
 
 	virtual void LoadData(const TCHAR * Path) override;
 	virtual void UseSKill(int ID) override;

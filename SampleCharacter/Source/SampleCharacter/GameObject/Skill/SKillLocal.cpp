@@ -15,7 +15,7 @@ FSKillLocal::~FSKillLocal()
 {
 }
 
-void FSKillLocal::Initialize(FGameObjectBase* owner)
+void FSKillLocal::Initialize(UGameObjectBase* owner)
 {
 	FSkillBase::Initialize(owner);
 }
@@ -36,7 +36,7 @@ void FSKillLocal::UseSKill(int ID)
 	FSkillBase::UseSKill(ID);
 
 	//스킬 상태로 전환
-	FGameObjectLocal* My = static_cast<FGameObjectLocal*>(Owner);
+	UGameObjectLocal* My = Cast<UGameObjectLocal>(Owner);
 	FFSMManager* fsm = My->GetUpperFSM();
 	fsm->ChangeState<FStateAttack>();
 }
@@ -112,7 +112,7 @@ void FSKillLocal::RunSkillNode(float DeltaTime)
 	}
 
 	//사용 스킬 감시/제거
-	FGameObjectBase* param = Owner;
+	UGameObjectBase* param = Owner;
 	UseSkillNodes.RemoveAll([param](FSkillActionNodeBase* el)
 	{
 		return el->Update(param);
@@ -122,7 +122,7 @@ void FSKillLocal::RunSkillNode(float DeltaTime)
 	if (CurrentSkillData->IsEnd())
 	{
 		//유휴 상태로 전환
-		FGameObjectLocal* My = static_cast<FGameObjectLocal*>(Owner);
+		UGameObjectLocal* My = Cast<UGameObjectLocal>(Owner);
 		FFSMManager* fsm = My->GetUpperFSM();
 		fsm->ChangeState<FStateUpperIdle>();
 	}

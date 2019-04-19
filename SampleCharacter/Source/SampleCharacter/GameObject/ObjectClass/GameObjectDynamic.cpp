@@ -4,12 +4,12 @@
 #include "GameObject/State/FSMManager.h"
 #include "GameObject/Parts/PartsBase.h"
 
-void FGameObjectDynamic::Initialize()
+void UGameObjectDynamic::Initialize()
 {
 
 }
 
-void FGameObjectDynamic::DeInitialize()
+void UGameObjectDynamic::DeInitialize()
 {
 	if (Fsm)
 	{
@@ -22,23 +22,24 @@ void FGameObjectDynamic::DeInitialize()
 	}
 }
 
-AActor* FGameObjectDynamic::GetActor()
+AActor* UGameObjectDynamic::GetActor()
 {
 	return NULL;
 }
 
-FFSMManager* FGameObjectDynamic::GetBaseFSM()
+FFSMManager* UGameObjectDynamic::GetBaseFSM()
 {
 	return Fsm;
 }
 
-FPartsBase* FGameObjectDynamic::GetParts()
+FPartsBase* UGameObjectDynamic::GetParts()
 {
 	return Parts;
 }
 
-void FGameObjectDynamic::Update(float delta)
+void UGameObjectDynamic::Update(float delta)
 {
-	FGameObjectBase::Update(delta);
-	if (Fsm) { Fsm->Update(delta); }
+	Super::Update(delta);
+
+	if (Fsm) { Fsm->Update(this, delta); }
 }

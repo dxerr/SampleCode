@@ -12,19 +12,18 @@ FSKillActionNodeProjectile::FSKillActionNodeProjectile(const FSkillActionDataBas
 
 }
 
-void FSKillActionNodeProjectile::Process(FGameObjectBase* Owner)
+void FSKillActionNodeProjectile::Process(UGameObjectBase* Owner)
 {
 
 }
 
-void FSKillActionNodeProjectile::Action(FGameObjectBase* Owner)
+void FSKillActionNodeProjectile::Action(UGameObjectBase* Owner)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Fire Skill!!!"));
 	UGameInstanceExtend* gameInst = Cast<UGameInstanceExtend>(Owner->GetActor()->GetWorld()->GetGameInstance());
 	if (gameInst)
 	{
-		TWeakPtr<FObjectSpawner> spawner = gameInst->GetSpawner();
-		if (spawner.IsValid())
+		if (UObjectSpawner* spawner = gameInst->GetSpawner())
 		{
 			//임시 데이터 리소스 하드코딩
 			FString path = TEXT("Blueprint'/Game/Blueprints/GameObject/BP_ProjectileActor.BP_ProjectileActor'");
@@ -39,7 +38,7 @@ void FSKillActionNodeProjectile::Action(FGameObjectBase* Owner)
 				//이걸 하지않으면 AActor클래스 정보를 스폰시에 찾을수 없는듯 하다.
 				if (UBlueprint* castBP = Cast<UBlueprint>(loadObject))
 				{
-					spawner.Pin()->SpawnProjectile(castBP->GeneratedClass, Pos, Rot);
+					spawner->SpawnProjectile(castBP->GeneratedClass, Pos, Rot);
 				}
 			}
 		}

@@ -8,17 +8,14 @@
 #include "GameObject/ObjectClass/GameObjectNonPlayer.h"
 #include "GameObject/ObjectClass/GameObjectProjectile.h"
 
-FObjectSpawner::FObjectSpawner()
+void UObjectSpawner::Initialize(UWorld* world)
 {
 	Collider = MakeShareable(new FObjectCollider());
-}
-
-void FObjectSpawner::Initialize(UWorld* world)
-{
 	World = world;
+	//World->RemoveOnActorSpawnedHandler(FOnActorSpawned::FDelegate::CreateRaw(this, &UObjectSpawner::CallbackActorDeSpawn))
 }
 
-void FObjectSpawner::DeInitialize()
+void UObjectSpawner::DeInitialize()
 {
 	for (auto el : Spawns)
 	{
@@ -30,7 +27,7 @@ void FObjectSpawner::DeInitialize()
 	Collider.Reset();
 }
 
-void FObjectSpawner::Update(float delta)
+void UObjectSpawner::Update(float delta)
 {
 	for (int i = 0; i != Spawns.Num(); ++i)
 	{
@@ -38,36 +35,32 @@ void FObjectSpawner::Update(float delta)
 		el->Update(delta);
 	}
 
-	/*
+	/* 
 	for (auto el : Spawns)
 	{
 		el->Update(delta);
 	}*/
 }
 
-FGameObjectBase* FObjectSpawner::SpawnPlayer(UClass* uclass, const FVector& pos, const FRotator& rot)
+UGameObjectBase* UObjectSpawner::SpawnPlayer(UClass* uclass, const FVector& pos, const FRotator& rot)
 {
-	FGameObjectLocal* local = new FGameObjectLocal();
+	UGameObjectLocal* local = NewObject<UGameObjectLocal>();
 	local->Initialize();
 
 	if (AActor* actor = local->Spawn(uclass, World, pos, rot))
 	{
 		Spawns.Add(local);
+		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 	}
-	else
-	{
-		delete local;
-	}
-
 	return local;
 }
 
 //[Todo] Class UCharacterMovementComponent
 //void UCharacterMovementComponent::FindFloor(const FVector& CapsuleLocation, FFindFloorResult& OutFloorResult, bool bCanUseCachedLocation, const FHitResult* DownwardSweepResult) const
 //내부 구현을 참고 하여 개선한다.
-FGameObjectBase* FObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, const FRotator& rot)
+UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, const FRotator& rot)
 {
-	FGameObjectNonPlayer* npc = new FGameObjectNonPlayer();
+	UGameObjectNonPlayer* npc = NewObject<UGameObjectNonPlayer>();
 	npc->Initialize();
 
 	FVector rayOri = pos + FVector(0.f, 0.f, 1000.f);
@@ -92,10 +85,7 @@ FGameObjectBase* FObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, co
 			if (AActor* actor = npc->Spawn(uclass, World, location, rot))
 			{
 				Spawns.Add(npc);
-			}
-			else
-			{
-				delete npc;
+				actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 			}
 		}
 	}
@@ -103,19 +93,46 @@ FGameObjectBase* FObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, co
 	return npc;
 }
 
-FGameObjectBase* FObjectSpawner::SpawnProjectile(UClass* uclass, const FVector& pos, const FRotator& rot)
+UGameObjectBase* UObjectSpawner::SpawnProjectile(UClass* uclass, const FVector& pos, const FRotator& rot)
 {
-	FGameObjectProjectile* projectile = new FGameObjectProjectile();
+	UGameObjectProjectile* projectile = NewObject<UGameObjectProjectile>();
 	projectile->Initialize();
 
 	if (AActor* actor = projectile->Spawn(uclass, World, pos, rot))
 	{
 		Spawns.Add(projectile);
+		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 	}
-	else
-	{
-		delete projectile;
-	}
-
 	return projectile;
+}
+
+void UObjectSpawner::DespawnObject(UGameObjectBase* despawn)
+{
+	if (Spawns.Contains(despawn))
+	{
+		//액터 소멸
+		World->DestroyActor(despawn->GetActor());
+
+		//액터 소멸시 일단 관리대상 에서 제거
+		RemoveGameObject(despawn);
+	}
+}
+
+void UObjectSpawner::RemoveGameObject(UGameObjectBase* despawn)
+{
+	Spawns.Remove(despawn);
+}
+
+void UObjectSpawner::CallbackActorDeSpawn(AActor* despawn)
+{
+	//관리 대상인가 찾음
+	UGameObjectBase* findObj = *(Spawns.FindByPredicate([=](UGameObjectBase* el)
+	{
+		return (el)->GetActor() == despawn;
+	}));
+
+	if (findObj) 
+	{
+		RemoveGameObject(findObj);
+	}
 }

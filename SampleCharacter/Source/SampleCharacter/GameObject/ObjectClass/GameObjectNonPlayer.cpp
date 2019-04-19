@@ -5,23 +5,23 @@
 #include "GameObject/ObjectClass/GameObjectNonPlayer.h"
 #include "GameObject/State/FSMManager.h"
 
-void FGameObjectNonPlayer::Initialize()
+void UGameObjectNonPlayer::Initialize()
 {
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);
 }
 
-void FGameObjectNonPlayer::DeInitialize()
+void UGameObjectNonPlayer::DeInitialize()
 {
 	delete Fsm;
 }
 
-AActor* FGameObjectNonPlayer::GetActor()
+AActor* UGameObjectNonPlayer::GetActor()
 {
 	return GetNpc();
 }
 
-ANpcPawn* FGameObjectNonPlayer::GetNpc()
+ANpcPawn* UGameObjectNonPlayer::GetNpc()
 {
 	return Actor;
 }

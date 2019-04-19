@@ -4,12 +4,11 @@
 #include "GameObject/State/FSMManager.h"
 #include "GameObject/Skill/SkillBase.h"
 
-void FGameObjectPlayer::Initialize()
+void UGameObjectPlayer::Initialize()
 {
-
 }
 
-void FGameObjectPlayer::DeInitialize()
+void UGameObjectPlayer::DeInitialize()
 {
 	if (UpperFsm)
 	{
@@ -22,19 +21,15 @@ void FGameObjectPlayer::DeInitialize()
 	}
 }
 
-FFSMManager* FGameObjectPlayer::GetUpperFSM()
-{
-	return UpperFsm;
-}
+AActor* UGameObjectPlayer::GetActor()			{ return NULL; }
+ACharacter* UGameObjectPlayer::GetCharacter()	{ return NULL; }
+FFSMManager* UGameObjectPlayer::GetUpperFSM()	{ return UpperFsm; }
+FSkillBase* UGameObjectPlayer::GetSkill()		{ return Skill; }
 
-FSkillBase* FGameObjectPlayer::GetSkill()
+void UGameObjectPlayer::Update(float delta)
 {
-	return Skill;
-}
+	Super::Update(delta);
 
-void FGameObjectPlayer::Update(float delta)
-{
-	FGameObjectDynamic::Update(delta);
-	if (UpperFsm) { UpperFsm->Update(delta); }
+	if (UpperFsm) { UpperFsm->Update(this, delta); }
 	if (Skill) { Skill->Update(delta); }
 }

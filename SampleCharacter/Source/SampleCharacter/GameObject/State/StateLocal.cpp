@@ -20,7 +20,7 @@ FString FStateIdle::Name()
 	return TEXT("StateIdle");
 }
 
-void FStateIdle::OnEnter(FGameObjectLocal* Owner)
+void FStateIdle::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
 
@@ -38,7 +38,7 @@ FString FStateForwardWalk::Name()
 	return TEXT("StateForwardWalk");
 }
 
-void FStateForwardWalk::OnEnter(FGameObjectLocal* Owner)
+void FStateForwardWalk::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
 
@@ -48,13 +48,13 @@ void FStateForwardWalk::OnEnter(FGameObjectLocal* Owner)
 	Owner->MovementForce = 1.f;
 }
 
-void FStateForwardWalk::OnUpdate(FGameObjectLocal* Owner, float Delta)
+void FStateForwardWalk::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
 	Owner->MovementForce += 3.f * Delta;
 	UpdateSpeed(Owner, Owner->MovementForce);
 }
 
-void FStateForwardWalk::UpdateSpeed(FGameObjectLocal* Owner, float Speed)
+void FStateForwardWalk::UpdateSpeed(UGameObjectLocal* Owner, float Speed)
 {
 	FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	Owner->GetLocal()->AddMovementInput(dir, Speed);
@@ -80,7 +80,7 @@ FString FStateBackwardWalk::Name()
 	return TEXT("StateBackwardWalk");
 }
 
-void FStateBackwardWalk::OnEnter(FGameObjectLocal* Owner)
+void FStateBackwardWalk::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
 
@@ -90,7 +90,7 @@ void FStateBackwardWalk::OnEnter(FGameObjectLocal* Owner)
 	Owner->MovementForce = -0.5f;
 }
 
-void FStateBackwardWalk::OnUpdate(FGameObjectLocal* Owner, float Delta)
+void FStateBackwardWalk::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
 	FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	Owner->GetLocal()->AddMovementInput(dir, Owner->MovementForce);
@@ -108,7 +108,7 @@ FString FStateSideWalk::Name()
 	return TEXT("StateSideWalk");
 }
 
-void FStateSideWalk::OnEnter(FGameObjectLocal* Owner)
+void FStateSideWalk::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
 
@@ -118,7 +118,7 @@ void FStateSideWalk::OnEnter(FGameObjectLocal* Owner)
 	//Owner->MovementForce = -0.5f;
 }
 
-void FStateSideWalk::OnUpdate(FGameObjectLocal* Owner, float Delta)
+void FStateSideWalk::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
 	FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	Owner->GetLocal()->AddMovementInput(dir, Owner->MovementForce);
@@ -146,7 +146,7 @@ bool FStateRun::IsChange(int StateID)
 	return false;
 }
 
-void FStateRun::OnEnter(FGameObjectLocal* Owner)
+void FStateRun::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
 
@@ -155,7 +155,7 @@ void FStateRun::OnEnter(FGameObjectLocal* Owner)
 	movement->MaxWalkSpeed = 2000.f;
 }
 
-void FStateRun::OnUpdate(FGameObjectLocal* Owner, float Delta)
+void FStateRun::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
 	Owner->MovementForce += Delta;
 	FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
@@ -173,15 +173,14 @@ FString FStateUpperIdle::Name()
 	return TEXT("StateUpperIdle");
 }
 
-void FStateUpperIdle::OnEnter(FGameObjectLocal* Owner)
+void FStateUpperIdle::OnEnter(UGameObjectLocal* Owner)
 {
 	//상체 애니 재생 정지
-	FSKillLocal* skillMgr = static_cast<FSKillLocal*>(Owner->GetSkill());
+	FSkillBase* skillMgr = Owner->GetSkill();
 	if (skillMgr->CurrentSkillData)
 	{
 		UAnimInstanceState* anim = Owner->GetLocal()->GetAnim();
 		anim->StopUpperAni(skillMgr->CurrentSkillData->GetAni());
-
 	}
 }
 
@@ -196,11 +195,11 @@ FString FStateAttack::Name()
 	return TEXT("StateAttack");
 }
 
-void FStateAttack::OnEnter(FGameObjectLocal* Owner)
+void FStateAttack::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
 
-	FSKillLocal* skillMgr = static_cast<FSKillLocal*>(Owner->GetSkill());
+	FSkillBase* skillMgr = Owner->GetSkill();
 	if (skillMgr->CurrentSkillData)
 	{
 		UAnimInstanceState* anim = Owner->GetLocal()->GetAnim();
@@ -209,10 +208,8 @@ void FStateAttack::OnEnter(FGameObjectLocal* Owner)
 	}
 }
 
-void FStateAttack::OnUpdate(FGameObjectLocal* Owner, float Delta)
+void FStateAttack::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
-	if (FSKillLocal* skillMgr = static_cast<FSKillLocal*>(Owner->GetSkill()))
-	{
-		skillMgr->RunSkillNode(Delta);
-	}
+	FSkillBase* skillMgr = Owner->GetSkill();
+	skillMgr->RunSkillNode(Delta);
 }

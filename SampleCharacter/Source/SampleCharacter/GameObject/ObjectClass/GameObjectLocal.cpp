@@ -11,7 +11,7 @@
 #include "Runtime/Engine/Classes/GameFramework/Controller.h"
 #include "Runtime/Engine/Classes/Components/InputComponent.h"
 
-void FGameObjectLocal::Initialize()
+void UGameObjectLocal::Initialize()
 {
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);
@@ -20,52 +20,58 @@ void FGameObjectLocal::Initialize()
 	UpperFsm->Initialize(this);
 	Actor = NULL;
 }
-void FGameObjectLocal::DeInitialize()
+void UGameObjectLocal::DeInitialize()
 {
 	if (Actor)
 	{
 		Actor->GetWorld()->DestroyActor(Actor);
 	}
+
+	delete Fsm;
+	delete UpperFsm;
+	delete Skill;
+	delete Parts;
 }
 
-AActor* FGameObjectLocal::GetActor()
+AActor* UGameObjectLocal::GetActor()
 {
 	return GetLocal();
 }
 
-ACharacter* FGameObjectLocal::GetCharacter()
+ACharacter* UGameObjectLocal::GetCharacter()
 {
 	return GetLocal();
 }
 
-ALocalCharacter* FGameObjectLocal::GetLocal()
+ALocalCharacter* UGameObjectLocal::GetLocal()
 {
 	return Actor;
 }
 
-FFSMManager* FGameObjectLocal::GetBaseFSM()
+FFSMManager* UGameObjectLocal::GetBaseFSM()
 {
 	return Fsm;
 }
 
-FFSMManager* FGameObjectLocal::GetUpperFSM()
+FFSMManager* UGameObjectLocal::GetUpperFSM()
 {
 	return UpperFsm;
 }
 
-FSkillBase* FGameObjectLocal::GetSkill()
+FSkillBase* UGameObjectLocal::GetSkill()
 {
 	return Skill;
 }
 
-FPartsBase* FGameObjectLocal::GetParts()
+FPartsBase* UGameObjectLocal::GetParts()
 {
 	return Parts;
 }
 
-void FGameObjectLocal::ActorSpawned(AActor* Spawn)
+void UGameObjectLocal::ActorSpawned(AActor* Spawn)
 {
-	FGameObjectPlayer::ActorSpawned(Spawn);
+	Super::ActorSpawned(Spawn);
+
 	if (Spawn)
 	{
 		Actor = Cast<ALocalCharacter>(Spawn);
@@ -86,8 +92,9 @@ void FGameObjectLocal::ActorSpawned(AActor* Spawn)
 	Parts->AttachAll();
 }
 
-void FGameObjectLocal::Update(float delta)
+void UGameObjectLocal::Update(float delta)
 {
-	FGameObjectPlayer::Update(delta);
-	if (UpperFsm) { UpperFsm->Update(delta); }
+	Super::Update(delta);
+
+	if (UpperFsm) { UpperFsm->Update(this, delta); }
 }

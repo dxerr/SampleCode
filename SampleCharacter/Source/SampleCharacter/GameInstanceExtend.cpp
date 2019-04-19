@@ -16,7 +16,7 @@ void UGameInstanceExtend::Init()
 	//Tick 델리게이트 설정
 	TickDelegate = FTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateUObject(this, &UGameInstanceExtend::Tick));
 
-	Spawner = MakeShareable(new FObjectSpawner());
+	Spawner = NewObject<UObjectSpawner>();
 	Spawner->Initialize(GetWorld());
 }
 
@@ -28,23 +28,20 @@ void UGameInstanceExtend::Shutdown()
 
 bool UGameInstanceExtend::Tick(float delta)
 {
-	if (Spawner.IsValid())
-	{
-		Spawner->Update(delta);
-	}
+	Spawner->Update(delta);
 	return true;
 }
 
 //로컬 플레이어 스폰 담당
 void UGameInstanceExtend::SpawnPlayer(TSubclassOf<ACharacter> ActorClass, const FVector& StartPos, const FVector& Offset)
 {
-	if (FGameObjectBase* obj = Spawner->SpawnPlayer(ActorClass.Get(), StartPos + Offset, FRotator(0.f, 0.f, 0.f)))
+	if (UGameObjectBase* obj = Spawner->SpawnPlayer(ActorClass.Get(), StartPos + Offset, FRotator(0.f, 0.f, 0.f)))
 	{
 	}
 }
 
 AActor* UGameInstanceExtend::SpawnOnGround(TSubclassOf<AActor> ActorClass, const FVector& StartPos, const FVector& Offset)
 {
-	FGameObjectBase* obj = Spawner->SpawnNpc(ActorClass.Get(), StartPos, FRotator(0.f, 0.f, 0.f));
+	UGameObjectBase* obj = Spawner->SpawnNpc(ActorClass.Get(), StartPos, FRotator(0.f, 0.f, 0.f));
 	return obj->GetActor();
 }

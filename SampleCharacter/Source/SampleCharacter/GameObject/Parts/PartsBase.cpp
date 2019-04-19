@@ -14,7 +14,7 @@ FPartsBase::~FPartsBase()
 
 }
 
-void FPartsBase::Initialize(FGameObjectBase* owner)
+void FPartsBase::Initialize(UGameObjectBase* owner)
 {
 	Owner = owner;
 }

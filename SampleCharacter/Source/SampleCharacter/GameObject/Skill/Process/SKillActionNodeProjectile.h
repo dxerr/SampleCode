@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "SkillActionNodeBase.h"
 
-class FGameObjectBase;
+class UGameObjectBase;
 /**
  * 
  */
@@ -15,6 +15,6 @@ public:
 	FSKillActionNodeProjectile(const FSkillActionDataBase& Data);
 
 public:
-	virtual void Process(FGameObjectBase* Owner) override;
-	virtual void Action(FGameObjectBase* Owner) override;
+	virtual void Process(UGameObjectBase* Owner) override;
+	virtual void Action(UGameObjectBase* Owner) override;
 };
