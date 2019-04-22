@@ -6,6 +6,7 @@
 #include "ObjectSpawner.generated.h"
 
 class AActor;
+class UPrimitiveComponent;
 class UGameObjectBase;
 class FObjectCollider;
 /**
@@ -20,6 +21,8 @@ class SAMPLECHARACTER_API UObjectSpawner : public UObject
 public:
 	void Initialize(UWorld* world);
 	void DeInitialize();
+
+	UGameObjectBase* FindObject(AActor* actor);
 
 	void Update(float delta);
 
@@ -36,13 +39,18 @@ protected:
 	void RemoveGameObject(UGameObjectBase* despawn);
 
 	UFUNCTION()
+	void CallbackCompHit(UPrimitiveComponent* hitComponent, AActor* otherActor, UPrimitiveComponent* otherComp, FVector normalImpulse, const FHitResult& hit);
+	UFUNCTION()
 	void CallbackActorDeSpawn(AActor* despawn);
 
 private:
 	//액터 객체 관리
 	TArray<UGameObjectBase*> Spawns;
-	//임시 충돌객체 관리 클래스
-	TSharedPtr<FObjectCollider> Collider;
+
+	//추가/삭제 대상 관리
+	TArray<UGameObjectBase*> AddSpawns;
+	TArray<UGameObjectBase*> RemoveSpawns;
+
 	//현재 월드 정보
 	//TSharedPtr로는 해제 타이밍을 잘잡아줘야 할듯
 	//TSharedPtr<UWorld> World;

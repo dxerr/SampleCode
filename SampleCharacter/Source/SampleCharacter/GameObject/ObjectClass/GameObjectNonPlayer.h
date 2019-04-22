@@ -25,6 +25,12 @@ public:
 	virtual AActor* GetActor() override;
 	virtual ANpcPawn* GetNpc();
 
+public:
+	virtual void OnHit(UGameObjectBase* target) override;
+
+protected:
+	virtual void ActorSpawned(AActor* Spawn) override;
+
 protected:
 	ANpcPawn* Actor;
 };

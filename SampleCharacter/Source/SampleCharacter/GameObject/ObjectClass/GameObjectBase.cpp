@@ -20,6 +20,10 @@ void UGameObjectBase::Update(float delta)
 {
 }
 
+void UGameObjectBase::OnHit(UGameObjectBase* target)
+{
+}
+
 AActor* UGameObjectBase::Spawn(UClass* Instance, UWorld* World, const FVector& Position, const FRotator& dir)
 {
 	FActorSpawnParameters SpawnInfo;

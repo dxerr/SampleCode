@@ -6,11 +6,13 @@
 
 void UGameObjectDynamic::Initialize()
 {
-
+	Super::Initialize();
 }
 
 void UGameObjectDynamic::DeInitialize()
 {
+	Super::DeInitialize();
+
 	if (Fsm)
 	{
 		delete Fsm;

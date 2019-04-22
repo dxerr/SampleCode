@@ -28,6 +28,8 @@ public:
 	virtual AActor* Spawn(UClass* instance, UWorld* world, const FVector& position, const FRotator& dir);
 	virtual void Update(float delta);
 
+	virtual void OnHit(UGameObjectBase* target);
+
 protected:
 	//스폰 완료시 호출
 	virtual void ActorSpawned(AActor* spawn);

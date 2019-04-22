@@ -6,10 +6,13 @@
 
 void UGameObjectPlayer::Initialize()
 {
+	Super::Initialize();
 }
 
 void UGameObjectPlayer::DeInitialize()
 {
+	Super::DeInitialize();
+
 	if (UpperFsm)
 	{
 		delete UpperFsm;

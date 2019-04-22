@@ -3,7 +3,7 @@
 #include "StateNPC.h"
 #include "FSMManager.h"
 
-/*
+
 int FStateNpcIdle::GetStateID()
 {
 	return (int)EStateBase::Idle;
@@ -14,7 +14,7 @@ FString FStateNpcIdle::Name()
 	return TEXT("StateIdle");
 }
 
-void FStateNpcIdle::OnEnter(ANonePcObject* Owner)
+void FStateNpcIdle::OnEnter(UGameObjectNonPlayer* Owner)
 {
 	FStateSingleNpc::OnEnter(Owner);
 }
@@ -30,10 +30,9 @@ FString FStateNpcBeaten::Name()
 	return TEXT("StateNpcBeaten");
 }
 
-void FStateNpcBeaten::OnEnter(ANonePcObject* Owner)
+void FStateNpcBeaten::OnEnter(UGameObjectNonPlayer* Owner)
 {
 	FStateSingleNpc::OnEnter(Owner);
 	//임의로 상태전환 시간 설정
-	Owner->GetState()->ChangePrevState(2.f);
+	Owner->GetBaseFSM()->ChangePrevState(2.f);
 }
-*/

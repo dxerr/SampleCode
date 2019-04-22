@@ -13,6 +13,8 @@
 
 void UGameObjectLocal::Initialize()
 {
+	Super::Initialize();
+
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);
 
@@ -22,15 +24,17 @@ void UGameObjectLocal::Initialize()
 }
 void UGameObjectLocal::DeInitialize()
 {
+	Super::DeInitialize();
+
 	if (Actor)
 	{
 		Actor->GetWorld()->DestroyActor(Actor);
 	}
 
-	delete Fsm;
-	delete UpperFsm;
-	delete Skill;
-	delete Parts;
+	if (Fsm)		{ delete Fsm; }
+	if (UpperFsm)	{ delete UpperFsm; }
+	if (Skill)		{ delete Skill; }
+	if (Parts)		{ delete Parts; }
 }
 
 AActor* UGameObjectLocal::GetActor()
@@ -90,6 +94,9 @@ void UGameObjectLocal::ActorSpawned(AActor* Spawn)
 
 	//모든 파츠 장착
 	Parts->AttachAll();
+
+	//기본 상태 설정
+	Fsm->ChangeState<FStateIdle>();
 }
 
 void UGameObjectLocal::Update(float delta)

@@ -1,17 +1,20 @@
 ﻿#include "ObjectSpawner.h"
-#include "ObjectCollider.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/CapsuleComponent.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h"
+#include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
 #include "GameObject/ObjectClass/GameObjectLocal.h"
 #include "GameObject/ObjectClass/GameObjectNonPlayer.h"
 #include "GameObject/ObjectClass/GameObjectProjectile.h"
 
+
 void UObjectSpawner::Initialize(UWorld* world)
 {
-	Collider = MakeShareable(new FObjectCollider());
 	World = world;
+	Spawns.Empty();
+	AddSpawns.Empty();
+	RemoveSpawns.Empty();
 	//World->RemoveOnActorSpawnedHandler(FOnActorSpawned::FDelegate::CreateRaw(this, &UObjectSpawner::CallbackActorDeSpawn))
 }
 
@@ -23,23 +26,46 @@ void UObjectSpawner::DeInitialize()
 		delete el;
 	}
 
+	World = NULL;
 	Spawns.Empty();
-	Collider.Reset();
+	AddSpawns.Empty();
+	RemoveSpawns.Empty();
+}
+
+UGameObjectBase* UObjectSpawner::FindObject(AActor* actor)
+{
+	auto* findobj = (Spawns.FindByPredicate([=](UGameObjectBase* el)
+	{
+		return NULL != (el)->GetActor() && (el)->GetActor() == actor;
+	}));
+
+	return (findobj) ? *findobj : NULL;
 }
 
 void UObjectSpawner::Update(float delta)
 {
-	for (int i = 0; i != Spawns.Num(); ++i)
+	//대상 리스트 제거
+	if (0 < RemoveSpawns.Num())
 	{
-		auto el = Spawns[i];
-		el->Update(delta);
+		for (auto el : RemoveSpawns)
+		{
+			Spawns.RemoveSwap(el);
+			el = NULL;
+		}
+		RemoveSpawns.Empty();
 	}
 
-	/* 
+	//대상 추가
+	if (0 < AddSpawns.Num())
+	{
+		Spawns.Append(AddSpawns);
+		AddSpawns.Empty();
+	}
+
 	for (auto el : Spawns)
 	{
 		el->Update(delta);
-	}*/
+	}
 }
 
 UGameObjectBase* UObjectSpawner::SpawnPlayer(UClass* uclass, const FVector& pos, const FRotator& rot)
@@ -49,7 +75,7 @@ UGameObjectBase* UObjectSpawner::SpawnPlayer(UClass* uclass, const FVector& pos,
 
 	if (AActor* actor = local->Spawn(uclass, World, pos, rot))
 	{
-		Spawns.Add(local);
+		AddSpawns.Add(local);
 		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 	}
 	return local;
@@ -84,7 +110,7 @@ UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, co
 
 			if (AActor* actor = npc->Spawn(uclass, World, location, rot))
 			{
-				Spawns.Add(npc);
+				AddSpawns.Add(npc);
 				actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 			}
 		}
@@ -100,8 +126,14 @@ UGameObjectBase* UObjectSpawner::SpawnProjectile(UClass* uclass, const FVector& 
 
 	if (AActor* actor = projectile->Spawn(uclass, World, pos, rot))
 	{
-		Spawns.Add(projectile);
+		AddSpawns.Add(projectile);
 		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
+
+		//충돌 처리
+		if (UPrimitiveComponent* collider = actor->FindComponentByClass<UPrimitiveComponent>())
+		{
+			collider->OnComponentHit.AddDynamic(this, &UObjectSpawner::CallbackCompHit);
+		}
 	}
 	return projectile;
 }
@@ -120,17 +152,33 @@ void UObjectSpawner::DespawnObject(UGameObjectBase* despawn)
 
 void UObjectSpawner::RemoveGameObject(UGameObjectBase* despawn)
 {
-	Spawns.Remove(despawn);
+	RemoveSpawns.Add(despawn);
+}
+
+void UObjectSpawner::CallbackCompHit(UPrimitiveComponent* hitComponent, AActor* otherActor, UPrimitiveComponent* otherComp, FVector normalImpulse, const FHitResult& hit)
+{
+	if (otherActor)
+	{
+		UGameObjectBase* hitObj = FindObject(Cast<AActor>(hitComponent));
+		//충돌 객체 성향에 따라 Destory여부 설정하기
+		if (hitObj)
+		{
+			//현재는 무조건 삭제
+			DespawnObject(hitObj);
+		}
+
+		//피격 알림
+		if (UGameObjectBase* findObj = FindObject(otherActor))
+		{
+			findObj->OnHit(hitObj);
+		}
+	}
 }
 
 void UObjectSpawner::CallbackActorDeSpawn(AActor* despawn)
 {
 	//관리 대상인가 찾음
-	UGameObjectBase* findObj = *(Spawns.FindByPredicate([=](UGameObjectBase* el)
-	{
-		return (el)->GetActor() == despawn;
-	}));
-
+	UGameObjectBase* findObj = FindObject(despawn);
 	if (findObj) 
 	{
 		RemoveGameObject(findObj);
