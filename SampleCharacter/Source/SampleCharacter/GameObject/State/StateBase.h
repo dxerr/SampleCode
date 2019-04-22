@@ -8,8 +8,31 @@
 #include "GameObject/Component/Animation/AnimInstanceState.h"
 #include "Define/StateParams.h"
 
-template <typename T>
-class StateSingleton
+/**
+ *
+ */
+class SAMPLECHARACTER_API FStateBase
+{
+public:
+	FStateBase();
+	virtual ~FStateBase();
+
+	virtual int GetStateID() = 0;
+	virtual FString Name() = 0;
+	virtual int GetAniRandomCount() { return 0; }
+
+	//체인지 가능 or 불가능(Black List | White List) 상태 정의
+	virtual bool IsChange(int StateID);
+	virtual bool IsSameState(int StateID);
+
+	virtual void Enter(UGameObjectBase* Owner) {}
+	virtual void ReEnter(UGameObjectBase* Owner) {}
+	virtual void Update(UGameObjectBase* Owner, float Delta) {}
+	virtual void Exit(UGameObjectBase* Owner) {}
+};
+
+template <class T>
+class StateSingleton : public FStateBase
 {
 protected:
 	StateSingleton() = default;
@@ -34,34 +57,12 @@ template <typename T> std::unique_ptr<T> StateSingleton<T>::_instance;
 template <typename T> std::once_flag StateSingleton<T>::_flag1;
 
 /**
- * 
- */
-class SAMPLECHARACTER_API FStateBase
-{
-public:
-	FStateBase();
-	virtual ~FStateBase();
-
-	virtual int GetStateID() = 0;
-	virtual FString Name() = 0;
-
-	//체인지 가능 or 불가능(Black List | White List) 상태 정의
-	virtual bool IsChange(int StateID);
-	virtual bool IsSameState(int StateID);
-
-	virtual void Enter(UGameObjectBase* Owner)	= 0;
-	virtual void ReEnter(UGameObjectBase* Owner) = 0;
-	virtual void Update(UGameObjectBase* Owner, float Delta) = 0;
-	virtual void Exit(UGameObjectBase* Owner) = 0;
-};
-
-/**
 * [Todo] 
 * FSM의 상태 클래스들은 자주 호출되고, 싱글톤 객체이므로 다중상속에 의한 캐스팅보다(Owner->cast())
 * 추후 템플릿 구현으로 수정
 */
-template <typename T>
-class SAMPLECHARACTER_API FStateTargetBase : public FStateBase
+template <class T, class U>
+class SAMPLECHARACTER_API FStateTargetBase : public StateSingleton<U>
 {
 public:
 	virtual void Enter(UGameObjectBase* Owner) override

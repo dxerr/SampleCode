@@ -40,6 +40,8 @@ void ALocalCharacter::PostInitializeComponents()
 void ALocalCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 	
 }
 

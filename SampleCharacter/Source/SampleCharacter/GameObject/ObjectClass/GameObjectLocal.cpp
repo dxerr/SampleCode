@@ -96,7 +96,7 @@ void UGameObjectLocal::ActorSpawned(AActor* Spawn)
 	Parts->AttachAll();
 
 	//기본 상태 설정
-	Fsm->ChangeState<FStateIdle>();
+	Fsm->ChangeState<FStateSpawn>();
 }
 
 void UGameObjectLocal::Update(float delta)

@@ -8,7 +8,7 @@
 #include "GameObject/ObjectClass/GameObjectLocal.h"
 
 template <typename T>
-class SAMPLECHARACTER_API FStateSingleLocal : public StateSingleton<T>, public FStateTargetBase<UGameObjectLocal>
+class SAMPLECHARACTER_API FStateSingleLocal : public FStateTargetBase<UGameObjectLocal, T>
 {
 protected:
 	//애님 블루프린트에 가장 최우선으로 상태를 전송해줘야한다.
@@ -16,7 +16,7 @@ protected:
 	{
 		if (UAnimInstanceState* anim = Owner->GetLocal()->GetAnim())
 		{
-			anim->ChangeState(GetStateID());
+			anim->ChangeState(GetStateID(), 0, GetAniRandomCount());
 		}
 	}
 
@@ -37,6 +37,16 @@ protected:
 /**
  * 
  */
+class SAMPLECHARACTER_API FStateSpawn : public FStateSingleLocal<FStateSpawn>
+{
+public:
+	virtual int GetStateID() override;
+	virtual FString Name() override;
+	virtual int GetAniRandomCount() override;
+
+	virtual void OnEnter(UGameObjectLocal* Owner) override;
+};
+
 class SAMPLECHARACTER_API FStateIdle : public FStateSingleLocal<FStateIdle>
 {
 public:

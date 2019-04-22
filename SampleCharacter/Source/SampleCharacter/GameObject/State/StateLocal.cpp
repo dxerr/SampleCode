@@ -9,6 +9,29 @@
 #include "Runtime/Engine/Classes/GameFramework/Controller.h"
 
 
+/// FStateSpawn ///
+int FStateSpawn::GetStateID()
+{
+	return (int)EStateBase::Spawn;
+}
+
+FString FStateSpawn::Name()
+{
+	return TEXT("StateSpawn");
+}
+
+int FStateSpawn::GetAniRandomCount()
+{
+	return 2;
+}
+
+void FStateSpawn::OnEnter(UGameObjectLocal* Owner)
+{
+	FStateSingleLocal::OnEnter(Owner);
+
+	Owner->GetBaseFSM()->ChangeDelayState<FStateIdle>(1.5f);
+}
+
 /// FStateIdle ///
 int FStateIdle::GetStateID()
 {

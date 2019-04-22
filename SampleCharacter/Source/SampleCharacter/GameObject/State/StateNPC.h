@@ -9,7 +9,7 @@
 
 
 template <typename T>
-class SAMPLECHARACTER_API FStateSingleNpc : public StateSingleton<T>, public FStateTargetBase<UGameObjectNonPlayer>
+class SAMPLECHARACTER_API FStateSingleNpc : public FStateTargetBase<UGameObjectNonPlayer, T>
 {
 protected:
 	//애님 블루프린트에 가장 최우선으로 상태를 전송해줘야한다.

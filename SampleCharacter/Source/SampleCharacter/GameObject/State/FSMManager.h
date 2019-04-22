@@ -28,12 +28,15 @@ public:
 	void Update(Owner* owner, float delta);
 	template <class State>
 	bool ChangeState(FStateChangeFailed const& failDelegate = nullptr);
-	//FTimerManager를 통한 이벤트 처리 일정 시간후 이전 스테이트로 전환
-	void ChangePrevState(float Time);
+	//FTimerManager를 통한 이벤트 처리 일정 시간후 스테이트 전환
+	template <class State>
+	void ChangeDelayState(float time);
+	void ChangeDelayState(FStateBase* state, float time);
+	void ChangeDelayPrevState(float time);
 
 private:
-	bool ChangeState(FStateBase* state, FStateChangeFailed const& failDelegate = nullptr);
-	void CallbakChangePrevState(FStateBase* State);
+	bool ChangeState(FStateBase* state, FStateChangeFailed const& failDelegate = NULL);
+	void CallbakChangeState(FStateBase* state);
 
 private:
 	UGameObjectBase* Owner;
@@ -55,4 +58,11 @@ bool FFSMManager::ChangeState(FStateChangeFailed const& failDelegate)
 {
 	State* state = State::GetInstance();
 	return ChangeState(state, failDelegate);
+}
+
+template <class State>
+void FFSMManager::ChangeDelayState(float time)
+{
+	State* state = State::GetInstance();
+	ChangeDelayState(state, time);
 }

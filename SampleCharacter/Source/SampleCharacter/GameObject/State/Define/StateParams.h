@@ -13,14 +13,16 @@
 UENUM()
 enum class EStateBase : uint8
 {
-	None,
-	Idle = 1,
+	None = 0,
+	Spawn,
+	Idle,
 	ForwardWalk,
 	BackwardWalk,
 	SideWalk,
 	Run,
 
 	Beaten,
+	Die,
 
 	BaseMax,
 };
@@ -29,10 +31,11 @@ enum class EStateBase : uint8
 UENUM()
 enum class  EStateUpperBase : uint8
 {
-	None = (uint8)EStateBase::BaseMax,
+	None = 100,
 	Idle,
 	Attack,
-	BaseMax,
+
+	UpperBaseMax,
 };
 
 DECLARE_DELEGATE_OneParam(FStateChangeFailed, int32/* State Id*/);

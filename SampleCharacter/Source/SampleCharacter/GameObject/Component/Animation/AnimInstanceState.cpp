@@ -33,15 +33,23 @@ bool UAnimInstanceState::IsUpperState(EStateUpperBase State)
 
 bool UAnimInstanceState::IsUpperBlend()
 {
-	return BaseStateType != EStateBase::Idle;
+	return IsMoveState();
 }
 
 bool UAnimInstanceState::IsMoveState()
 {
-	return BaseStateType != EStateBase::Idle;
+	return BaseStateType == EStateBase::ForwardWalk ||
+		BaseStateType == EStateBase::BackwardWalk ||
+		BaseStateType == EStateBase::SideWalk ||
+		BaseStateType == EStateBase::Run;
 }
 
-void UAnimInstanceState::ChangeState(int State)
+int UAnimInstanceState::GetRandomIndex()
+{
+	return RandomIndex;
+}
+
+void UAnimInstanceState::ChangeState(int State, int min, int max)
 {
 	if (State >= (int)EStateUpperBase::None)
 	{
@@ -50,6 +58,16 @@ void UAnimInstanceState::ChangeState(int State)
 	else
 	{
 		BaseStateType = static_cast<EStateBase>(State);
+	}
+
+	//·£´ý ÀÎµ¦½º »ý¼º
+	if (max - min > 0)
+	{
+		RandomIndex = FMath::RandRange(min, max);
+	}
+	else
+	{
+		RandomIndex = 0;
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("UAnimInstanceLocal ChangeState Lowwer : %d  Upper : %d"), (int)BaseStateType, (int)UpperStateType);

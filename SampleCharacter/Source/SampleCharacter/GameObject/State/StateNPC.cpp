@@ -34,5 +34,5 @@ void FStateNpcBeaten::OnEnter(UGameObjectNonPlayer* Owner)
 {
 	FStateSingleNpc::OnEnter(Owner);
 	//임의로 상태전환 시간 설정
-	Owner->GetBaseFSM()->ChangePrevState(2.f);
+	Owner->GetBaseFSM()->ChangeDelayPrevState(2.f);
 }
