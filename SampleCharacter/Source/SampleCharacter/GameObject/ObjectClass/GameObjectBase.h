@@ -17,6 +17,8 @@ class SAMPLECHARACTER_API UGameObjectBase : public UObject
 	GENERATED_BODY()
 	
 public:
+	virtual ~UGameObjectBase();
+
 	virtual void Initialize();
 	virtual void DeInitialize();
 
@@ -25,12 +27,13 @@ public:
 	virtual AActor* GetActor();
 
 public:
-	virtual AActor* Spawn(UClass* instance, UWorld* world, const FVector& position, const FRotator& dir);
-	virtual void Update(float delta);
+	virtual AActor* Spawn(UClass* Instance, UWorld* World, const FVector& Position, const FRotator& Dir);
+	virtual void Update(float Delta);
 
-	virtual void OnHit(UGameObjectBase* target);
+	//충돌 이벤트
+	virtual void OnHit(UGameObjectBase* Target);
 
 protected:
 	//스폰 완료시 호출
-	virtual void ActorSpawned(AActor* spawn);
+	virtual void ActorSpawned(AActor* Spawn);
 };

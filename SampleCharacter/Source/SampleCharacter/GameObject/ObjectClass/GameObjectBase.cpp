@@ -3,12 +3,22 @@
 #include "GameObjectBase.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 
+UGameObjectBase::~UGameObjectBase()
+{
+	UE_LOG(LogTemp, Warning, TEXT("~UGameObjectBase (%s)"), *GetName());
+}
+
 void UGameObjectBase::Initialize()
 {
 }
 
 void UGameObjectBase::DeInitialize()
 {
+	//액터가 존재한다면 소멸
+	if (AActor* actor = GetActor())
+	{
+		actor->GetWorld()->DestroyActor(actor);
+	}
 }
 
 AActor* UGameObjectBase::GetActor()
@@ -16,31 +26,30 @@ AActor* UGameObjectBase::GetActor()
 	return NULL;
 }
 
-void UGameObjectBase::Update(float delta)
+void UGameObjectBase::Update(float Delta)
 {
 }
 
-void UGameObjectBase::OnHit(UGameObjectBase* target)
+void UGameObjectBase::OnHit(UGameObjectBase* Target)
 {
 }
 
-AActor* UGameObjectBase::Spawn(UClass* Instance, UWorld* World, const FVector& Position, const FRotator& dir)
+AActor* UGameObjectBase::Spawn(UClass* Instance, UWorld* World, const FVector& Position, const FRotator& Dir)
 {
 	FActorSpawnParameters SpawnInfo;
 	//스폰완료 델리게이트 연결
 	//이 델리게이트는 브로드 캐스팅이다. 즉 다른 액터 스폰시에도 응답
 	//World->AddOnActorSpawnedHandler(FOnActorSpawned::FDelegate::CreateRaw(this, &UGameObjectBase::ActorSpawned));
-	AActor* actor = World->SpawnActor(Instance, &Position, &dir, SpawnInfo);
-
+	AActor* actor = World->SpawnActor(Instance, &Position, &Dir, SpawnInfo);
 	ActorSpawned(actor);
 
 	return actor;
 }
 
-void UGameObjectBase::ActorSpawned(AActor* spawn)
+void UGameObjectBase::ActorSpawned(AActor* Spawn)
 {
-	if (spawn)
+	if (Spawn)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s Actor Spawn Complete"), *spawn->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("%s Actor Spawn Complete"), *Spawn->GetName());
 	}
 }

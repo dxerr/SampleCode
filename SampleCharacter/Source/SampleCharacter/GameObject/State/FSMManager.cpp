@@ -15,33 +15,33 @@ void FFSMManager::DeInitialize()
 
 }
 
-bool FFSMManager::ChangeState(FStateBase* state, FStateChangeFailed const& failDelegate)
+bool FFSMManager::ChangeState(FStateBase* State, FStateChangeFailed const& FailDelegate)
 {
-	check(state);
+	check(State);
 	if (nullptr != Current)
 	{
 		//체인지 가능 여부 검사
-		if (false == state->IsChange(Current->GetStateID()))
+		if (false == State->IsChange(Current->GetStateID()))
 		{			
 			//
 			//실패에 대한 델리게이트를 연결하여 호출 상황에 맞게 유동적인 대처를 유도한다.
-			if (failDelegate.IsBound())
+			if (FailDelegate.IsBound())
 			{
-				failDelegate.Execute(Current->GetStateID());
+				FailDelegate.Execute(Current->GetStateID());
 			}
 			//
 
-			UE_LOG(LogTemp, Warning, TEXT("%s State Change Failed! CurrState(%s)"), *state->Name(), *Current->Name());
+			UE_LOG(LogTemp, Warning, TEXT("%s State Change Failed! CurrState(%s)"), *State->Name(), *Current->Name());
 			return false;
 		}
 
 		//[Todo] 애님 블루프린트의 FSM전환 가능 여부를 알수 있다면 여기서 검사
 		//
 
-		if (Current->GetStateID() != state->GetStateID())
+		if (Current->GetStateID() != State->GetStateID())
 		{
 			//중복 상태 호출 확인
-			if (Current->GetStateID() == state->GetStateID())
+			if (Current->GetStateID() == State->GetStateID())
 			{
 				Current->ReEnter(Owner);
 				UE_LOG(LogTemp, Warning, TEXT("%s State ReEnter"), *Current->Name());
@@ -54,16 +54,16 @@ bool FFSMManager::ChangeState(FStateBase* state, FStateChangeFailed const& failD
 		}
 	}
 
-	Current = state;
+	Current = State;
 	Current->Enter(Owner);
 	UE_LOG(LogTemp, Warning, TEXT("%s State Enter"), *Current->Name());
 
 	return true;
 }
 
-void FFSMManager::ChangeDelayState(FStateBase* state, float time)
+void FFSMManager::ChangeDelayState(FStateBase* State, float Time)
 {
-	if (nullptr == state)
+	if (nullptr == State)
 	{
 		return;
 	}
@@ -72,19 +72,19 @@ void FFSMManager::ChangeDelayState(FStateBase* state, float time)
 	{
 		FTimerHandle handle;
 		world->GetTimerManager().SetTimer(handle, 
-			FTimerDelegate::CreateRaw(this, &FFSMManager::CallbakChangeState, state), time, false);
+			FTimerDelegate::CreateRaw(this, &FFSMManager::CallbakChangeState, State), Time, false);
 	}
 }
 
-void FFSMManager::ChangeDelayPrevState(float time)
+void FFSMManager::ChangeDelayPrevState(float Time)
 {
 	if (Prev)
 	{
-		ChangeDelayState(Prev, time);
+		ChangeDelayState(Prev, Time);
 	}
 }
 
-void FFSMManager::CallbakChangeState(FStateBase* state)
+void FFSMManager::CallbakChangeState(FStateBase* State)
 {
-	ChangeState(state);
+	ChangeState(State);
 }

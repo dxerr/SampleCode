@@ -84,7 +84,6 @@ void FStateForwardWalk::UpdateSpeed(UGameObjectLocal* Owner, float Speed)
 
 	auto movement = Owner->GetLocal()->GetCharacterMovement();
 	float walkSpeed = FVector::DotProduct(movement->Velocity, Owner->GetLocal()->GetActorRotation().Vector());
-	UE_LOG(LogTemp, Warning, TEXT("FStateForwardWalk Speed %f"), walkSpeed);
 	if (walkSpeed > movement->MaxWalkSpeed)
 	{
 		Owner->GetBaseFSM()->ChangeState<FStateRun>();

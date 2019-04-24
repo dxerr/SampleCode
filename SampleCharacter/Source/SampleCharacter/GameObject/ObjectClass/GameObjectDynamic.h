@@ -29,7 +29,7 @@ public:
 	virtual FFSMManager* GetBaseFSM();
 
 public:
-	virtual void Update(float delta) override;
+	virtual void Update(float Delta) override;
 
 protected:
 	FFSMManager* Fsm;

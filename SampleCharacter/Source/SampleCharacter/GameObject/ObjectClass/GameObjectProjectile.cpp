@@ -4,7 +4,6 @@
 #include "GameObject/ActorExtend/ProjectileActor.h"
 #include "Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h"
 
-
 void UGameObjectProjectile::Initialize()
 {
 
@@ -20,12 +19,14 @@ AActor* UGameObjectProjectile::GetActor()
 	return Actor;
 }
 
-void UGameObjectProjectile::ActorSpawned(AActor* spawn)
+void UGameObjectProjectile::ActorSpawned(AActor* Spawn)
 {
-	UGameObjectBase::ActorSpawned(spawn);
-	if (spawn)
+	UGameObjectBase::ActorSpawned(Spawn);
+	if (Spawn)
 	{
-		Actor = Cast<AProjectileActor>(spawn);
+		//액터 저장
+		Actor = Cast<AProjectileActor>(Spawn);
+
 		//방향 설정
 		//필요 하려나??
 		UProjectileMovementComponent* projectileComponent = Actor->FindComponentByClass<UProjectileMovementComponent>();

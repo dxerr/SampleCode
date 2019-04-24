@@ -26,51 +26,21 @@ void UGameObjectLocal::DeInitialize()
 {
 	Super::DeInitialize();
 
-	if (Actor)
-	{
-		Actor->GetWorld()->DestroyActor(Actor);
-	}
-
 	if (Fsm)		{ delete Fsm; }
 	if (UpperFsm)	{ delete UpperFsm; }
 	if (Skill)		{ delete Skill; }
 	if (Parts)		{ delete Parts; }
 }
 
-AActor* UGameObjectLocal::GetActor()
-{
-	return GetLocal();
-}
-
-ACharacter* UGameObjectLocal::GetCharacter()
-{
-	return GetLocal();
-}
-
-ALocalCharacter* UGameObjectLocal::GetLocal()
-{
-	return Actor;
-}
-
-FFSMManager* UGameObjectLocal::GetBaseFSM()
-{
-	return Fsm;
-}
-
-FFSMManager* UGameObjectLocal::GetUpperFSM()
-{
-	return UpperFsm;
-}
-
-FSkillBase* UGameObjectLocal::GetSkill()
-{
-	return Skill;
-}
-
-FPartsBase* UGameObjectLocal::GetParts()
-{
-	return Parts;
-}
+//프로퍼티
+AActor*			UGameObjectLocal::GetActor()		{ return GetLocal();}
+ACharacter*		UGameObjectLocal::GetCharacter()	{ return GetLocal(); }
+ALocalCharacter* UGameObjectLocal::GetLocal()		{ return Actor; }
+FFSMManager*	UGameObjectLocal::GetBaseFSM()		{ return Fsm; }
+FFSMManager*	UGameObjectLocal::GetUpperFSM()		{ return UpperFsm; }
+FSkillBase*		UGameObjectLocal::GetSkill()		{ return Skill; }
+FPartsBase*		UGameObjectLocal::GetParts()		{ return Parts; }
+//
 
 void UGameObjectLocal::ActorSpawned(AActor* Spawn)
 {
@@ -78,6 +48,7 @@ void UGameObjectLocal::ActorSpawned(AActor* Spawn)
 
 	if (Spawn)
 	{
+		//액터 저장
 		Actor = Cast<ALocalCharacter>(Spawn);
 
 		//키입력 바인딩

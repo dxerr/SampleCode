@@ -8,6 +8,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "Controller/Input/InputBindingLocalPlayer.h"
 
+ALocalCharacter::~ALocalCharacter()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Destroy"));
+}
 
 // Sets default values
 ALocalCharacter::ALocalCharacter()

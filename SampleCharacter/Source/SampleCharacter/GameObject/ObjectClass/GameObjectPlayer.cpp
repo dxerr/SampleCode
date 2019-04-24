@@ -13,26 +13,19 @@ void UGameObjectPlayer::DeInitialize()
 {
 	Super::DeInitialize();
 
-	if (UpperFsm)
-	{
-		delete UpperFsm;
-	}
-
-	if (Skill)
-	{
-		delete Skill;
-	}
+	if (UpperFsm)	{ delete UpperFsm; }
+	if (Skill)		{ delete Skill; }
 }
 
-AActor* UGameObjectPlayer::GetActor()			{ return NULL; }
+AActor*		UGameObjectPlayer::GetActor()		{ return NULL; }
 ACharacter* UGameObjectPlayer::GetCharacter()	{ return NULL; }
 FFSMManager* UGameObjectPlayer::GetUpperFSM()	{ return UpperFsm; }
 FSkillBase* UGameObjectPlayer::GetSkill()		{ return Skill; }
 
-void UGameObjectPlayer::Update(float delta)
+void UGameObjectPlayer::Update(float Delta)
 {
-	Super::Update(delta);
+	Super::Update(Delta);
 
-	if (UpperFsm) { UpperFsm->Update(this, delta); }
-	if (Skill) { Skill->Update(delta); }
+	if (UpperFsm) { UpperFsm->Update(this, Delta); }
+	if (Skill)	{ Skill->Update(Delta); }
 }

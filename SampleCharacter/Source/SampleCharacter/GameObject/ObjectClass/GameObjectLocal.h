@@ -10,7 +10,7 @@ class ALocalCharacter;
 class UInputBindingLocalPlayer;
 
 /**
- * 
+ * 내플레이어
  */
 UCLASS()
 class SAMPLECHARACTER_API UGameObjectLocal : public UGameObjectPlayer
@@ -26,14 +26,13 @@ public:
 	virtual ACharacter* GetCharacter() override;
 	ALocalCharacter* GetLocal();
 
-
 	virtual FFSMManager* GetBaseFSM() override;
 	virtual FFSMManager* GetUpperFSM() override;
 	virtual FSkillBase* GetSkill()  override;
 	virtual FPartsBase* GetParts() override;
 
 public:
-	virtual void Update(float delta) override;
+	virtual void Update(float Delta) override;
 
 protected:
 	virtual void ActorSpawned(AActor* Spawn) override;
@@ -41,10 +40,10 @@ protected:
 public:
 	//Movement로 이관필요
 	float MovementForce;
-	FORCEINLINE void SetMoveSpeed(float val) { MovementForce = val; }
+	FORCEINLINE void SetMoveSpeed(float Val) { MovementForce = Val; }
 	//
 
 private:
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = GameObject, Meta = (AllowPrivateAccess = true))
  	ALocalCharacter* Actor;
-	UInputBindingLocalPlayer* InputBinding;
 };

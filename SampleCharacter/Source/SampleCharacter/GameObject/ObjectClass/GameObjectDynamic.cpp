@@ -39,9 +39,9 @@ FPartsBase* UGameObjectDynamic::GetParts()
 	return Parts;
 }
 
-void UGameObjectDynamic::Update(float delta)
+void UGameObjectDynamic::Update(float Delta)
 {
-	Super::Update(delta);
+	Super::Update(Delta);
 
-	if (Fsm) { Fsm->Update(this, delta); }
+	if (Fsm) { Fsm->Update(this, Delta); }
 }

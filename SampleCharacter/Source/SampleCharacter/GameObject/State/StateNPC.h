@@ -15,8 +15,11 @@ protected:
 	//애님 블루프린트에 가장 최우선으로 상태를 전송해줘야한다.
 	virtual void OnEnter(UGameObjectNonPlayer* Owner) override
 	{
-		UAnimInstanceState* anim = Owner->GetNpc()->GetAnim();
-		anim->ChangeState(GetStateID());
+		if (ANpcPawn* actor = Owner->GetNpc())
+		{
+			UAnimInstanceState* anim = actor->GetAnim();
+			anim->ChangeState(GetStateID());
+		}
 	}
 
 	virtual void OnReEnter(UGameObjectNonPlayer* Owner) override

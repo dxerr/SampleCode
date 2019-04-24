@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GameObjectNonPlayer.h"
 #include "GameObject/ActorExtend/NpcPawn.h"
@@ -31,9 +31,9 @@ ANpcPawn* UGameObjectNonPlayer::GetNpc()
 	return Actor;
 }
 
-void UGameObjectNonPlayer::OnHit(UGameObjectBase* target)
+void UGameObjectNonPlayer::OnHit(UGameObjectBase* Target)
 {
-	Super::OnHit(target);
+	Super::OnHit(Target);
 
 	Fsm->ChangeState<FStateNpcBeaten>();
 }
@@ -44,6 +44,7 @@ void UGameObjectNonPlayer::ActorSpawned(AActor* Spawn)
 
 	if (Spawn)
 	{
+		//액터 저장
 		Actor = Cast<ANpcPawn>(Spawn);
 	}
 

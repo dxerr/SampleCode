@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PartsLocal.h"
 #include "Engine/SkeletalMesh.h"
@@ -30,7 +30,9 @@ void FPartsLocal::Attach(EPartsType Type, ...)
 			}
 		}
 	}
-
+/*
+* [Todo] 가변인자, 또는 복수개 파라미터 적용 구현필요
+*/
 	/*
 	va_list params;
 

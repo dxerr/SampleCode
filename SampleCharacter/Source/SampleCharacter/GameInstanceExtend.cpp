@@ -14,6 +14,10 @@ UGameInstanceExtend::UGameInstanceExtend()
 void UGameInstanceExtend::Init()
 {
 	//Tick 델리게이트 설정
+	if (TickDelegate.IsValid())
+	{
+		FTicker::GetCoreTicker().RemoveTicker(TickDelegate);
+	}
 	TickDelegate = FTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateUObject(this, &UGameInstanceExtend::Tick));
 
 	Spawner = NewObject<UObjectSpawner>();
@@ -35,13 +39,11 @@ bool UGameInstanceExtend::Tick(float delta)
 //로컬 플레이어 스폰 담당
 void UGameInstanceExtend::SpawnPlayer(TSubclassOf<ACharacter> ActorClass, const FVector& StartPos, const FVector& Offset)
 {
-	if (UGameObjectBase* obj = Spawner->SpawnPlayer(ActorClass.Get(), StartPos + Offset, FRotator(0.f, 0.f, 0.f)))
-	{
-	}
+	Spawner->SpawnPlayer(ActorClass.Get(), StartPos + Offset, FRotator(0.f, 0.f, 0.f));
 }
 
 AActor* UGameInstanceExtend::SpawnOnGround(TSubclassOf<AActor> ActorClass, const FVector& StartPos, const FVector& Offset)
 {
 	UGameObjectBase* obj = Spawner->SpawnNpc(ActorClass.Get(), StartPos, FRotator(0.f, 0.f, 0.f));
-	return obj->GetActor();
+	return  obj->GetActor();
 }

@@ -32,7 +32,7 @@ public:
 	virtual FSkillBase* GetSkill();
 
 public:
-	virtual void Update(float delta) override;
+	virtual void Update(float Delta) override;
 
 protected:
 	FFSMManager* UpperFsm;

@@ -26,11 +26,12 @@ public:
 	virtual ANpcPawn* GetNpc();
 
 public:
-	virtual void OnHit(UGameObjectBase* target) override;
+	virtual void OnHit(UGameObjectBase* Target) override;
 
 protected:
 	virtual void ActorSpawned(AActor* Spawn) override;
 
 protected:
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = GameObject, Meta = (AllowPrivateAccess = true))
 	ANpcPawn* Actor;
 };

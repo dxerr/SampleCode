@@ -28,7 +28,7 @@ public:
 	virtual void Init() override;
 	virtual void Shutdown() override;
 
-	bool Tick(float delta);
+	bool Tick(float Delta);
 
 public:
 	//로컬 캐릭터 스폰
@@ -45,5 +45,6 @@ private:
 	FDelegateHandle TickDelegate;
 
 	//스폰 관련 매니져 클래스
+	UPROPERTY(Transient, VisibleInstanceOnly, Meta = (AllowPrivateAccess = true))
 	UObjectSpawner* Spawner;
 };

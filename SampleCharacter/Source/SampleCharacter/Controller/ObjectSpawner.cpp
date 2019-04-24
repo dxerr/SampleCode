@@ -23,7 +23,17 @@ void UObjectSpawner::DeInitialize()
 	for (auto el : Spawns)
 	{
 		el->DeInitialize();
-		delete el;
+		el = NULL;
+	}
+
+	for (auto el : AddSpawns)
+	{
+		el = NULL;
+	}
+
+	for (auto el : RemoveSpawns)
+	{
+		el = NULL;
 	}
 
 	World = NULL;
@@ -32,17 +42,18 @@ void UObjectSpawner::DeInitialize()
 	RemoveSpawns.Empty();
 }
 
-UGameObjectBase* UObjectSpawner::FindObject(AActor* actor)
+UGameObjectBase* UObjectSpawner::FindObject(AActor* Actor)
 {
-	auto* findobj = (Spawns.FindByPredicate([=](UGameObjectBase* el)
+	auto findobj = Spawns.FindByPredicate([=](UGameObjectBase* el)
 	{
-		return NULL != (el)->GetActor() && (el)->GetActor() == actor;
-	}));
+		AActor* a = el->GetActor();
+		return NULL != a && a == Actor;
+	});
 
-	return (findobj) ? *findobj : NULL;
+	return findobj ? *findobj : NULL;
 }
 
-void UObjectSpawner::Update(float delta)
+void UObjectSpawner::Update(float Delta)
 {
 	//대상 리스트 제거
 	if (0 < RemoveSpawns.Num())
@@ -50,7 +61,6 @@ void UObjectSpawner::Update(float delta)
 		for (auto el : RemoveSpawns)
 		{
 			Spawns.RemoveSwap(el);
-			el = NULL;
 		}
 		RemoveSpawns.Empty();
 	}
@@ -64,16 +74,16 @@ void UObjectSpawner::Update(float delta)
 
 	for (auto el : Spawns)
 	{
-		el->Update(delta);
+		el->Update(Delta);
 	}
 }
 
-UGameObjectBase* UObjectSpawner::SpawnPlayer(UClass* uclass, const FVector& pos, const FRotator& rot)
+UGameObjectBase* UObjectSpawner::SpawnPlayer(UClass* Uclass, const FVector& Pos, const FRotator& Rot)
 {
-	UGameObjectLocal* local = NewObject<UGameObjectLocal>();
+	UGameObjectBase* local = NewObject<UGameObjectLocal>();
 	local->Initialize();
 
-	if (AActor* actor = local->Spawn(uclass, World, pos, rot))
+	if (auto actor = local->Spawn(Uclass, World, Pos, Rot))
 	{
 		AddSpawns.Add(local);
 		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
@@ -84,19 +94,19 @@ UGameObjectBase* UObjectSpawner::SpawnPlayer(UClass* uclass, const FVector& pos,
 //[Todo] Class UCharacterMovementComponent
 //void UCharacterMovementComponent::FindFloor(const FVector& CapsuleLocation, FFindFloorResult& OutFloorResult, bool bCanUseCachedLocation, const FHitResult* DownwardSweepResult) const
 //내부 구현을 참고 하여 개선한다.
-UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, const FRotator& rot)
+UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* Uclass, const FVector& Pos, const FRotator& Rot)
 {
 	UGameObjectNonPlayer* npc = NewObject<UGameObjectNonPlayer>();
 	npc->Initialize();
 
-	FVector rayOri = pos + FVector(0.f, 0.f, 1000.f);
+	FVector rayOri = Pos + FVector(0.f, 0.f, 1000.f);
 	FVector rayDes = rayOri + FVector(0.f, 0.f, -1.f)  * 1200.f;
 
 	FHitResult HitResult;
 	TArray<AActor*> actorsToIgnore;
 
 	//생성도 되기전에 얻어오는게 맞는지 모르것음...
-	if (AActor* castActor = uclass->GetDefaultObject<AActor>())
+	if (AActor* castActor = Uclass->GetDefaultObject<AActor>())
 	{
 		UKismetSystemLibrary::LineTraceSingle(World, rayOri, rayDes, UEngineTypes::ConvertToTraceType(ECC_WorldStatic),
 			false, actorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green, FLinearColor::Red);
@@ -108,7 +118,7 @@ UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, co
 				location.Z += Capshule->GetUnscaledCapsuleHalfHeight();
 			}
 
-			if (AActor* actor = npc->Spawn(uclass, World, location, rot))
+			if (auto actor = npc->Spawn(Uclass, World, location, Rot))
 			{
 				AddSpawns.Add(npc);
 				actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
@@ -119,12 +129,12 @@ UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* uclass, const FVector& pos, co
 	return npc;
 }
 
-UGameObjectBase* UObjectSpawner::SpawnProjectile(UClass* uclass, const FVector& pos, const FRotator& rot)
+UGameObjectBase* UObjectSpawner::SpawnProjectile(UClass* Uclass, const FVector& Pos, const FRotator& Rot)
 {
 	UGameObjectProjectile* projectile = NewObject<UGameObjectProjectile>();
 	projectile->Initialize();
 
-	if (AActor* actor = projectile->Spawn(uclass, World, pos, rot))
+	if (auto actor = projectile->Spawn(Uclass, World, Pos, Rot))
 	{
 		AddSpawns.Add(projectile);
 		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
@@ -138,29 +148,29 @@ UGameObjectBase* UObjectSpawner::SpawnProjectile(UClass* uclass, const FVector& 
 	return projectile;
 }
 
-void UObjectSpawner::DespawnObject(UGameObjectBase* despawn)
+void UObjectSpawner::DespawnObject(UGameObjectBase* Despawn)
 {
-	if (Spawns.Contains(despawn))
+	if (Spawns.Contains(Despawn))
 	{
 		//액터 소멸
-		World->DestroyActor(despawn->GetActor());
+		World->DestroyActor(Despawn->GetActor());
 
 		//액터 소멸시 일단 관리대상 에서 제거
-		RemoveGameObject(despawn);
+		RemoveGameObject(Despawn);
 	}
 }
 
-void UObjectSpawner::RemoveGameObject(UGameObjectBase* despawn)
+void UObjectSpawner::RemoveGameObject(UGameObjectBase* Despawn)
 {
-	RemoveSpawns.Add(despawn);
+	RemoveSpawns.Add(Despawn);
 }
 
-void UObjectSpawner::CallbackCompHit(UPrimitiveComponent* hitComponent, AActor* otherActor, UPrimitiveComponent* otherComp, FVector normalImpulse, const FHitResult& hit)
+void UObjectSpawner::CallbackCompHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (otherActor)
+	if (OtherActor)
 	{
-		UGameObjectBase* hitObj = FindObject(Cast<AActor>(hitComponent));
 		//충돌 객체 성향에 따라 Destory여부 설정하기
+		auto hitObj = FindObject(Cast<AActor>(HitComponent));
 		if (hitObj)
 		{
 			//현재는 무조건 삭제
@@ -168,18 +178,17 @@ void UObjectSpawner::CallbackCompHit(UPrimitiveComponent* hitComponent, AActor* 
 		}
 
 		//피격 알림
-		if (UGameObjectBase* findObj = FindObject(otherActor))
+		if (auto findObj = FindObject(OtherActor))
 		{
 			findObj->OnHit(hitObj);
 		}
 	}
 }
 
-void UObjectSpawner::CallbackActorDeSpawn(AActor* despawn)
+void UObjectSpawner::CallbackActorDeSpawn(AActor* Despawn)
 {
 	//관리 대상인가 찾음
-	UGameObjectBase* findObj = FindObject(despawn);
-	if (findObj) 
+	if (auto findObj = FindObject(Despawn))
 	{
 		RemoveGameObject(findObj);
 	}

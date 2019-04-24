@@ -15,11 +15,11 @@ class SAMPLECHARACTER_API FSkillBase
 {
 public:
 
-	virtual void Initialize(UGameObjectBase* owner);
+	virtual void Initialize(UGameObjectBase* Owner);
 	virtual void DeInitialize();
 	virtual void LoadData(const TCHAR * Path);
 
-	virtual void Update(float delta);
+	virtual void Update(float Delta);
 
 	virtual void UseSKill(int ID);
 
@@ -37,6 +37,7 @@ protected:
 	USkillDataContainerBase* SkillFactory;
 };
 
+//발동 스킬 구조체
 struct RunSKillInfo
 {
 	const FSkillDataBase* Data;

@@ -30,6 +30,7 @@ class SAMPLECHARACTER_API ALocalCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ALocalCharacter();
+	virtual ~ALocalCharacter();
 
 protected:
 	virtual void PostInitializeComponents() override;

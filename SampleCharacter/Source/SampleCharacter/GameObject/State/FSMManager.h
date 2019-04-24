@@ -14,29 +14,29 @@ class SAMPLECHARACTER_API FFSMManager
 {
 public:
 	FORCEINLINE FStateBase* CurrentState() const { return Current; }
-	FORCEINLINE FStateBase* PrevState() const { return Prev; }
-	FORCEINLINE bool IsState(int stateID)
+	FORCEINLINE FStateBase* PrevState() const	{ return Prev; }
+	FORCEINLINE bool IsState(int StateID)
 	{
-		return (nullptr != Current && Current->GetStateID() == stateID);
+		return (nullptr != Current && Current->GetStateID() == StateID);
 	}
 
 	//region
-	void Initialize(UGameObjectBase* owner);
+	void Initialize(UGameObjectBase* Owner);
 	void DeInitialize();
 
-	template <class Owner>
-	void Update(Owner* owner, float delta);
+	template <class Char>
+	void Update(Char* Owner, float Delta);
 	template <class State>
-	bool ChangeState(FStateChangeFailed const& failDelegate = nullptr);
+	bool ChangeState(FStateChangeFailed const& FailDelegate = nullptr);
 	//FTimerManager를 통한 이벤트 처리 일정 시간후 스테이트 전환
 	template <class State>
-	void ChangeDelayState(float time);
-	void ChangeDelayState(FStateBase* state, float time);
-	void ChangeDelayPrevState(float time);
+	void ChangeDelayState(float Time);
+	void ChangeDelayState(FStateBase* State, float Time);
+	void ChangeDelayPrevState(float Time);
 
 private:
-	bool ChangeState(FStateBase* state, FStateChangeFailed const& failDelegate = NULL);
-	void CallbakChangeState(FStateBase* state);
+	bool ChangeState(FStateBase* State, FStateChangeFailed const& FailDelegate = NULL);
+	void CallbakChangeState(FStateBase* State);
 
 private:
 	UGameObjectBase* Owner;
@@ -44,25 +44,25 @@ private:
 	FStateBase* Prev;
 };
 
-template <class Object>
-void FFSMManager::Update(Object* owner, float delta)
+template <class Char>
+void FFSMManager::Update(Char* Owner, float Delta)
 {
 	if (nullptr != Current)
 	{
-		Current->Update(owner, delta);
+		Current->Update(Owner, Delta);
 	}
 }
 
 template <class State>
-bool FFSMManager::ChangeState(FStateChangeFailed const& failDelegate)
+bool FFSMManager::ChangeState(FStateChangeFailed const& FailDelegate)
 {
 	State* state = State::GetInstance();
-	return ChangeState(state, failDelegate);
+	return ChangeState(state, FailDelegate);
 }
 
 template <class State>
-void FFSMManager::ChangeDelayState(float time)
+void FFSMManager::ChangeDelayState(float Time)
 {
 	State* state = State::GetInstance();
-	ChangeDelayState(state, time);
+	ChangeDelayState(state, Time);
 }

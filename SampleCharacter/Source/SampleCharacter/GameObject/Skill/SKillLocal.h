@@ -16,7 +16,7 @@ public:
 	FSKillLocal();
 	virtual ~FSKillLocal();
 
-	virtual void Initialize(UGameObjectBase* owner) override;
+	virtual void Initialize(UGameObjectBase* Owner) override;
 
 	virtual void LoadData(const TCHAR * Path) override;
 	virtual void UseSKill(int ID) override;

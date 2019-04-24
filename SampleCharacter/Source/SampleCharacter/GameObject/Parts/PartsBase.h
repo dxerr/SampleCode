@@ -19,7 +19,7 @@ public:
 	FPartsBase();
 	virtual ~FPartsBase();
 
-	virtual void Initialize(UGameObjectBase* owner);
+	virtual void Initialize(UGameObjectBase* Owner);
 	virtual void DeInitialize();
 	virtual void LoadData(const TCHAR * Path);
 

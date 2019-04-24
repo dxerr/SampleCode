@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -8,7 +8,7 @@
 
 class AProjectileActor;
 /**
- * 
+ * 발사체 클래스
  */
 UCLASS()
 class SAMPLECHARACTER_API UGameObjectProjectile : public UGameObjectBase
@@ -21,8 +21,9 @@ public:
 	virtual AActor* GetActor() override;
 
 protected:
-	virtual void ActorSpawned(AActor* spawn) override;
+	virtual void ActorSpawned(AActor* Spawn) override;
 
 protected:
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = GameObject, Meta = (AllowPrivateAccess = true))
 	AProjectileActor* Actor;
 };

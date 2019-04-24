@@ -49,7 +49,7 @@ int UAnimInstanceState::GetRandomIndex()
 	return RandomIndex;
 }
 
-void UAnimInstanceState::ChangeState(int State, int min, int max)
+void UAnimInstanceState::ChangeState(int State, int Min, int Max)
 {
 	if (State >= (int)EStateUpperBase::None)
 	{
@@ -61,9 +61,9 @@ void UAnimInstanceState::ChangeState(int State, int min, int max)
 	}
 
 	//·£´ý ÀÎµ¦½º »ý¼º
-	if (max - min > 0)
+	if (Max - Min > 0)
 	{
-		RandomIndex = FMath::RandRange(min, max);
+		RandomIndex = FMath::RandRange(Min, Max);
 	}
 	else
 	{
@@ -73,13 +73,13 @@ void UAnimInstanceState::ChangeState(int State, int min, int max)
 	UE_LOG(LogTemp, Warning, TEXT("UAnimInstanceLocal ChangeState Lowwer : %d  Upper : %d"), (int)BaseStateType, (int)UpperStateType);
 }
 
-void UAnimInstanceState::PlayUpperAni(UAnimMontage* res)
+void UAnimInstanceState::PlayUpperAni(UAnimMontage* Res)
 {
-	Montage_Play(res);
+	Montage_Play(Res);
 }
 
-void UAnimInstanceState::StopUpperAni(UAnimMontage* res)
+void UAnimInstanceState::StopUpperAni(UAnimMontage* Res)
 {
-	Montage_Stop(0.2f, res);
+	Montage_Stop(0.2f, Res);
 }
 

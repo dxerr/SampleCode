@@ -17,7 +17,7 @@ class UGameObjectLocal;
 class SAMPLECHARACTER_API FPartsLocal : public FPartsBase
 {
 public:
-	virtual void Initialize(UGameObjectBase* owner) override;
+	virtual void Initialize(UGameObjectBase* Owner) override;
 
 	virtual void Attach(EPartsType Type, ...) override;
 	virtual void Detach(EPartsType Type, ...) override;
