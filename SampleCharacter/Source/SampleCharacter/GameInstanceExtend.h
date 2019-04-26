@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Controller/ObjectSpawner.h"
 #include "GameInstanceExtend.generated.h"
 
 class FGameObjectLocal;
-class UObjectSpawner;
 class APlayerControllerExpend;
 
 /**

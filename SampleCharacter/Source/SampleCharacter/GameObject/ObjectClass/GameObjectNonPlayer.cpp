@@ -6,9 +6,15 @@
 #include "GameObject/State/FSMManager.h"
 #include "GameObject/State/StateNPC.h"
 
+
+AActor*		UGameObjectNonPlayer::GetActor() { return GetNpc(); }
+ANpcPawn*	UGameObjectNonPlayer::GetNpc()	 { return Actor; }
+
 void UGameObjectNonPlayer::Initialize()
 {
 	Super::Initialize();
+
+	SET_OBJECTYTPE(ObjectType, EGameObjectType::NonPlayer);
 
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);
@@ -19,16 +25,6 @@ void UGameObjectNonPlayer::DeInitialize()
 	Super::DeInitialize();
 
 	delete Fsm;
-}
-
-AActor* UGameObjectNonPlayer::GetActor()
-{
-	return GetNpc();
-}
-
-ANpcPawn* UGameObjectNonPlayer::GetNpc()
-{
-	return Actor;
 }
 
 void UGameObjectNonPlayer::OnHit(UGameObjectBase* Target)

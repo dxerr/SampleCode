@@ -8,13 +8,19 @@
 #include "GameObject/ObjectClass/GameObjectNonPlayer.h"
 #include "GameObject/ObjectClass/GameObjectProjectile.h"
 
-
 void UObjectSpawner::Initialize(UWorld* world)
 {
 	World = world;
 	Spawns.Empty();
 	AddSpawns.Empty();
 	RemoveSpawns.Empty();
+	TypeSpawns.Empty(EGameObjectTypeALLCount);
+	//타입별 빈공간 생성
+	for (auto el : EGameObjectTypeALL)
+	{
+		TypeSpawns.Emplace(el);
+	}
+
 	//World->RemoveOnActorSpawnedHandler(FOnActorSpawned::FDelegate::CreateRaw(this, &UObjectSpawner::CallbackActorDeSpawn))
 }
 
@@ -23,54 +29,55 @@ void UObjectSpawner::DeInitialize()
 	for (auto el : Spawns)
 	{
 		el->DeInitialize();
-		el = NULL;
-	}
-
-	for (auto el : AddSpawns)
-	{
-		el = NULL;
-	}
-
-	for (auto el : RemoveSpawns)
-	{
-		el = NULL;
 	}
 
 	World = NULL;
-	Spawns.Empty();
+	TypeSpawns.Empty();
 	AddSpawns.Empty();
 	RemoveSpawns.Empty();
+	Spawns.Empty();
 }
 
-UGameObjectBase* UObjectSpawner::FindObject(AActor* Actor)
+UGameObjectBase* UObjectSpawner::FindObject(AActor* Actor, EGameObjectType Type)
 {
-	auto findobj = Spawns.FindByPredicate([=](UGameObjectBase* el)
+	if (Type == EGameObjectType::Base)
 	{
-		AActor* a = el->GetActor();
-		return NULL != a && a == Actor;
-	});
+		if (auto findobj = Spawns.FindByPredicate([=](UGameObjectBase* el)
+		{
+			AActor* a = el->GetActor();
+			return NULL != a && a == Actor;
+		}))
+		{
+			return *findobj;
+		}
+	}
+	else
+	{
+		auto list = TypeSpawns[Type];
+		if (auto findobj = list.FindByPredicate([=](UGameObjectBase* el)
+		{
+			AActor* a = el->GetActor();
+			return NULL != a && a == Actor;
+		}))
+		{
+			return *findobj;
+		}
+	}
 
-	return findobj ? *findobj : NULL;
+	return NULL;
+}
+
+TArray<UGameObjectBase*> UObjectSpawner::FindObjects(EGameObjectType Type)
+{
+	return TypeSpawns[Type];
 }
 
 void UObjectSpawner::Update(float Delta)
 {
 	//대상 리스트 제거
-	if (0 < RemoveSpawns.Num())
-	{
-		for (auto el : RemoveSpawns)
-		{
-			Spawns.RemoveSwap(el);
-		}
-		RemoveSpawns.Empty();
-	}
-
+	UpdateRemoveGameObject();
 	//대상 추가
-	if (0 < AddSpawns.Num())
-	{
-		Spawns.Append(AddSpawns);
-		AddSpawns.Empty();
-	}
+	UpdateAddGameObject();
 
 	for (auto el : Spawns)
 	{
@@ -85,7 +92,7 @@ UGameObjectBase* UObjectSpawner::SpawnPlayer(UClass* Uclass, const FVector& Pos,
 
 	if (auto actor = local->Spawn(Uclass, World, Pos, Rot))
 	{
-		AddSpawns.Add(local);
+		AddSpawns.Emplace(local);
 		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 	}
 	return local;
@@ -120,7 +127,7 @@ UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* Uclass, const FVector& Pos, co
 
 			if (auto actor = npc->Spawn(Uclass, World, location, Rot))
 			{
-				AddSpawns.Add(npc);
+				AddSpawns.Emplace(npc);
 				actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 			}
 		}
@@ -136,7 +143,7 @@ UGameObjectBase* UObjectSpawner::SpawnProjectile(UClass* Uclass, const FVector& 
 
 	if (auto actor = projectile->Spawn(Uclass, World, Pos, Rot))
 	{
-		AddSpawns.Add(projectile);
+		AddSpawns.Emplace(projectile);
 		actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 
 		//충돌 처리
@@ -156,31 +163,68 @@ void UObjectSpawner::DespawnObject(UGameObjectBase* Despawn)
 		World->DestroyActor(Despawn->GetActor());
 
 		//액터 소멸시 일단 관리대상 에서 제거
-		RemoveGameObject(Despawn);
+		RemoveSpawns.Emplace(Despawn);
 	}
 }
 
-void UObjectSpawner::RemoveGameObject(UGameObjectBase* Despawn)
+void UObjectSpawner::UpdateAddGameObject()
 {
-	RemoveSpawns.Add(Despawn);
+	//대상 추가
+	if (0 < AddSpawns.Num())
+	{
+		for (auto el : AddSpawns)
+		{
+			uint8 key = el->GetObjectType();
+			for (auto el2 : EGameObjectTypeALL)
+			{
+				if (CHECK_OBJECTYTPE(key, el2))
+				{
+					TypeSpawns[el2].Emplace(el);
+				}
+			}
+			Spawns.Emplace(el);
+		}
+		AddSpawns.Empty();
+	}
+}
+
+void UObjectSpawner::UpdateRemoveGameObject()
+{
+	if (0 < RemoveSpawns.Num())
+	{
+		for (auto el : RemoveSpawns)
+		{
+			uint8 key = el->GetObjectType();
+			for (auto el2 : EGameObjectTypeALL)
+			{
+				if (CHECK_OBJECTYTPE(key, el2))
+				{
+					TypeSpawns[el2].RemoveSwap(el);
+				}
+			}
+
+			Spawns.RemoveSwap(el);
+		}
+		RemoveSpawns.Empty();
+	}
 }
 
 void UObjectSpawner::CallbackCompHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor)
 	{
-		//충돌 객체 성향에 따라 Destory여부 설정하기
-		auto hitObj = FindObject(Cast<AActor>(HitComponent));
-		if (hitObj)
-		{
-			//현재는 무조건 삭제
-			DespawnObject(hitObj);
-		}
-
+		UGameObjectBase* hitObj = FindObject(HitComponent->GetOwner(), EGameObjectType::Projectile);
 		//피격 알림
-		if (auto findObj = FindObject(OtherActor))
+		if (UGameObjectBase* findObj = FindObject(OtherActor, EGameObjectType::NonPlayer))
 		{
 			findObj->OnHit(hitObj);
+		}
+
+		if (hitObj)
+		{
+			//충돌 객체 성향에 따라 Destory여부 설정하기
+			//현재는 무조건 삭제
+			DespawnObject(hitObj);
 		}
 	}
 }
@@ -190,6 +234,6 @@ void UObjectSpawner::CallbackActorDeSpawn(AActor* Despawn)
 	//관리 대상인가 찾음
 	if (auto findObj = FindObject(Despawn))
 	{
-		RemoveGameObject(findObj);
+		RemoveSpawns.Emplace(findObj);
 	}
 }

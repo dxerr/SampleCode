@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameObject/Define/GameObjectDefine.h"
 #include "GameObjectBase.generated.h"
 
 class AActor;
@@ -22,10 +23,15 @@ public:
 	virtual void Initialize();
 	virtual void DeInitialize();
 
+//프로퍼티
 public:
+	//타입 얻기
+	virtual uint32 GetObjectType();
+
 	//기본적인 Actor클래스 얻기
 	virtual AActor* GetActor();
 
+//메서드
 public:
 	virtual AActor* Spawn(UClass* Instance, UWorld* World, const FVector& Position, const FRotator& Dir);
 	virtual void Update(float Delta);
@@ -36,4 +42,8 @@ public:
 protected:
 	//스폰 완료시 호출
 	virtual void ActorSpawned(AActor* Spawn);
+
+//맴버 변수
+protected:
+	uint8 ObjectType;
 };

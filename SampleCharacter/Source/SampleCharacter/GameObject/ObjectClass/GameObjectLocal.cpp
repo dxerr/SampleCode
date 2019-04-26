@@ -11,9 +11,21 @@
 #include "Runtime/Engine/Classes/GameFramework/Controller.h"
 #include "Runtime/Engine/Classes/Components/InputComponent.h"
 
+//프로퍼티
+AActor*			UGameObjectLocal::GetActor()	{ return GetLocal(); }
+ACharacter*		UGameObjectLocal::GetCharacter() { return GetLocal(); }
+ALocalCharacter* UGameObjectLocal::GetLocal()	{ return Actor; }
+FFSMManager*	UGameObjectLocal::GetBaseFSM()	{ return Fsm; }
+FFSMManager*	UGameObjectLocal::GetUpperFSM() { return UpperFsm; }
+FSkillBase*		UGameObjectLocal::GetSkill()	{ return Skill; }
+FPartsBase*		UGameObjectLocal::GetParts()	{ return Parts; }
+//
+
 void UGameObjectLocal::Initialize()
 {
 	Super::Initialize();
+
+	SET_OBJECTYTPE(ObjectType, EGameObjectType::LocalPlayer);
 
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);
@@ -22,6 +34,7 @@ void UGameObjectLocal::Initialize()
 	UpperFsm->Initialize(this);
 	Actor = NULL;
 }
+
 void UGameObjectLocal::DeInitialize()
 {
 	Super::DeInitialize();
@@ -31,16 +44,6 @@ void UGameObjectLocal::DeInitialize()
 	if (Skill)		{ delete Skill; }
 	if (Parts)		{ delete Parts; }
 }
-
-//프로퍼티
-AActor*			UGameObjectLocal::GetActor()		{ return GetLocal();}
-ACharacter*		UGameObjectLocal::GetCharacter()	{ return GetLocal(); }
-ALocalCharacter* UGameObjectLocal::GetLocal()		{ return Actor; }
-FFSMManager*	UGameObjectLocal::GetBaseFSM()		{ return Fsm; }
-FFSMManager*	UGameObjectLocal::GetUpperFSM()		{ return UpperFsm; }
-FSkillBase*		UGameObjectLocal::GetSkill()		{ return Skill; }
-FPartsBase*		UGameObjectLocal::GetParts()		{ return Parts; }
-//
 
 void UGameObjectLocal::ActorSpawned(AActor* Spawn)
 {

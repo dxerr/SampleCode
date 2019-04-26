@@ -4,23 +4,24 @@
 #include "GameObject/ActorExtend/ProjectileActor.h"
 #include "Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h"
 
+AActor* UGameObjectProjectile::GetActor() { return Actor; }
+
 void UGameObjectProjectile::Initialize()
 {
+	Super::Initialize();
 
+	SET_OBJECTYTPE(ObjectType, EGameObjectType::Projectile);
 }
 
 void UGameObjectProjectile::DeInitialize()
 {
-
-}
-
-AActor* UGameObjectProjectile::GetActor()
-{
-	return Actor;
+	Super::DeInitialize();
 }
 
 void UGameObjectProjectile::ActorSpawned(AActor* Spawn)
 {
+	Super::ActorSpawned(Spawn);
+
 	UGameObjectBase::ActorSpawned(Spawn);
 	if (Spawn)
 	{

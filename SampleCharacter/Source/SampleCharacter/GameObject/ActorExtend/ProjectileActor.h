@@ -1,18 +1,10 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ProjectileActor.generated.h"
 
-
-class UProjectileMovementComponent;
-
-/**
-* AActor기반 프로젝타일 타입 클래스
-* 메시 관련 정보는 일단 BP에서 설정 하게 유도
-*/
 UCLASS()
 class SAMPLECHARACTER_API AProjectileActor : public AActor
 {

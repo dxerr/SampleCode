@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine.h"
+#include "GameObject/Define/GameObjectDefine.h"
 #include "ObjectSpawner.generated.h"
 
 class AActor;
@@ -23,7 +24,8 @@ public:
 	void Initialize(UWorld* World);
 	void DeInitialize();
 
-	UGameObjectBase* FindObject(AActor* Actor);
+	UGameObjectBase* FindObject(AActor* Actor, EGameObjectType Type = EGameObjectType::Base);
+	TArray<UGameObjectBase*> FindObjects(EGameObjectType Type);
 
 	void Update(float Delta);
 
@@ -37,7 +39,8 @@ public:
 	//
 
 protected:
-	void RemoveGameObject(UGameObjectBase* Despawn);
+	void UpdateAddGameObject();
+	void UpdateRemoveGameObject();
 
 	UFUNCTION()
 	void CallbackCompHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
@@ -50,8 +53,12 @@ private:
 	UWorld* World;
 
 	//액터 객체 관리
+	//전체 대상 시리얼라이즈 포함
 	UPROPERTY(Transient, VisibleInstanceOnly, Meta = (AllowPrivateAccess = true))
 	TArray<UGameObjectBase*> Spawns;
+
+	//빠른 검색정보
+	TMap<EGameObjectType, TArray<UGameObjectBase*>> TypeSpawns;
 
 	//추가/삭제 대상 관리
 	TArray<UGameObjectBase*> AddSpawns;

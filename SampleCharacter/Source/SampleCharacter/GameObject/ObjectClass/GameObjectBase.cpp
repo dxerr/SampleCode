@@ -10,6 +10,7 @@ UGameObjectBase::~UGameObjectBase()
 
 void UGameObjectBase::Initialize()
 {
+	SET_OBJECTYTPE(ObjectType, EGameObjectType::Base);
 }
 
 void UGameObjectBase::DeInitialize()
@@ -19,6 +20,11 @@ void UGameObjectBase::DeInitialize()
 	{
 		actor->GetWorld()->DestroyActor(actor);
 	}
+}
+
+uint32 UGameObjectBase::GetObjectType()
+{
+	return ObjectType;
 }
 
 AActor* UGameObjectBase::GetActor()
