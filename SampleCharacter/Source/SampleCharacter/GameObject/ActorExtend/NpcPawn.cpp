@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "NpcPawn.h"
 #include "Components/CapsuleComponent.h"
@@ -14,7 +14,6 @@ ANpcPawn::ANpcPawn()
 	CapsuleComponent->InitCapsuleSize(34.0f, 88.0f);
 	CapsuleComponent->CanCharacterStepUpOn = ECB_No;
 	CapsuleComponent->SetShouldUpdatePhysicsVolume(true);
-	CapsuleComponent->bCheckAsyncSceneOnMove = false;
 	CapsuleComponent->SetCanEverAffectNavigation(false);
 	CapsuleComponent->bDynamicObstacle = true;
 
