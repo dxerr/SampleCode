@@ -4,13 +4,14 @@
 #include "GameObject/ActorExtend/ProjectileActor.h"
 #include "Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h"
 
-AActor* UGameObjectProjectile::GetActor() { return Actor; }
+EGameObjectType UGameObjectProjectile::GetObjectType() const  { return EGameObjectType::Projectile; }
+AActor*         UGameObjectProjectile::GetActor() const       { return Actor; }
 
 void UGameObjectProjectile::Initialize()
 {
 	Super::Initialize();
 
-	SET_OBJECTYTPE(ObjectType, EGameObjectType::Projectile);
+	SET_OBJECTYTPE(ObjectType, UGameObjectProjectile::GetObjectType());
 }
 
 void UGameObjectProjectile::DeInitialize()

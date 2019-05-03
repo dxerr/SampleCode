@@ -174,7 +174,7 @@ void UObjectSpawner::UpdateAddGameObject()
 	{
 		for (auto el : AddSpawns)
 		{
-			uint8 key = el->GetObjectType();
+			uint8 key = el->GetObjectTypeMask();
 			for (auto el2 : EGameObjectTypeALL)
 			{
 				if (CHECK_OBJECTYTPE(key, el2))
@@ -194,7 +194,7 @@ void UObjectSpawner::UpdateRemoveGameObject()
 	{
 		for (auto el : RemoveSpawns)
 		{
-			uint8 key = el->GetObjectType();
+			uint8 key = el->GetObjectTypeMask();
 			for (auto el2 : EGameObjectTypeALL)
 			{
 				if (CHECK_OBJECTYTPE(key, el2))

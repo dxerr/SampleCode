@@ -18,23 +18,27 @@ UCLASS()
 class SAMPLECHARACTER_API ACommonAIController : public AAIController
 {
 	GENERATED_BODY()
+	
+	//블루프린트 Visible용 블랙보드 키 리스트
+    struct FBlackboardKeys
+    {
+        TArray<FString> Keys;
+        FString SelectKey;
+    };
 
 public:
 	ACommonAIController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void PostInitializeComponents() override;
 
+protected:
+    virtual void OnPossess(APawn* InPawn) override;
+
 public:
 	virtual bool RunBehaviorTree(UBehaviorTree* BTAsset) override;
 
-//BP지원 함수 모음
-public:
-	//BP로 이함수를 호출했을경우는 내부 블랙보드 데이터를 사용하지 않을경우이다.
-	UFUNCTION(BlueprintCallable, Category = "AI|Ex")
-	bool UseBlackboardEx(UBlackboardData* BlackboardAsset, UBlackboardComponent*& BlackboardComponent);
-	
-private:
-	//블랙보드 데이터는 내부에서 사용 용도로 활용하는게 좋을것 같음
-	UPROPERTY(transient, EditInstanceOnly, BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
-	class UBlackboardData* BlackboardData;
+//블랙보드 데이터 접근용 유틸 함수
+protected:
+    //UFUNCTION(BlueprintCallable, Category = "AI|BehaviorTree|Ex")
+    //void SetBlackboardData(FBlackboardKeys Value);
 };

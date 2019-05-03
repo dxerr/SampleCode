@@ -2,6 +2,7 @@
 
 #include "BTService_BlueprintBaseExpend.h"
 #include "GameInstanceExtend.h"
+#include "Runtime/AIModule/Classes/BehaviorTree/BlackboardComponent.h"
 #include "GameObject/ObjectClass/GameObjectBase.h"
 
 /*
@@ -30,3 +31,11 @@ TArray<UGameObjectBase*> UBTService_BlueprintBaseExpend::FindObject(EGameObjectT
 	return finds;
 }*/
 
+
+UBlackboardData* UBTService_BlueprintBaseExpend::GetBlackboardData()
+{
+    UBlackboardComponent* bb = ActorOwner->FindComponentByClass< UBlackboardComponent>();
+    UBlackboardData* data = bb->GetBlackboardAsset();
+
+    return data;
+}

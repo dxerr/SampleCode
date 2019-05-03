@@ -18,7 +18,9 @@ class SAMPLECHARACTER_API UGameObjectProjectile : public UGameObjectBase
 public:
 	virtual void Initialize() override;
 	virtual void DeInitialize() override;
-	virtual AActor* GetActor() override;
+
+    virtual EGameObjectType GetObjectType() const override;
+	virtual AActor* GetActor() const override;
 
 protected:
 	virtual void ActorSpawned(AActor* Spawn) override;

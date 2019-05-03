@@ -12,7 +12,7 @@ class AActor;
  * 모든 스폰 관련 오브젝트들의 base클래스
  * 언리얼엔진에서 제공하는 로직을 제외한 오브젝트에 대한 클라이언트 로직 처리 담당 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class SAMPLECHARACTER_API UGameObjectBase : public UObject
 {
 	GENERATED_BODY()
@@ -25,11 +25,15 @@ public:
 
 //프로퍼티
 public:
-	//타입 얻기
-	virtual uint32 GetObjectType();
+    //GameObject 타입값 얻기
+    UFUNCTION(BlueprintCallable, Category = "GameObject")
+    virtual EGameObjectType GetObjectType() const;
+	//타입 조합값 얻기
+	virtual uint32 GetObjectTypeMask() const;
 
 	//기본적인 Actor클래스 얻기
-	virtual AActor* GetActor();
+    UFUNCTION(BlueprintCallable, Category = "GameObject")
+	virtual AActor* GetActor() const;
 
 //메서드
 public:

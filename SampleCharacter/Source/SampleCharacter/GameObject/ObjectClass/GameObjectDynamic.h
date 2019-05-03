@@ -22,11 +22,13 @@ class SAMPLECHARACTER_API UGameObjectDynamic : public UGameObjectBase
 public:
 	virtual void Initialize() override;
 	virtual void DeInitialize() override;
-	virtual AActor* GetActor() override;
+
+    virtual EGameObjectType GetObjectType() const override;
+	virtual AActor* GetActor() const override;
 
 public:	
-	virtual FPartsBase* GetParts();
-	virtual FFSMManager* GetBaseFSM();
+	virtual FPartsBase* GetParts() const;
+	virtual FFSMManager* GetBaseFSM() const;
 
 public:
 	virtual void Update(float Delta) override;

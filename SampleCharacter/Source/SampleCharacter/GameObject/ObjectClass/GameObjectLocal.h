@@ -22,14 +22,16 @@ public:
 	virtual void DeInitialize() override;
 
 public:
-	virtual AActor* GetActor() override;
-	virtual ACharacter* GetCharacter() override;
-	ALocalCharacter* GetLocal();
+    virtual EGameObjectType GetObjectType() const override;
+	virtual AActor* GetActor() const override;
+	virtual ACharacter* GetCharacter() const override;
+    UFUNCTION(BlueprintCallable, Category = "GameObject")
+	ALocalCharacter* GetLocal() const;
 
-	virtual FFSMManager* GetBaseFSM() override;
-	virtual FFSMManager* GetUpperFSM() override;
-	virtual FSkillBase* GetSkill()  override;
-	virtual FPartsBase* GetParts() override;
+	virtual FFSMManager* GetBaseFSM() const override;
+	virtual FFSMManager* GetUpperFSM() const override;
+	virtual FSkillBase* GetSkill()  const override;
+	virtual FPartsBase* GetParts() const override;
 
 public:
 	virtual void Update(float Delta) override;

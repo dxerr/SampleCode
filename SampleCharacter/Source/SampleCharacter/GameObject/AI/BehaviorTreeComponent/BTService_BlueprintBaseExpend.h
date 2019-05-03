@@ -20,7 +20,10 @@ class SAMPLECHARACTER_API UBTService_BlueprintBaseExpend : public UBTService_Blu
 {
 	GENERATED_BODY()
 	
-public:
+public: 
     UFUNCTION(BlueprintCallable, Category = "AI|Ex")
     FORCEINLINE AActor* GetActorOwner() { return ActorOwner ; }
+
+    UFUNCTION(BlueprintCallable, Category = "AI|Ex")
+    UBlackboardData* GetBlackboardData();
 };

@@ -15,9 +15,9 @@ FSKillLocal::~FSKillLocal()
 {
 }
 
-void FSKillLocal::Initialize(UGameObjectBase* Owner)
+void FSKillLocal::Initialize(UGameObjectBase* owner)
 {
-	FSkillBase::Initialize(Owner);
+	FSkillBase::Initialize(owner);
 }
 
 TArray<FSkillActionNodeBase*>* FSKillLocal::GetSKillNodes(int ID)

@@ -2,6 +2,8 @@
 
 #include "NpcPawn.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 #include "GameObject/Component/Animation/AnimInstanceState.h"
 
 // Sets default values
@@ -19,7 +21,7 @@ ANpcPawn::ANpcPawn()
 
 	RootComponent = CapsuleComponent;
 
-	Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("NpcSkeletalMesh"));
+    Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("NpcSkeletalMesh"));
 	if (Mesh)
 	{
 		Mesh->AlwaysLoadOnClient = true;
@@ -36,6 +38,9 @@ ANpcPawn::ANpcPawn()
 		Mesh->SetCanEverAffectNavigation(false);
 	}
 
+    MovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UFloatingPawnMovement>(TEXT("NpcMovement"));
+    MovementComponent->UpdatedComponent = CapsuleComponent;
+    
 }
 
 // Called when the game starts or when spawned

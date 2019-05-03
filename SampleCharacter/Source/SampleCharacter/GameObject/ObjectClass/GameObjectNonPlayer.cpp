@@ -7,14 +7,15 @@
 #include "GameObject/State/StateNPC.h"
 
 
-AActor*		UGameObjectNonPlayer::GetActor() { return GetNpc(); }
-ANpcPawn*	UGameObjectNonPlayer::GetNpc()	 { return Actor; }
+EGameObjectType UGameObjectNonPlayer::GetObjectType() const   { return EGameObjectType::NonPlayer; }
+AActor*		    UGameObjectNonPlayer::GetActor() const        { return GetNpc(); }
+ANpcPawn*	    UGameObjectNonPlayer::GetNpc() const	      { return Actor; }
 
 void UGameObjectNonPlayer::Initialize()
 {
 	Super::Initialize();
 
-	SET_OBJECTYTPE(ObjectType, EGameObjectType::NonPlayer);
+	SET_OBJECTYTPE(ObjectType, UGameObjectNonPlayer::GetObjectType());
 
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);

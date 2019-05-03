@@ -1,18 +1,19 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "GameObjectDynamic.h"
 #include "GameObject/State/FSMManager.h"
 #include "GameObject/Parts/PartsBase.h"
 
-AActor*		UGameObjectDynamic::GetActor()		{ return NULL; }
-FFSMManager* UGameObjectDynamic::GetBaseFSM()	{ return Fsm; }
-FPartsBase* UGameObjectDynamic::GetParts()		{ return Parts; }
+EGameObjectType UGameObjectDynamic::GetObjectType() const   { return EGameObjectType::Dynamic; }
+AActor*		    UGameObjectDynamic::GetActor() const    	{ return NULL; }
+FFSMManager*    UGameObjectDynamic::GetBaseFSM() const  	{ return Fsm; }
+FPartsBase*     UGameObjectDynamic::GetParts() const		{ return Parts; }
 
 void UGameObjectDynamic::Initialize()
 {
 	Super::Initialize();
 
-	SET_OBJECTYTPE(ObjectType, EGameObjectType::Dynamic);
+	SET_OBJECTYTPE(ObjectType, UGameObjectDynamic::GetObjectType());
 }
 
 void UGameObjectDynamic::DeInitialize()

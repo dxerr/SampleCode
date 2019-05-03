@@ -8,9 +8,15 @@ UGameObjectBase::~UGameObjectBase()
 	UE_LOG(LogTemp, Warning, TEXT("~UGameObjectBase (%s)"), *GetName());
 }
 
+//프로퍼티
+EGameObjectType UGameObjectBase::GetObjectType() const      { return EGameObjectType::Base; }
+uint32          UGameObjectBase::GetObjectTypeMask() const  { return ObjectType; }
+AActor*         UGameObjectBase::GetActor() const           { return NULL; }
+//
+
 void UGameObjectBase::Initialize()
 {
-	SET_OBJECTYTPE(ObjectType, EGameObjectType::Base);
+	SET_OBJECTYTPE(ObjectType, UGameObjectBase::GetObjectType());
 }
 
 void UGameObjectBase::DeInitialize()
@@ -22,15 +28,6 @@ void UGameObjectBase::DeInitialize()
 	}
 }
 
-uint32 UGameObjectBase::GetObjectType()
-{
-	return ObjectType;
-}
-
-AActor* UGameObjectBase::GetActor()
-{
-	return NULL;
-}
 
 void UGameObjectBase::Update(float Delta)
 {

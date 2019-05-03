@@ -12,20 +12,21 @@
 #include "Runtime/Engine/Classes/Components/InputComponent.h"
 
 //프로퍼티
-AActor*			UGameObjectLocal::GetActor()	{ return GetLocal(); }
-ACharacter*		UGameObjectLocal::GetCharacter() { return GetLocal(); }
-ALocalCharacter* UGameObjectLocal::GetLocal()	{ return Actor; }
-FFSMManager*	UGameObjectLocal::GetBaseFSM()	{ return Fsm; }
-FFSMManager*	UGameObjectLocal::GetUpperFSM() { return UpperFsm; }
-FSkillBase*		UGameObjectLocal::GetSkill()	{ return Skill; }
-FPartsBase*		UGameObjectLocal::GetParts()	{ return Parts; }
+EGameObjectType UGameObjectLocal::GetObjectType() const { return EGameObjectType::LocalPlayer; }
+AActor*			UGameObjectLocal::GetActor() const	    { return GetLocal(); }
+ACharacter*		UGameObjectLocal::GetCharacter() const  { return GetLocal(); }
+ALocalCharacter* UGameObjectLocal::GetLocal() const     { return Actor; }
+FFSMManager*	UGameObjectLocal::GetBaseFSM() const    { return Fsm; }
+FFSMManager*	UGameObjectLocal::GetUpperFSM() const   { return UpperFsm; }
+FSkillBase*		UGameObjectLocal::GetSkill() const      { return Skill; }
+FPartsBase*		UGameObjectLocal::GetParts() const      { return Parts; }
 //
 
 void UGameObjectLocal::Initialize()
 {
 	Super::Initialize();
 
-	SET_OBJECTYTPE(ObjectType, EGameObjectType::LocalPlayer);
+	SET_OBJECTYTPE(ObjectType, UGameObjectLocal::GetObjectType());
 
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -22,8 +22,10 @@ public:
 	virtual void DeInitialize() override;
 
 public:
-	virtual AActor* GetActor() override;
-	virtual ANpcPawn* GetNpc();
+    virtual EGameObjectType GetObjectType() const override;
+	virtual AActor* GetActor() const override;
+    UFUNCTION(BlueprintCallable, Category = "GameObject")
+	virtual ANpcPawn* GetNpc() const;
 
 public:
 	virtual void OnHit(UGameObjectBase* Target) override;
