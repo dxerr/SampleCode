@@ -22,15 +22,12 @@ protected:
 
 	virtual void OnReEnter(UGameObjectLocal* Owner) override
 	{
-
 	}
 	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override
 	{
-
 	}
 	virtual void OnExit(UGameObjectLocal* Owner) override
 	{
-
 	}
 };
 
@@ -89,18 +86,6 @@ public:
 	virtual void OnEnter(UGameObjectLocal* Owner) override;
 	virtual void OnUpdate(UGameObjectLocal* Owner, float Delta) override;
 };
-
-/*
-* NPC류에 사용 예정
-class SAMPLECHARACTER_API FStateWalk : public FStateSingleBase<FStateWalk>
-{
-public:
-	virtual int GetStateID() override;
-	virtual FString Name() override;
-
-	virtual void Update(ALocalPlayerObject* Owner, float Delta) override;
-};
-*/
 
 class SAMPLECHARACTER_API FStateRun : public FStateSingleLocal<FStateRun>
 {

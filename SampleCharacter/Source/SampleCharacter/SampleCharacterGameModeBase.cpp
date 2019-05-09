@@ -1,8 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SampleCharacterGameModeBase.h"
-#include "Controller/PlayerControllerExpend.h"
-
 
 void ASampleCharacterGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -17,7 +15,7 @@ void ASampleCharacterGameModeBase::RestartPlayer(AController* NewPlayer)
 		// initialize and start it up
 		InitStartSpot(StartSpot, NewPlayer);
 
-		APlayerControllerExpend* const NewPC = Cast<APlayerControllerExpend>(NewPlayer);
+		APlayerController* const NewPC = Cast<APlayerController>(NewPlayer);
 		if (NewPC != nullptr)
 		{
 			NewPC->SetInitialLocationAndRotation(StartSpot->GetActorLocation(), StartSpot->GetActorRotation());

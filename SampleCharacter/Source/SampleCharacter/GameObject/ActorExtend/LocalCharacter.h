@@ -44,8 +44,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	FORCEINLINE UAnimInstanceState* GetAnim() { return Animation; }
-	FORCEINLINE UInputBindingLocalPlayer* GetInputBinder() { return InputBinder; }
+	FORCEINLINE UAnimInstanceState* GetAnim() const { return Animation; }
+	FORCEINLINE UInputBindingLocalPlayer* GetInputBinder() const { return InputBinder; }
 
 private:
 	//Anim

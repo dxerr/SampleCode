@@ -6,12 +6,10 @@
 
 FPartsBase::FPartsBase()
 {
-
 }
 
 FPartsBase::~FPartsBase()
 {
-
 }
 
 void FPartsBase::Initialize(UGameObjectBase* owner)
@@ -21,7 +19,6 @@ void FPartsBase::Initialize(UGameObjectBase* owner)
 
 void FPartsBase::DeInitialize()
 {
-
 }
 
 void FPartsBase::LoadData(const TCHAR * Path)

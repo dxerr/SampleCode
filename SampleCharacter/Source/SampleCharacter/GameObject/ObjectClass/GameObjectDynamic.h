@@ -8,6 +8,7 @@
 #include "GameObjectDynamic.generated.h"
 
 class FPartsBase;
+class FMovementBase;
 class FFSMManager;
 
 /**
@@ -29,6 +30,7 @@ public:
 public:	
 	virtual FPartsBase* GetParts() const;
 	virtual FFSMManager* GetBaseFSM() const;
+    virtual FMovementBase* GetMovement() const;
 
 public:
 	virtual void Update(float Delta) override;
@@ -36,4 +38,5 @@ public:
 protected:
 	FFSMManager* Fsm;
 	FPartsBase* Parts;
+    FMovementBase* Movement;
 };

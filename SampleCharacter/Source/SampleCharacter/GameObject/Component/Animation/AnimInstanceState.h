@@ -8,7 +8,8 @@
 #include "AnimInstanceState.generated.h"
 
 /**
- * 
+ * 애님 블루프린트 동기화용 클래스
+ * 애님 블루프린트의 상태머신은 BaseStateType, UpperStateType 설정값 체크로만 변환(transition)을 일으켜야한다.
  */
 UCLASS()
 class SAMPLECHARACTER_API UAnimInstanceState : public UAnimInstance
@@ -26,6 +27,7 @@ protected:
 	int RandomIndex;
 
 public:
+    //[Todo]
 	//FSMManager 애님 블루프린트 FSM 파라미터 동기화
 	//FSMManager에서 직접 참조하고 싶지만.. 아직 잘모르겠음..
 	//문제점1. AMyCharacter 객체 참조를 하려해도 에디터상 문제가 생김(CDO)

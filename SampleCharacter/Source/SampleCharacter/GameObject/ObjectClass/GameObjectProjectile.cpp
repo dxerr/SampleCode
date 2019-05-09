@@ -11,7 +11,7 @@ void UGameObjectProjectile::Initialize()
 {
 	Super::Initialize();
 
-	SET_OBJECTYTPE(ObjectType, UGameObjectProjectile::GetObjectType());
+    SET_FLAG_TYPE(ObjectType, UGameObjectProjectile::GetObjectType());
 }
 
 void UGameObjectProjectile::DeInitialize()

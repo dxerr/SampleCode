@@ -6,7 +6,6 @@
 
 EGameObjectType UGameObjectPlayer::GetObjectType() const    { return EGameObjectType::Player; }
 AActor*		    UGameObjectPlayer::GetActor() const		    { return NULL; }
-ACharacter*     UGameObjectPlayer::GetCharacter() const     { return NULL; }
 FFSMManager*    UGameObjectPlayer::GetUpperFSM() const	    { return UpperFsm; }
 FSkillBase*     UGameObjectPlayer::GetSkill() const		    { return Skill; }
 
@@ -14,7 +13,7 @@ void UGameObjectPlayer::Initialize()
 {
 	Super::Initialize();
 
-	SET_OBJECTYTPE(ObjectType, UGameObjectPlayer::GetObjectType());
+	SET_FLAG_TYPE(ObjectType, UGameObjectPlayer::GetObjectType());
 }
 
 void UGameObjectPlayer::DeInitialize()

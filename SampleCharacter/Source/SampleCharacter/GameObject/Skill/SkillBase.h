@@ -37,7 +37,7 @@ protected:
 	USkillDataContainerBase* SkillFactory;
 };
 
-//발동 스킬 구조체
+//발동 스킬(액션) 구조체
 struct RunSKillInfo
 {
 	const FSkillDataBase* Data;

@@ -3,6 +3,7 @@
 #include "StateLocal.h"
 #include "FSMManager.h"
 #include "GameObject/Skill/SKillLocal.h"
+#include "GameObject/Movement/MovementBase.h"
 #include "GameObject/Component/Animation/AnimInstanceState.h"
 
 #include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
@@ -64,17 +65,10 @@ FString FStateForwardWalk::Name()
 void FStateForwardWalk::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
-
-	auto movement = Owner->GetLocal()->GetCharacterMovement();
-	movement->SetMovementMode(MOVE_Walking);
-	movement->MaxWalkSpeed = 1000.f;
-	Owner->MovementForce = 1.f;
 }
 
 void FStateForwardWalk::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
-	Owner->MovementForce += 3.f * Delta;
-	UpdateSpeed(Owner, Owner->MovementForce);
 }
 
 void FStateForwardWalk::UpdateSpeed(UGameObjectLocal* Owner, float Speed)
@@ -105,17 +99,10 @@ FString FStateBackwardWalk::Name()
 void FStateBackwardWalk::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
-
-	auto movement = Owner->GetLocal()->GetCharacterMovement();
-	movement->SetMovementMode(MOVE_Walking);
-	movement->MaxWalkSpeed = 500.f;
-	Owner->MovementForce = -0.5f;
 }
 
 void FStateBackwardWalk::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
-	FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	Owner->GetLocal()->AddMovementInput(dir, Owner->MovementForce);
 }
 
 
@@ -134,16 +121,15 @@ void FStateSideWalk::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
 
-	auto movement = Owner->GetLocal()->GetCharacterMovement();
-	movement->SetMovementMode(MOVE_Walking);
-	movement->MaxWalkSpeed = 500.f;
-	//Owner->MovementForce = -0.5f;
+    if (FMovementBase* movement = Owner->GetMovement())
+    {
+        FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+        movement->Move(dir, EGameObjectMoveDirType::SideStep);
+    }
 }
 
 void FStateSideWalk::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
-	FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-	Owner->GetLocal()->AddMovementInput(dir, Owner->MovementForce);
 }
 
 
@@ -171,17 +157,10 @@ bool FStateRun::IsChange(int StateID)
 void FStateRun::OnEnter(UGameObjectLocal* Owner)
 {
 	FStateSingleLocal::OnEnter(Owner);
-
-	auto movement = Owner->GetLocal()->GetCharacterMovement();
-	movement->SetMovementMode(MOVE_Walking);
-	movement->MaxWalkSpeed = 2000.f;
 }
 
 void FStateRun::OnUpdate(UGameObjectLocal* Owner, float Delta)
 {
-	Owner->MovementForce += Delta;
-	FVector dir = FRotationMatrix(Owner->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	Owner->GetLocal()->AddMovementInput(dir, Owner->MovementForce);
 }
 
 ///FStateUpperIdle///

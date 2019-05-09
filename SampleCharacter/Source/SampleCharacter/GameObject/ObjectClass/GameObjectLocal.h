@@ -24,7 +24,6 @@ public:
 public:
     virtual EGameObjectType GetObjectType() const override;
 	virtual AActor* GetActor() const override;
-	virtual ACharacter* GetCharacter() const override;
     UFUNCTION(BlueprintCallable, Category = "GameObject")
 	ALocalCharacter* GetLocal() const;
 
@@ -38,12 +37,6 @@ public:
 
 protected:
 	virtual void ActorSpawned(AActor* Spawn) override;
-
-public:
-	//Movement로 이관필요
-	float MovementForce;
-	FORCEINLINE void SetMoveSpeed(float Val) { MovementForce = Val; }
-	//
 
 private:
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = GameObject, Meta = (AllowPrivateAccess = true))

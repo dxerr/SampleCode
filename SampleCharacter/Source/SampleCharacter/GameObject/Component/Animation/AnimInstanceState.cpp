@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AnimInstanceState.h"
 
@@ -60,7 +60,7 @@ void UAnimInstanceState::ChangeState(int State, int Min, int Max)
 		BaseStateType = static_cast<EStateBase>(State);
 	}
 
-	//·£´ý ÀÎµ¦½º »ý¼º
+	//ëžœë¤ ì¸ë±ìŠ¤ ìƒì„±
 	if (Max - Min > 0)
 	{
 		RandomIndex = FMath::RandRange(Min, Max);

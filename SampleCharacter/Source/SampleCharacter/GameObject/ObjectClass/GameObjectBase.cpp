@@ -16,7 +16,7 @@ AActor*         UGameObjectBase::GetActor() const           { return NULL; }
 
 void UGameObjectBase::Initialize()
 {
-	SET_OBJECTYTPE(ObjectType, UGameObjectBase::GetObjectType());
+    SET_FLAG_TYPE(ObjectType, UGameObjectBase::GetObjectType());
 }
 
 void UGameObjectBase::DeInitialize()

@@ -26,10 +26,6 @@ public:
 public:    
     virtual EGameObjectType GetObjectType() const override;
 	virtual AActor* GetActor() const override;
-    UFUNCTION(BlueprintCallable, Category = "GameObject")
-	virtual ACharacter* GetCharacter() const;
-
-	//virtual TWeakPtr<FFSMManager> GetBaseFSM() = 0;
 	virtual FFSMManager* GetUpperFSM() const;
 	virtual FSkillBase* GetSkill() const;
 
@@ -37,6 +33,6 @@ public:
 	virtual void Update(float Delta) override;
 
 protected:
-	FFSMManager* UpperFsm;
+	FFSMManager* UpperFsm;          //상체 Fsm
 	FSkillBase* Skill;
 };

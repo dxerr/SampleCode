@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "Global/GlobalDefine.h"
 #include "StateBase.h"
 #include "Define/StateParams.h"
 #include "GameObject/ObjectClass/GameObjectBase.h"
@@ -12,10 +11,12 @@
  */
 class SAMPLECHARACTER_API FFSMManager
 {
+    DECLARE_DELEGATE_OneParam(FStateChangeFailed, int32/* State Id*/);
+
 public:
 	FORCEINLINE FStateBase* CurrentState() const { return Current; }
 	FORCEINLINE FStateBase* PrevState() const	{ return Prev; }
-	FORCEINLINE bool IsState(int StateID)
+	FORCEINLINE bool IsState(int StateID) const
 	{
 		return (nullptr != Current && Current->GetStateID() == StateID);
 	}
@@ -44,6 +45,8 @@ private:
 	FStateBase* Prev;
 };
 
+//[Todo]
+//나중에 Update만이라도 캐스팅을 피하게 작업해보기....ㅠ
 template <class Char>
 void FFSMManager::Update(Char* Owner, float Delta)
 {

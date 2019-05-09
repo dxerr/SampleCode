@@ -3,6 +3,23 @@
 #include "StateNPC.h"
 #include "FSMManager.h"
 
+int FStateNpcSpawn::GetStateID()
+{
+    return (int)EStateBase::Spawn;
+}
+
+FString FStateNpcSpawn::Name()
+{
+    return TEXT("StateNpcSpawn");
+}
+
+void FStateNpcSpawn::OnEnter(UGameObjectNonPlayer* Owner)
+{
+    FStateSingleNpc::OnEnter(Owner);
+
+    Owner->GetBaseFSM()->ChangeDelayState<FStateNpcIdle>(1.5f);
+}
+
 
 int FStateNpcIdle::GetStateID()
 {
@@ -11,12 +28,27 @@ int FStateNpcIdle::GetStateID()
 
 FString FStateNpcIdle::Name()
 {
-	return TEXT("StateIdle");
+	return TEXT("StateNpcIdle");
 }
 
 void FStateNpcIdle::OnEnter(UGameObjectNonPlayer* Owner)
 {
 	FStateSingleNpc::OnEnter(Owner);
+}
+
+int FStateNpcWalk::GetStateID()
+{
+    return (int)EStateBase::ForwardWalk;
+}
+
+FString FStateNpcWalk::Name()
+{
+    return TEXT("StateNpcWalk");
+}
+
+void FStateNpcWalk::OnEnter(UGameObjectNonPlayer* Owner)
+{
+    FStateSingleNpc::OnEnter(Owner);
 }
 
 

@@ -128,6 +128,8 @@ UGameObjectBase* UObjectSpawner::SpawnNpc(UClass* Uclass, const FVector& Pos, co
 			if (auto actor = npc->Spawn(Uclass, World, location, Rot))
 			{
 				AddSpawns.Emplace(npc);
+
+                //액터 자동 소멸 콜백을 연결하여 관리 대상 동기화를 맞춤
 				actor->OnDestroyed.AddDynamic(this, &UObjectSpawner::CallbackActorDeSpawn);
 			}
 		}
@@ -177,7 +179,7 @@ void UObjectSpawner::UpdateAddGameObject()
 			uint8 key = el->GetObjectTypeMask();
 			for (auto el2 : EGameObjectTypeALL)
 			{
-				if (CHECK_OBJECTYTPE(key, el2))
+				if (CHECK_FLAG_TYPE(key, el2))
 				{
 					TypeSpawns[el2].Emplace(el);
 				}
@@ -197,7 +199,7 @@ void UObjectSpawner::UpdateRemoveGameObject()
 			uint8 key = el->GetObjectTypeMask();
 			for (auto el2 : EGameObjectTypeALL)
 			{
-				if (CHECK_OBJECTYTPE(key, el2))
+				if (CHECK_FLAG_TYPE(key, el2))
 				{
 					TypeSpawns[el2].RemoveSwap(el);
 				}

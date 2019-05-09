@@ -8,7 +8,6 @@
 
 class APawn;
 class ANpcPawn;
-class FSkillBase;
 /**
  * 
  */

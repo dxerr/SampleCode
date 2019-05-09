@@ -28,7 +28,6 @@ void FSkillBase::LoadData(const TCHAR * Path)
 
 void FSkillBase::Update(float delta)
 {
-
 }
 
 const FSkillDataBase* FSkillBase::GetSkillData(int ID)

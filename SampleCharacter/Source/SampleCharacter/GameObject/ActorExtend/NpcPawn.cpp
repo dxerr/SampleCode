@@ -22,25 +22,20 @@ ANpcPawn::ANpcPawn()
 	RootComponent = CapsuleComponent;
 
     Mesh = CreateOptionalDefaultSubobject<USkeletalMeshComponent>(TEXT("NpcSkeletalMesh"));
-	if (Mesh)
-	{
-		Mesh->AlwaysLoadOnClient = true;
-		Mesh->AlwaysLoadOnServer = true;
-		Mesh->bOwnerNoSee = false;
-		Mesh->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
-		Mesh->bCastDynamicShadow = true;
-		Mesh->bAffectDynamicIndirectLighting = true;
-		Mesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-		Mesh->SetupAttachment(CapsuleComponent);
-		static FName MeshCollisionProfileName(TEXT("NpcMesh"));
-		Mesh->SetCollisionProfileName(MeshCollisionProfileName);
-		Mesh->SetGenerateOverlapEvents(false);
-		Mesh->SetCanEverAffectNavigation(false);
-	}
+    Mesh->AlwaysLoadOnClient = true;
+    Mesh->AlwaysLoadOnServer = true;
+    Mesh->bOwnerNoSee = false;
+    Mesh->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPose;
+    Mesh->bCastDynamicShadow = true;
+    Mesh->bAffectDynamicIndirectLighting = true;
+    Mesh->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+    Mesh->SetupAttachment(CapsuleComponent);
+    Mesh->SetCollisionProfileName(TEXT("NpcMesh"));
+    Mesh->SetGenerateOverlapEvents(false);
+    Mesh->SetCanEverAffectNavigation(false);
 
     MovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UFloatingPawnMovement>(TEXT("NpcMovement"));
     MovementComponent->UpdatedComponent = CapsuleComponent;
-    
 }
 
 // Called when the game starts or when spawned

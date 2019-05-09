@@ -24,16 +24,23 @@ protected:
 
 	virtual void OnReEnter(UGameObjectNonPlayer* Owner) override
 	{
-
 	}
 	virtual void OnUpdate(UGameObjectNonPlayer* Owner, float Delta) override
 	{
-
 	}
 	virtual void OnExit(UGameObjectNonPlayer* Owner) override
 	{
-
 	}
+};
+
+class SAMPLECHARACTER_API FStateNpcSpawn : public FStateSingleNpc<FStateNpcSpawn>
+{
+public:
+    virtual int GetStateID() override;
+    virtual FString Name() override;
+    //virtual int GetAniRandomCount() override;
+    
+    virtual void OnEnter(UGameObjectNonPlayer* Owner) override;
 };
 
 class SAMPLECHARACTER_API FStateNpcIdle : public FStateSingleNpc<FStateNpcIdle>
@@ -43,6 +50,15 @@ public:
 	virtual FString Name() override;
 
 	virtual void OnEnter(UGameObjectNonPlayer* Owner) override;
+};
+
+class SAMPLECHARACTER_API FStateNpcWalk : public FStateSingleNpc<FStateNpcWalk>
+{
+public:
+    virtual int GetStateID() override;
+    virtual FString Name() override;
+
+    virtual void OnEnter(UGameObjectNonPlayer* Owner) override;
 };
 
 class SAMPLECHARACTER_API FStateNpcBeaten : public FStateSingleNpc<FStateNpcBeaten>

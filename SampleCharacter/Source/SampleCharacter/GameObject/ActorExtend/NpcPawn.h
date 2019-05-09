@@ -40,7 +40,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	FORCEINLINE UAnimInstanceState* GetAnim() { return Animation; }
+	FORCEINLINE UAnimInstanceState* GetAnim() const { return Animation; }
+    FORCEINLINE UPawnMovementComponent* GetPawnMovement() const { return MovementComponent; }
 
 private:
 	//Anim

@@ -3,9 +3,9 @@
 #include "SKillLocal.h"
 #include "Container/SkillDataContainerBase.h"
 #include "Process/SKillActionNodeProjectile.h"
-#include "GameObject/State/FSMManager.h"
 #include "GameObject/ObjectClass/GameObjectLocal.h"
-
+#include "GameObject/State/FSMManager.h"
+#include "GameObject/State/StateLocal.h"
 
 FSKillLocal::FSKillLocal()
 {
@@ -95,7 +95,6 @@ void FSKillLocal::RunSkillNode(float DeltaTime)
 	FSkillBase::RunSkillNode(DeltaTime);
 
 	//실행할 노드 찾기
-
 	for (auto el : RunSkillNodes)
 	{
 		if (el->GetRate() < CurrentSkillData->GetRate())
@@ -121,7 +120,7 @@ void FSKillLocal::RunSkillNode(float DeltaTime)
 	//스킬 종료
 	if (CurrentSkillData->IsEnd())
 	{
-		//유휴 상태로 전환
+		//상체 유휴 상태로 전환
 		UGameObjectLocal* My = Cast<UGameObjectLocal>(Owner);
 		FFSMManager* fsm = My->GetUpperFSM();
 		fsm->ChangeState<FStateUpperIdle>();

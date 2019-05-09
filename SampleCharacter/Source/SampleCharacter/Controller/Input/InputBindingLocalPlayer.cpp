@@ -6,6 +6,7 @@
 #include "GameObject/Skill/SKillLocal.h"
 #include "GameObject/State/FSMManager.h"
 #include "GameObject/State/StateLocal.h"
+#include "GameObject/Movement/MovementLocal.h"
 
 //[Todo]타겟 클래스 설정 방식에 좀더 좋은 구조를 생각해볼것
 void UInputBindingLocalPlayer::Initialize()
@@ -65,46 +66,46 @@ void UInputBindingLocalPlayer::OnAttack1(int32 slot)
 
 void UInputBindingLocalPlayer::OnMoveStop()
 {
-	if (FFSMManager* fsm = Target->GetBaseFSM())
-	{
-		fsm->ChangeState<FStateIdle>();
-	}
+    if (FMovementBase* movement = Target->GetMovement())
+    {
+        movement->Stop();
+    }
 }
 
 void UInputBindingLocalPlayer::OnMoveForward()
 {
-	if (FFSMManager* fsm = Target->GetBaseFSM())
-	{
-		fsm->ChangeState<FStateForwardWalk>();
-	}
+    if (FMovementBase* movement = Target->GetMovement())
+    {
+        FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+        movement->Move(dir, EGameObjectMoveDirType::Forward, 1.0f);
+    }
 }
 
 void UInputBindingLocalPlayer::OnMoveBackward()
 {
-	if (FFSMManager* fsm = Target->GetBaseFSM())
-	{
-		fsm->ChangeState<FStateBackwardWalk>();
-	}
+    if (FMovementBase* movement = Target->GetMovement())
+    {
+        FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+        movement->Move(dir, EGameObjectMoveDirType::Backward, -0.5f);
+    }
 }
 
 void UInputBindingLocalPlayer::OnMoveLeft()
 {
-	Target->MovementForce = -0.5f; //Movement 구현으로 추후 대체되야함
-
-	if (FFSMManager* fsm = Target->GetBaseFSM())
-	{
-		fsm->ChangeState<FStateSideWalk>();
-	}
+    if (FMovementBase* movement = Target->GetMovement())
+    {
+        FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+        movement->Move(dir, EGameObjectMoveDirType::SideStep, -0.5f);
+    }
 }
 
 void UInputBindingLocalPlayer::OnMoveRight()
 {
-	Target->MovementForce = 0.5f; //Movement 구현으로 추후 대체되야함
-
-	if (FFSMManager* fsm = Target->GetBaseFSM())
-	{
-		fsm->ChangeState<FStateSideWalk>();
-	}
+    if (FMovementBase* movement = Target->GetMovement())
+    {
+        FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+        movement->Move(dir, EGameObjectMoveDirType::SideStep, 0.5f);
+    }
 }
 
 void UInputBindingLocalPlayer::OnMoveRotate(float Value)

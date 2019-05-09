@@ -4,7 +4,7 @@
 #include "GameObject/Skill/SKillLocal.h"
 #include "GameObject/Parts/PartsLocal.h"
 #include "GameObject/State/StateLocal.h"
-#include "Controller/PlayerControllerExpend.h"
+#include "GameObject/Movement/MovementLocal.h"
 #include "GameInstanceExtend.h"
 #include "Controller/Input/InputBindingLocalPlayer.h"
 
@@ -14,7 +14,6 @@
 //프로퍼티
 EGameObjectType UGameObjectLocal::GetObjectType() const { return EGameObjectType::LocalPlayer; }
 AActor*			UGameObjectLocal::GetActor() const	    { return GetLocal(); }
-ACharacter*		UGameObjectLocal::GetCharacter() const  { return GetLocal(); }
 ALocalCharacter* UGameObjectLocal::GetLocal() const     { return Actor; }
 FFSMManager*	UGameObjectLocal::GetBaseFSM() const    { return Fsm; }
 FFSMManager*	UGameObjectLocal::GetUpperFSM() const   { return UpperFsm; }
@@ -26,24 +25,20 @@ void UGameObjectLocal::Initialize()
 {
 	Super::Initialize();
 
-	SET_OBJECTYTPE(ObjectType, UGameObjectLocal::GetObjectType());
+    SET_FLAG_TYPE(ObjectType, UGameObjectLocal::GetObjectType());
 
 	Fsm = new FFSMManager();
 	Fsm->Initialize(this);
 
 	UpperFsm = new FFSMManager();
 	UpperFsm->Initialize(this);
+
 	Actor = NULL;
 }
 
 void UGameObjectLocal::DeInitialize()
 {
 	Super::DeInitialize();
-
-	if (Fsm)		{ delete Fsm; }
-	if (UpperFsm)	{ delete UpperFsm; }
-	if (Skill)		{ delete Skill; }
-	if (Parts)		{ delete Parts; }
 }
 
 void UGameObjectLocal::ActorSpawned(AActor* Spawn)
@@ -57,21 +52,26 @@ void UGameObjectLocal::ActorSpawned(AActor* Spawn)
 
 		//키입력 바인딩
 		Actor->GetInputBinder()->Initialize(this);
+
+        Movement = new FMovementLocal();
+        Movement->Initialize(this);
+
+        Skill = new FSKillLocal();
+        Skill->Initialize(this);
+        //임시 데이터 적용
+        Skill->LoadData(TEXT("SkillDataContainerBase'/Game/Resource/DataAsset/LocalSkills.LocalSkills'"));
+
+        Parts = new FPartsLocal();
+        Parts->Initialize(this);
+        //임시 데이터 적용
+        Parts->LoadData(TEXT("PartsDataContainerBase'/Game/Resource/DataAsset/LocalParts.LocalParts'"));
+
+        //기본 상태 설정
+        Fsm->ChangeState<FStateSpawn>();
+
+        //모든 파츠 장착
+        Parts->AttachAll();
 	}
-
-	Skill = new FSKillLocal();
-	Skill->Initialize(this);
-	Skill->LoadData(TEXT("SkillDataContainerBase'/Game/Resource/DataAsset/LocalSkills.LocalSkills'"));
-
-	Parts = new FPartsLocal();
-	Parts->Initialize(this);
-	Parts->LoadData(TEXT("PartsDataContainerBase'/Game/Resource/DataAsset/LocalParts.LocalParts'"));
-
-	//모든 파츠 장착
-	Parts->AttachAll();
-
-	//기본 상태 설정
-	Fsm->ChangeState<FStateSpawn>();
 }
 
 void UGameObjectLocal::Update(float delta)

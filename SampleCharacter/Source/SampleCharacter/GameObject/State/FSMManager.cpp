@@ -12,7 +12,6 @@ void FFSMManager::Initialize(UGameObjectBase* owner)
 
 void FFSMManager::DeInitialize()
 {
-
 }
 
 bool FFSMManager::ChangeState(FStateBase* State, FStateChangeFailed const& FailDelegate)

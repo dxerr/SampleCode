@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -37,5 +37,3 @@ enum class  EStateUpperBase : uint8
 
 	UpperBaseMax,
 };
-
-DECLARE_DELEGATE_OneParam(FStateChangeFailed, int32/* State Id*/);
