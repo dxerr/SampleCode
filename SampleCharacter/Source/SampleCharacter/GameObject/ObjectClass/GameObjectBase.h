@@ -35,6 +35,15 @@ public:
     UFUNCTION(BlueprintCallable, Category = "GameObject")
 	virtual AActor* GetActor() const;
 
+    //BP에서 간략한 접근을 위해 기본 TM정보 제공
+public:
+    UFUNCTION(BlueprintCallable, Category = "GameObject")
+    virtual FVector GetLocation() const;
+    UFUNCTION(BlueprintCallable, Category = "GameObject")
+    virtual FRotator GetRotation() const;
+    UFUNCTION(BlueprintCallable, Category = "GameObject")
+    virtual FVector GetScale() const;
+
 //메서드
 public:
 	virtual AActor* Spawn(UClass* Instance, UWorld* World, const FVector& Position, const FRotator& Dir);

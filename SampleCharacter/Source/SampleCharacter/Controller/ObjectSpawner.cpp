@@ -67,6 +67,11 @@ UGameObjectBase* UObjectSpawner::FindObject(AActor* Actor, EGameObjectType Type)
 	return NULL;
 }
 
+UGameObjectBase* UObjectSpawner::FindObject(EGameObjectType Type)
+{
+    return TypeSpawns[Type].Num() > 0 ? TypeSpawns[Type].Top() : NULL;
+}
+
 TArray<UGameObjectBase*> UObjectSpawner::FindObjects(EGameObjectType Type)
 {
 	return TypeSpawns[Type];

@@ -77,7 +77,7 @@ void UInputBindingLocalPlayer::OnMoveForward()
     if (FMovementBase* movement = Target->GetMovement())
     {
         FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-        movement->Move(dir, EGameObjectMoveDirType::Forward, 1.0f);
+        movement->Move(dir, EGameObjectMoveDirType::Forward, 10.0f);
     }
 }
 
@@ -86,7 +86,7 @@ void UInputBindingLocalPlayer::OnMoveBackward()
     if (FMovementBase* movement = Target->GetMovement())
     {
         FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-        movement->Move(dir, EGameObjectMoveDirType::Backward, -0.5f);
+        movement->Move(dir, EGameObjectMoveDirType::Backward, -5.f);
     }
 }
 
@@ -95,7 +95,7 @@ void UInputBindingLocalPlayer::OnMoveLeft()
     if (FMovementBase* movement = Target->GetMovement())
     {
         FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-        movement->Move(dir, EGameObjectMoveDirType::SideStep, -0.5f);
+        movement->Move(dir, EGameObjectMoveDirType::SideStep, -5.f);
     }
 }
 
@@ -104,7 +104,7 @@ void UInputBindingLocalPlayer::OnMoveRight()
     if (FMovementBase* movement = Target->GetMovement())
     {
         FVector dir = FRotationMatrix(Target->GetLocal()->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-        movement->Move(dir, EGameObjectMoveDirType::SideStep, 0.5f);
+        movement->Move(dir, EGameObjectMoveDirType::SideStep, 5.f);
     }
 }
 

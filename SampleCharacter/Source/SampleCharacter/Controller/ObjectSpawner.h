@@ -25,6 +25,7 @@ public:
 	void DeInitialize();
 
 	UGameObjectBase* FindObject(AActor* Actor, EGameObjectType Type = EGameObjectType::Base);
+    UGameObjectBase* FindObject(EGameObjectType Type);
 	TArray<UGameObjectBase*> FindObjects(EGameObjectType Type);
 
 	void Update(float Delta);

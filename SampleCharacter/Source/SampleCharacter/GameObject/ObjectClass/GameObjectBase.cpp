@@ -14,6 +14,21 @@ uint32          UGameObjectBase::GetObjectTypeMask() const  { return ObjectType;
 AActor*         UGameObjectBase::GetActor() const           { return NULL; }
 //
 
+FVector UGameObjectBase::GetLocation() const
+{
+    return (GetActor()) ? GetActor()->GetActorLocation() : FVector::ZeroVector;
+}
+
+FRotator UGameObjectBase::GetRotation() const
+{
+    return  (GetActor()) ? GetActor()->GetActorRotation() : FRotator::ZeroRotator;
+}
+
+FVector UGameObjectBase::GetScale() const
+{
+    return (GetActor()) ? GetActor()->GetActorScale() : FVector::OneVector;
+}
+
 void UGameObjectBase::Initialize()
 {
     SET_FLAG_TYPE(ObjectType, UGameObjectBase::GetObjectType());
@@ -27,7 +42,6 @@ void UGameObjectBase::DeInitialize()
 		actor->GetWorld()->DestroyActor(actor);
 	}
 }
-
 
 void UGameObjectBase::Update(float Delta)
 {
